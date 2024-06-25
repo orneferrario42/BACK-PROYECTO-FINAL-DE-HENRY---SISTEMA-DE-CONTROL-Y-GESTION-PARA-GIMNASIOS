@@ -7,10 +7,6 @@ import { UpdateProfesorDto } from './dto/update-profesor.dto';
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
-  @Post()
-  create(@Body() createProfesorDto: CreateProfesorDto) {
-    return this.profesorService.create(createProfesorDto);
-  }
 
   @Get()
   findAll() {
@@ -27,8 +23,4 @@ export class ProfesorController {
     return this.profesorService.update(+id, updateProfesorDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profesorService.remove(+id);
-  }
 }
