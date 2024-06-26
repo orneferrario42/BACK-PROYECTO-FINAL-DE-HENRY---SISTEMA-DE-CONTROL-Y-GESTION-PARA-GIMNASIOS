@@ -6,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { Cliente } from './customer.entity';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Role } from 'src/guards/roles.enum';
 import { Pago } from 'src/pagos/entities/pago.entity';

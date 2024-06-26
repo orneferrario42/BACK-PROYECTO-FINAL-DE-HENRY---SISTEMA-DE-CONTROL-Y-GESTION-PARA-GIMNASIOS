@@ -32,9 +32,5 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  async onModuleInit(){
-    console.log('Running Seeder...');
-    await this.usersService.seedUser()
-    
-  }
+
 }
