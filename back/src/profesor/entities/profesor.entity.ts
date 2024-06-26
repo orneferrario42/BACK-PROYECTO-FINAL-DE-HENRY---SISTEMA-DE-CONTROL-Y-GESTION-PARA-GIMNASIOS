@@ -2,7 +2,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Column, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
-export class Profesor {
+export class Profesor{
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
