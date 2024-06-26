@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import typeOrmConfig from './config/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ProfesorModule } from './profesor/profesor.module';
+import { PagosModule } from './pagos/pagos.module';
 
 @Module({
+
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
@@ -24,8 +24,10 @@ import { ProfesorModule } from './profesor/profesor.module';
     AuthModule,
     FileModule,
     ProfesorModule,
+    PagosModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
