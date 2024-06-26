@@ -6,7 +6,7 @@ import { UpdateRutinaDto } from './dto/update-rutina.dto';
 @Injectable()
 export class ProfesorService {
 
-  constructor( private readonly profesorService: ProfesorService){}
+
   
   private alumnos = [
     {
@@ -54,7 +54,8 @@ export class ProfesorService {
   ]
 
   create(createProfesorDto: CreateProfesorDto) {
-    return this.profesores.push(createProfesorDto)
+    this.profesores.push(createProfesorDto)
+    return this.profesores
   }
   getUsers(): any[] {
     return this.alumnos;
