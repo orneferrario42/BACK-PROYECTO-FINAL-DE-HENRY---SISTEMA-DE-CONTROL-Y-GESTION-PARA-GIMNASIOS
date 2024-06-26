@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Cliente } from './customer.entity';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { Role } from 'src/guards/roles.guard';
 
 @Entity({
   name: 'users',
@@ -22,18 +23,14 @@ export class User {
   @Column({ type: 'int' })
   phone: number;
 
-  @Column({ type: 'date' })
-  fecha_nacimiento: Date;
+  @Column()
+  fecha_nacimiento: string;
 
   @Column({ type: 'int' })
   numero_dni: number;
 
-  @Column({
-    type: 'enum',
-    enum: ['Profesor', 'Cliente'],
-    default: 'Cliente',
-  })
-  tipo_user: 'Profesor' | 'Cliente';
+  @Column({default: Role.Cliente})
+  tipo_user: Role;
 
   @ManyToOne(() => Cliente, (cliente) => cliente.users)
   clientes: Cliente;
