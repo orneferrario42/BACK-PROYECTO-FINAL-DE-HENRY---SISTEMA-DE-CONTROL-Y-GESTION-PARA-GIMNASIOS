@@ -8,8 +8,10 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ProfesorModule } from './profesor/profesor.module';
+import { PagosModule } from './pagos/pagos.module';
 
 @Module({
+
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
@@ -24,7 +26,9 @@ import { ProfesorModule } from './profesor/profesor.module';
     AuthModule,
     FileModule,
     ProfesorModule,
+    PagosModule
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })
