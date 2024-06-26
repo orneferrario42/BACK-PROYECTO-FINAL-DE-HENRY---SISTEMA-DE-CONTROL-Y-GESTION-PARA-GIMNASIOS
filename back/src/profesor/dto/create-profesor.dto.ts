@@ -3,5 +3,7 @@ export class CreateProfesorDto {
     nombre: string;
     edad: number;
     dia: string;
-    horario: string;    
+    horario: string; 
+    email: string;
+    password: string;
 }

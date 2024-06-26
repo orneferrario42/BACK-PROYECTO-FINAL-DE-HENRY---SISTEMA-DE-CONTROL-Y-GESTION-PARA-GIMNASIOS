@@ -6,8 +6,26 @@ export class Profesor{
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
-  @Column({ type: 'int' })
-  disponibilidad: number; // cantidad de horas disponibles al dia
+  @Column({ type: 'string' })
+  nombre: string;
+
+  @Column({ type: 'number' })
+  edad: number;
+
+  @Column({ type: 'string' })
+  dia: string;
+
+  @Column({ type: 'string' })
+  horario: string; 
+
+  @Column({ type: 'string' })
+  email: string;
+
+  @Column({ type: 'string' })
+  password: string;
+
+  // @Column({ default: Role.profesor})
+  // role:Role
 
   @OneToMany(() => User, (user) => user.profesores)
   @JoinColumn({ name: 'id_users' })
