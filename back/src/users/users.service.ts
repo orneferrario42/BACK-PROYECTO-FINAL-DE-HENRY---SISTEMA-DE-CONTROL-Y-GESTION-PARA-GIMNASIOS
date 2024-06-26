@@ -11,13 +11,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { Role } from 'src/guards/roles.guard';
+import { Role } from 'src/guards/roles.enum';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(private userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>) {}
 
-  async seedUser() {
+  async seederUser() {
     try {
       const userExists = await this.userRepository.findOneBy({
         email: 'jose@mail.com',
@@ -68,7 +71,7 @@ export class UsersService {
 
   async findAll() {
     return await this.userRepository.find({
-      relations: ['cliente', 'profesor'],
+      relations: ['profesor'],
       select: [
         'id',
         'name',
@@ -76,7 +79,7 @@ export class UsersService {
         'phone',
         'fecha_nacimiento',
         'numero_dni',
-        'tipo_user',
+        'role',
         'profesores',
       ],
     });
@@ -86,7 +89,6 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: {
-        clientes: true,
         profesores: true,
       },
     });
