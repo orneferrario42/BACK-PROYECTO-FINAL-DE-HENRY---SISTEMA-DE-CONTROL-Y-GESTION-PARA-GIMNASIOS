@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { PagosModule } from './pagos/pagos.module';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
 
@@ -24,7 +25,8 @@ import { PagosModule } from './pagos/pagos.module';
     AuthModule,
     FileModule,
     ProfesorModule,
-    PagosModule
+    PagosModule,
+    SeederModule
   ],
 
   controllers: [],

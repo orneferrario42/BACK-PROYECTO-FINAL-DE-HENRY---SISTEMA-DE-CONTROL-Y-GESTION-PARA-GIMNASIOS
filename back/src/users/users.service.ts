@@ -102,9 +102,7 @@ export class UsersService {
     return userWithOutPassword;
   }
 
-  async update(
-    id: string,
-    updateUserDto: UpdateUserDto,
+  async update(id: string,updateUserDto: UpdateUserDto,
   ): Promise<Partial<User>> {
     const updateUser = await this.userRepository.findOneBy({ id });
     if (!updateUser) {
