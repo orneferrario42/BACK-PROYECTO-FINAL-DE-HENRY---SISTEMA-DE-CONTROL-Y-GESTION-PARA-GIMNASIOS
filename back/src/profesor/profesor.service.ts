@@ -4,14 +4,13 @@ import { Connection, Repository } from 'typeorm';
 import { Profesor } from './entities/profesor.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProfesorService {
   constructor(
     private connection: Connection,
-    private readonly usersService: UsersService,
-    @InjectRepository(User)
+    @Inject('UsersService') private readonly userService: UsersService,
+    @Inject('UsersRepository')
     private readonly userRepository: Repository<User>,
   ) {}
   async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {

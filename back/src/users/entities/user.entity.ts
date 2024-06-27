@@ -50,7 +50,7 @@ export class User {
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true, default: [] })
   objetivo: string[];
 
   @OneToOne(() => Profesor, (profesor) => profesor.rutina)
