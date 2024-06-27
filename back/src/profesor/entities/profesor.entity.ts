@@ -1,27 +1,27 @@
 import { User } from 'src/users/entities/user.entity';
-import { Column, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-
+@Entity({name:'profesores'})
 export class Profesor{
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
-  @Column({ type: 'string' })
+  @Column({ type: 'varchar' })
   nombre: string;
 
-  @Column({ type: 'number' })
+  @Column({ type: 'int' })
   edad: number;
 
-  @Column({ type: 'string' })
+  @Column({ type: 'varchar' })
   dia: string;
 
-  @Column({ type: 'string' })
+  @Column({ type: 'varchar' })
   horario: string; 
 
-  @Column({ type: 'string' })
+  @Column({ type: 'varchar' })
   email: string;
 
-  @Column({ type: 'string' })
+  @Column({ type: 'varchar' })
   password: string;
 
   // @Column({ default: Role.profesor})

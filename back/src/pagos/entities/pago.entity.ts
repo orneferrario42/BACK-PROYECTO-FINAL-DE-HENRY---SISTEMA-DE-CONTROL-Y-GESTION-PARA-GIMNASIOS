@@ -1,9 +1,9 @@
 
-import { Column, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Plan } from './plan.entity';
 import { User } from 'src/users/entities/user.entity';
-
+@Entity({name:'pagos'})
 export class Pago {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
