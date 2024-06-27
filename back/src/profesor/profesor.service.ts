@@ -1,72 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
-import { UpdateProfesorDto } from './dto/update-profesor.dto';
-import { UpdateRutinaDto } from './dto/update-rutina.dto';
+import { Connection, Repository } from 'typeorm';
+import { Profesor } from './entities/profesor.entity';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
+
 
 @Injectable()
 export class ProfesorService {
+  constructor(private connection: Connection,
+    @Inject('UsersService') private readonly userService: UsersService,
+    @Inject('UsersRepository') private readonly userRepository: Repository<User>) {}
+  async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {
+    const { nombre, edad, dia, horario, email, password } = createProfesorDto;
+    const tableProfesor = this.connection.createQueryRunner();
+    await tableProfesor.connect();
+    await tableProfesor.startTransaction();
+    try {
+        const query = `INSERT INTO profesor (nombre, edad, dia, horario, email, password)
+        VALUES  ($1, $2,$3, $4, $5, $6)
+        RETURNING *`;
 
+        const params = [nombre, edad, dia, horario,email, password];
 
-  
-  private alumnos = [
-    {
-      id:"1",
-      nombre:'Julieth',
-      edad: 24,
-      objetivo: 'Estética',
-      rutina: 'Hipertrofia y tonificación',
-      dia: 'Lunes, Miercoles, Viernes',
-      horario: '18:00 a 20:00',
-    },
-    {
-      id:"2",
-      nombre:'Ornella',
-      edad: 24,
-      objetivo: 'Preparación deportiva',
-      rutina: 'Fuerza y potencia',
-      dia: 'Lunes, Miercoles, Viernes',
-      horario: '21:00 a 23:00',
+      const result = await tableProfesor.query(query, params);
+      const createdProfesor = result[0];
+
+      await tableProfesor.commitTransaction();
+
+      return createdProfesor;
+    } catch (error) {
+      await tableProfesor.rollbackTransaction();
+      throw error;
+    } finally {
+      await tableProfesor.release();
     }
-  ];
-
-  private profesores = [
-    {
-      id:"1",
-      nombre:'Hernan',
-      edad: 38,
-      dia: 'Lunes, Martes, Miercoles, Jueves,  Viernes',
-      horario: '14:00 a 17:00',
-    },
-    {
-      id:"2",
-      nombre:'Matias',
-      edad: 30,
-      dia: 'Lunes, Martes, Miercoles, Jueves,  Viernes',
-      horario: '20:00 a 23:00',
-    },
-    {
-      id:"3",
-      nombre:'Miguel',
-      edad: 38,
-      dia: 'Lunes, Martes, Miercoles, Jueves,  Viernes',
-      horario: '17:00 a 23:00',
-    },
-  ]
-
-  create(createProfesorDto: CreateProfesorDto) {
-    this.profesores.push(createProfesorDto)
-    return this.profesores
   }
-  getUsers(): any[] {
-    return this.alumnos;
+  
+  getUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  getUsersById(id: string): any {
-    return this.alumnos.find(alumno => alumno.id === id);
+  async getUsersById(id: string): Promise<User> {
+    return this.userRepository.findOneBy({ id });
   }
-
-  // updateRutina(id: string, updateRutinaDto: UpdateRutinaDto) {
-  //   return this.profesorService.push();
-  // }
-
 }
+
