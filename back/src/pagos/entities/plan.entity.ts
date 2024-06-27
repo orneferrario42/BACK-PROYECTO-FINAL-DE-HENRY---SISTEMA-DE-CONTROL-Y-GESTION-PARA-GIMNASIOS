@@ -1,9 +1,11 @@
-
-import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Pago } from './pago.entity';
 import { User } from 'src/users/entities/user.entity';
 
+@Entity({
+  name: 'planes',
+})
 export class Plan {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
