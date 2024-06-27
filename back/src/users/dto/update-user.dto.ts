@@ -8,5 +8,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   profesor: Profesor;
   diasSeleccionados: string[];
   objetivo: string[];
-  rutina: string;
+  rutina: Profesor;
 }
