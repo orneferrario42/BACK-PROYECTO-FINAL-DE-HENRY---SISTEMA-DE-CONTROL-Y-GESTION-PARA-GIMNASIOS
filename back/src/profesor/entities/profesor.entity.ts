@@ -1,8 +1,15 @@
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { v4 as uuid } from 'uuid';
-@Entity({name:'profesor'})
-export class Profesor{
+@Entity({ name: 'profesor' })
+export class Profesor {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
@@ -16,7 +23,7 @@ export class Profesor{
   dia: string;
 
   @Column({ type: 'varchar' })
-  horario: string; 
+  horario: string;
 
   @Column({ type: 'varchar' })
   email: string;
@@ -26,7 +33,9 @@ export class Profesor{
 
   // @Column({ default: Role.profesor})
   // role:Role
-  
+
+  @OneToOne(() => User, (user) => user.rutina)
+  rutina: User;
 
   @OneToMany(() => User, (user) => user.profesor)
   @JoinColumn({ name: 'id_users' })

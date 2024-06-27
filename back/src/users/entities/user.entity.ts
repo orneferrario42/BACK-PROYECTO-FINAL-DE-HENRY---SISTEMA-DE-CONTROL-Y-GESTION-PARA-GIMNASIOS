@@ -1,8 +1,10 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -38,21 +40,22 @@ export class User {
 
   @Column({ default: Role.User })
   role: Role;
-  
+
   @ManyToOne(() => Plan, (plan) => plan.clientes)
-   plan: Plan; // Relación con el plan seleccionado
-  
+  plan: Plan; // Relación con el plan seleccionado
+
   @ManyToOne(() => Profesor, (profesor) => profesor.users)
   profesor: Profesor;
-    
-  @Column('varchar',{ default: [] })
+
+  @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
-  @Column()
+  @Column({ type: 'varchar' })
   objetivo: string[];
 
- @Column({ default: 'default_image_url' })
-  rutina: string;
+  @OneToOne(() => Profesor, (profesor) => profesor.rutina)
+  @JoinColumn({ name: 'rutina' })
+  rutina: Profesor;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago[];
