@@ -14,7 +14,8 @@ export class PagosController {
 
   @Get()
   findAll() {
-    return this.pagosService.findAll();
+    //return this.pagosService.findAll();
+    return "hola probando remoto";
   }
 
   @Get(':id')
