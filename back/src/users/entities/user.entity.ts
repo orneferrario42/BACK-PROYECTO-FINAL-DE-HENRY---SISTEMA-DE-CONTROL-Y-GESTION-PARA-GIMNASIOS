@@ -48,10 +48,10 @@ export class User {
   @Column('varchar',{ default: [] })
   diasSeleccionados: string[];
 
-  @Column()
+  @Column({type:'varchar', nullable: true, default: []})
   objetivo: string[];
 
- @Column({ default: 'default_image_url' })
+  @Column({ default: 'default_image_url' })
   rutina: string;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
