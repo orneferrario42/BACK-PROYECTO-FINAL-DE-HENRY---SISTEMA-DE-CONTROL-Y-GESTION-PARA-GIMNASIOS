@@ -1,7 +1,7 @@
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-@Entity({name:'profesores'})
+@Entity({name:'profesor'})
 export class Profesor{
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
@@ -26,9 +26,9 @@ export class Profesor{
 
   // @Column({ default: Role.profesor})
   // role:Role
-  // Some comentary
+  
 
-  @OneToMany(() => User, (user) => user.profesores)
+  @OneToMany(() => User, (user) => user.profesor)
   @JoinColumn({ name: 'id_users' })
   users: User[];
 }

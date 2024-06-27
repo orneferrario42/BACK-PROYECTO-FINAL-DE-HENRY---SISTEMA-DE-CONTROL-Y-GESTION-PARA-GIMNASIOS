@@ -1,15 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
-import { UpdateProfesorDto } from './dto/update-profesor.dto';
+import { Profesor } from './entities/profesor.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('profesor')
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
   @Get('users')
-  getUsers(): any[]{
-    return this.profesorService.getUsers();
+  async getUsers(): Promise<User[]> {
+    return await this.profesorService.getUsers();
   }
 
   @Get('users/:id')
@@ -18,14 +19,10 @@ getUsersById(@Param('id') id: string) {
   }
 
   @Post()
-  createProfesor(@Body() createProfesorDto:CreateProfesorDto){
+  createProfesor(@Body() createProfesorDto:CreateProfesorDto): Promise<Profesor>{
     return this.profesorService.create(createProfesorDto);
 
   }
-  // @Put('users/:id')
-  // updateRutina(@Param('id') id: string, @Body('rutina') newRuttine: string) {
-  //   return this.profesorService.updateRutina(id, newRuttine);
-  // }
 
 
 }
