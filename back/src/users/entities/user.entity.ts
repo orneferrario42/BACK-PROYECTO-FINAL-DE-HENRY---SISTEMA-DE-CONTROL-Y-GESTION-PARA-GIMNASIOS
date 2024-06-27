@@ -24,7 +24,7 @@ export class User {
   @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 72, nullable: false })
+  @Column({ type: 'varchar', length: 72, nullable: true })
   password: string;
 
   @Column({ type: 'int' })
@@ -38,19 +38,22 @@ export class User {
 
   @Column({ default: Role.User })
   role: Role;
-
+  
+  @ManyToOne(() => Plan, (plan) => plan.clientes)
+   plan: Plan; // Relación con el plan seleccionado
+  
   @ManyToOne(() => Profesor, (profesor) => profesor.users)
-  profesores: Profesor;
+  profesor: Profesor;
+    
+  @Column('varchar',{ default: [] })
+  diasSeleccionados: string[];
 
-  @Column({ default: 'default_image_url' })
+  @Column()
+  objetivo: string[];
+
+ @Column({ default: 'default_image_url' })
   rutina: string;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago[];
-
-  @ManyToOne(() => Plan, (plan) => plan.clientes)
-  plan: Plan; // Relación con el plan seleccionado
-
-  @Column('varchar',{ default: [] })
-  diasSeleccionados: string[];
 }

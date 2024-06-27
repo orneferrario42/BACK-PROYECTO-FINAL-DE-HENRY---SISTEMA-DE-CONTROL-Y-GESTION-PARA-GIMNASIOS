@@ -80,7 +80,7 @@ export class UsersService {
         'fecha_nacimiento',
         'numero_dni',
         'role',
-        'profesores',
+        'profesor',
       ],
     });
   }
@@ -89,7 +89,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: {
-        profesores: true,
+        profesor: true,
       },
     });
 
