@@ -51,6 +51,6 @@ export class User {
   @ManyToOne(() => Plan, (plan) => plan.clientes)
   plan: Plan; // Relación con el plan seleccionado
 
-  @Column({ default: [] })
+  @Column('varchar',{ default: [] })
   diasSeleccionados: string[];
 }
