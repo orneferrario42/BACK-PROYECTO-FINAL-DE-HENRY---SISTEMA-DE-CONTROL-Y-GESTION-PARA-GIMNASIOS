@@ -6,27 +6,25 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
-
 @Injectable()
 export class ProfesorService {
   constructor(
     private connection: Connection,
     private readonly usersService: UsersService,
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,) {}
-  
-  
-    async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {
+    private readonly userRepository: Repository<User>,
+  ) {}
+  async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {
     const { nombre, edad, dia, horario, email, password } = createProfesorDto;
     const tableProfesor = this.connection.createQueryRunner();
     await tableProfesor.connect();
     await tableProfesor.startTransaction();
     try {
-        const query = `INSERT INTO profesor (nombre, edad, dia, horario, email, password)
+      const query = `INSERT INTO profesor (nombre, edad, dia, horario, email, password)
         VALUES  ($1, $2,$3, $4, $5, $6)
         RETURNING *`;
 
-        const params = [nombre, edad, dia, horario,email, password];
+      const params = [nombre, edad, dia, horario, email, password];
 
       const result = await tableProfesor.query(query, params);
       const createdProfesor = result[0];
@@ -41,7 +39,7 @@ export class ProfesorService {
       await tableProfesor.release();
     }
   }
-  
+
   getUsers(): Promise<User[]> {
     return this.userRepository.find();
   }
@@ -50,4 +48,3 @@ export class ProfesorService {
     return this.userRepository.findOneBy({ id });
   }
 }
-
