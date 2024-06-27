@@ -26,6 +26,7 @@ export class Profesor{
 
   // @Column({ default: Role.profesor})
   // role:Role
+  // Some comentary
 
   @OneToMany(() => User, (user) => user.profesores)
   @JoinColumn({ name: 'id_users' })
