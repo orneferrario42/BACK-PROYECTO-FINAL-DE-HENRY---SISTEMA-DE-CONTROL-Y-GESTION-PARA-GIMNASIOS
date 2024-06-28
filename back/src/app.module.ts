@@ -8,6 +8,7 @@ import { FileModule } from './file/file.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
+import { JwtModule } from '@nestjs/jwt';
 import * as cors from 'cors';
 
 @Module({
@@ -26,8 +27,10 @@ import * as cors from 'cors';
     FileModule,
     ProfesorModule,
     PagosModule,
-    SeederModule
+    SeederModule,
+    JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
   ],
+
   controllers: [],
   providers: [],
 })
