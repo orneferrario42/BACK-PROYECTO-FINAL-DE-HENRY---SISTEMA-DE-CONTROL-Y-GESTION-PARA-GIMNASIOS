@@ -1,3 +1,4 @@
+import { Role } from 'src/guards/roles.enum';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -31,8 +32,9 @@ export class Profesor {
   @Column({ type: 'varchar' })
   password: string;
 
-  // @Column({ default: Role.profesor})
-  // role:Role
+  @Column({ default: Role.Profesor})
+  role:Role
+  
   @Column({ type: 'boolean' , default: true})
   estado: boolean;
 

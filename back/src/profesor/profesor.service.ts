@@ -18,6 +18,13 @@ export class ProfesorService {
     return this.ProfesorRepository.save(createProfesorDto)
   }
 
+  getProfesores() {
+    return this.ProfesorRepository.find();
+  } 
+
+  findBy(email: string) {
+    throw new Error('Method not implemented.');
+  }
   getUsers(): Promise<User[]> {
     return this.userRepository.find();
   }

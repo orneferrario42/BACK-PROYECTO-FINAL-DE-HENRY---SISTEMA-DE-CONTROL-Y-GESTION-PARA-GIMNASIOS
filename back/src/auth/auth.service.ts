@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { LoginUserDto } from './dto/LoginUserDto';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
+import { ProfesorService } from 'src/profesor/profesor.service';
+
+
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  /**LOGICA DE LOGIN*/
+  async signIn(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+
+    const emailUser = await this.usersService.findByEmail(email);
+    if (!emailUser) {
+      throw new Error('Credenciales incorrectas');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, emailUser.password);
+    if (!isPasswordValid) {
+      throw new Error('Credenciales incorrectas');
+    }
+
+    const payload = { id: emailUser.id, email: emailUser.email, role: emailUser.role };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      success: 'Inicio de sesión exitoso',
+      TuToken: token
+    };
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+
 }
