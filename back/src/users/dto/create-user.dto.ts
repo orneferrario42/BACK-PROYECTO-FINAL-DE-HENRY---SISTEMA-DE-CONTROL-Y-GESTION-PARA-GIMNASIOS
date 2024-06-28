@@ -17,11 +17,11 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsNumber()
-  phone: number;
+  phone: string;
 
   @IsNotEmpty()
   @IsNumber()
-  numero_dni: number;
+  numero_dni: string;
 
   @IsNotEmpty()
   @MinLength(8)
