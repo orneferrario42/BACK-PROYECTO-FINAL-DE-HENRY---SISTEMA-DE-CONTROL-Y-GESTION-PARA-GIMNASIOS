@@ -1,10 +1,20 @@
-import { Inject, Injectable, NotFoundException, Search } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Search,
+} from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { Connection, Repository } from 'typeorm';
 import { Profesor } from './entities/profesor.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { PutProfesorDto } from './dto/put-profesor.dto';
 
 @Injectable()
 export class ProfesorService {
@@ -12,18 +22,40 @@ export class ProfesorService {
     private readonly usersService: UsersService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Profesor) private readonly ProfesorRepository: Repository<Profesor>,
+    @InjectRepository(Profesor)
+    private readonly ProfesorRepository: Repository<Profesor>,
   ) {}
   async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {
-    return this.ProfesorRepository.save(createProfesorDto)
+    const email = createProfesorDto.email;
+    const profesorExist = await this.ProfesorRepository.findOneBy({ email });
+    if (profesorExist) {
+      throw new HttpException('el profesor ya existe', HttpStatus.BAD_REQUEST);
+    }
+    const hashedPassword = await bcrypt.hash(createProfesorDto.password, 10);
+    console.log(hashedPassword);
+
+    if (!hashedPassword) {
+      throw new BadRequestException('La constraseña no pudo ser hasheada');
+    }
+
+    const newProfesor = this.ProfesorRepository.save({
+      ...createProfesorDto,
+      password: hashedPassword,
+    });
+
+    if (newProfesor) {
+      return newProfesor;
+    } else {
+      throw new BadRequestException('Error al crear el usuario');
+    }
   }
 
   getProfesores() {
     return this.ProfesorRepository.find();
-  } 
+  }
 
-  findBy(email: string) {
-    throw new Error('Method not implemented.');
+  findByEmail(email: string): Promise<Profesor> {
+    return this.ProfesorRepository.findOneBy({ email: email });
   }
   getUsers(): Promise<User[]> {
     return this.userRepository.find();
@@ -33,33 +65,22 @@ export class ProfesorService {
     return this.userRepository.findOneBy({ id });
   }
 
-  async desactivarProfesor(id: string): Promise<Profesor>{
-  const searchProfesor = await this.ProfesorRepository.findOneBy({id})
+  async updateProfesor(
+    id: string,
+    updateProfesorDto: PutProfesorDto,
+  ): Promise<Profesor> {
+    const updateProfesor = await this.ProfesorRepository.findOneBy({ id });
 
-  if(!searchProfesor){
-    throw new NotFoundException('Profesor/a no encontrado/a')
-  } searchProfesor.estado = false
-
-  return this.ProfesorRepository.save(searchProfesor)
-  }
-  async reactivarProfesor(id: string): Promise<Profesor>{
-    const buscarProfesor = await this.ProfesorRepository.findOneBy({id})
-  
-    if(!buscarProfesor){
-      throw new NotFoundException('Profesor/a no encontrado/a')
-    } buscarProfesor.estado = true
-  
-    return this.ProfesorRepository.save(buscarProfesor)
+    if (!updateProfesor) {
+      throw new NotFoundException('Profesor/a no encontrado/a');
+    }
+    if (updateProfesor.estado === true) {
+      updateProfesor.estado = false;
     }
 
-    async updateProfesor(id: string, updateProfesorDto: CreateProfesorDto): Promise<Profesor> {
-      const updateProfesor = await this.ProfesorRepository.findOneBy({ id });
-  
-      if (!updateProfesor) {
-        throw new NotFoundException('Profesor/a no encontrado/a');
-      }
-  
-      return this.ProfesorRepository.save({ ...updateProfesor, ...updateProfesorDto });
-    } 
-
+    return this.ProfesorRepository.save({
+      ...updateProfesor,
+      ...updateProfesorDto,
+    });
+  }
 }

@@ -17,14 +17,14 @@ export class Profesor {
   @Column({ type: 'varchar' })
   nombre: string;
 
-  @Column({ type: 'int' })
-  edad: number;
+  @Column({ type: 'varchar' })
+  edad: string;
 
   @Column({ type: 'varchar' })
-  dia: string;
+  dia: string[];
 
   @Column({ type: 'varchar' })
-  horario: string;
+  horario: string[];
 
   @Column({ type: 'varchar' })
   email: string;
@@ -32,10 +32,10 @@ export class Profesor {
   @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ default: Role.Profesor})
-  role:Role
-  
-  @Column({ type: 'boolean' , default: true})
+  @Column({ default: Role.Profesor })
+  role: Role;
+
+  @Column({ type: 'boolean', default: true })
   estado: boolean;
 
   @OneToOne(() => User, (user) => user.rutina)

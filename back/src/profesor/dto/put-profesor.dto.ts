@@ -1,11 +1,9 @@
-import { PickType } from '@nestjs/swagger';
-
-export class CreateProfesorDto {
+export class PutProfesorDto {
   nombre: string;
   edad: string;
   dia: string[];
   horario: string[];
   email: string;
   password: string;
-  // estado?: boolean;
+  estado: boolean;
 }
