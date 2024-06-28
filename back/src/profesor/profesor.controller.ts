@@ -23,7 +23,7 @@ import { PutProfesorDto } from './dto/put-profesor.dto';
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
-  @Get('profesores')
+  @Get()
   async getAllProfesores(): Promise<Profesor[]> {
     return await this.profesorService.getProfesores();
   }

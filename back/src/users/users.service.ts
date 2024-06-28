@@ -36,9 +36,9 @@ export class UsersService {
           name: 'Jose',
           email: 'jose@mail.com',
           password: passwordHashed,
-          phone: "123456789",
+          phone: '123456789',
           fecha_nacimiento: '12-12-1994',
-          numero_dni: "12345678",
+          numero_dni: '12345678',
           role: Role.Admin,
         });
         return await this.userRepository.save(newUser);
@@ -109,7 +109,10 @@ export class UsersService {
     return userWithOutPassword;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<Partial<User>> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Partial<User>> {
     const updateUser = await this.userRepository.findOneBy({ id });
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
@@ -135,9 +138,6 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneBy({email: email});
-    }
+    return this.userRepository.findOneBy({ email: email });
+  }
 }
-
-}
-
