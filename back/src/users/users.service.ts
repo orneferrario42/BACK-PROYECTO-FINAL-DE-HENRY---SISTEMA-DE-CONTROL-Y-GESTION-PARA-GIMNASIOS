@@ -16,6 +16,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
+  findBy(email: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -130,4 +133,11 @@ export class UsersService {
     const { password, ...userWithOutPassword } = user;
     return userWithOutPassword;
   }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({email: email});
+    }
 }
+
+}
+
