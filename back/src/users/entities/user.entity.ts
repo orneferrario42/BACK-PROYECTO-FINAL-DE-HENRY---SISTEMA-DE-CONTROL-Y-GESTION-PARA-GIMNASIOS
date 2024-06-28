@@ -29,14 +29,14 @@ export class User {
   @Column({ type: 'varchar', length: 72, nullable: true })
   password: string;
 
-  @Column({ type: 'int' })
-  phone: number;
+  @Column({ type: 'varchar' })
+  phone: string;
 
   @Column()
   fecha_nacimiento: string;
 
-  @Column({ type: 'int' })
-  numero_dni: number;
+  @Column({ type: 'varchar' })
+  numero_dni: string;
 
   @Column({ default: Role.User })
   role: Role;

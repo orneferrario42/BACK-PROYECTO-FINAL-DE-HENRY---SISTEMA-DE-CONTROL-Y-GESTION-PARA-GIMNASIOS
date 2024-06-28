@@ -33,6 +33,8 @@ export class Profesor {
 
   // @Column({ default: Role.profesor})
   // role:Role
+  @Column({ type: 'boolean' , default: true})
+  estado: boolean;
 
   @OneToOne(() => User, (user) => user.rutina)
   rutina: User;

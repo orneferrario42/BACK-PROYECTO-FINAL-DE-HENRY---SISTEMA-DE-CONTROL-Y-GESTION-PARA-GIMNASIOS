@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Search } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { Connection, Repository } from 'typeorm';
 import { Profesor } from './entities/profesor.entity';
@@ -9,35 +9,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class ProfesorService {
   constructor(
-    private connection: Connection,
     private readonly usersService: UsersService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Profesor) private readonly ProfesorRepository: Repository<Profesor>,
   ) {}
   async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {
-    const { nombre, edad, dia, horario, email, password } = createProfesorDto;
-    const tableProfesor = this.connection.createQueryRunner();
-    await tableProfesor.connect();
-    await tableProfesor.startTransaction();
-    try {
-      const query = `INSERT INTO profesor (nombre, edad, dia, horario, email, password)
-        VALUES  ($1, $2,$3, $4, $5, $6)
-        RETURNING *`;
-
-      const params = [nombre, edad, dia, horario, email, password];
-
-      const result = await tableProfesor.query(query, params);
-      const createdProfesor = result[0];
-
-      await tableProfesor.commitTransaction();
-
-      return createdProfesor;
-    } catch (error) {
-      await tableProfesor.rollbackTransaction();
-      throw error;
-    } finally {
-      await tableProfesor.release();
-    }
+    return this.ProfesorRepository.save(createProfesorDto)
   }
 
   getUsers(): Promise<User[]> {
@@ -47,4 +25,34 @@ export class ProfesorService {
   async getUsersById(id: string): Promise<User> {
     return this.userRepository.findOneBy({ id });
   }
+
+  async desactivarProfesor(id: string): Promise<Profesor>{
+  const searchProfesor = await this.ProfesorRepository.findOneBy({id})
+
+  if(!searchProfesor){
+    throw new NotFoundException('Profesor/a no encontrado/a')
+  } searchProfesor.estado = false
+
+  return this.ProfesorRepository.save(searchProfesor)
+  }
+  async reactivarProfesor(id: string): Promise<Profesor>{
+    const buscarProfesor = await this.ProfesorRepository.findOneBy({id})
+  
+    if(!buscarProfesor){
+      throw new NotFoundException('Profesor/a no encontrado/a')
+    } buscarProfesor.estado = true
+  
+    return this.ProfesorRepository.save(buscarProfesor)
+    }
+
+    async updateProfesor(id: string, updateProfesorDto: CreateProfesorDto): Promise<Profesor> {
+      const updateProfesor = await this.ProfesorRepository.findOneBy({ id });
+  
+      if (!updateProfesor) {
+        throw new NotFoundException('Profesor/a no encontrado/a');
+      }
+  
+      return this.ProfesorRepository.save({ ...updateProfesor, ...updateProfesorDto });
+    } 
+
 }
