@@ -42,6 +42,13 @@ export class ProfesorController {
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
+
+
+  @Get(':id')
+  updateStatus(@Param('id') id: string){
+    return this.profesorService.updateState(id);
+  }
+
   /**
    *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
    */

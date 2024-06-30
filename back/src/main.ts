@@ -8,15 +8,22 @@ import { auth } from 'express-openid-connect';
 import { config as auth0Config } from './config/auth0.config';
 import { loggerGlobal } from './middleware/logger.middleware';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(loggerGlobal)
+  app.use(loggerGlobal);
   app.use(auth(auth0Config));
   app.enableCors({
-    origin: 'http://localhost:3000/', // Reemplaza con el origen de tu frontend
+    origin: '*', // Reemplaza con el origen de tu frontend
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: [
+      'Access-Control-Allow-Origin',
+      'Access-Control-Allow-Methods',
+      'x-requested-with',
+      'Access-Control-Allow-Headers',
+      'authorization',
+      'content-type',
+    ],
   });
 
   const swaggerConfig = new DocumentBuilder()
@@ -29,7 +36,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
-
 
   await app.listen(3001);
 }

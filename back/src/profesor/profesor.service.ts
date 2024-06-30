@@ -15,6 +15,7 @@ import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { PutProfesorDto } from './dto/put-profesor.dto';
+import { Status } from 'src/enum/estados.enum';
 
 @Injectable()
 export class ProfesorService {
@@ -33,21 +34,35 @@ export class ProfesorService {
     }
     const hashedPassword = await bcrypt.hash(createProfesorDto.password, 10);
     console.log(hashedPassword);
-
+    
     if (!hashedPassword) {
       throw new BadRequestException('La constraseña no pudo ser hasheada');
     }
-
+    
     const newProfesor = this.ProfesorRepository.save({
       ...createProfesorDto,
       password: hashedPassword,
     });
-
+    
     if (newProfesor) {
       return newProfesor;
     } else {
       throw new BadRequestException('Error al agregar al nuevo profesor/a');
     }
+  }
+  
+  async updateState(id: string) {
+    const profesor =  await this.userRepository.findOneBy({id});
+    if(!profesor){
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    profesor.estado = Status.Desactivado
+
+    this.userRepository.save(profesor)
+
+    const { password, ...userWithOutPassword } = profesor;
+    
+    return userWithOutPassword;
   }
 
   getProfesores() {

@@ -38,9 +38,17 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(cors({
-        origin: 'http://localhost:3000/', // Reemplaza con el origen de tu frontend
+        origin: '*', // Reemplaza con el origen de tu frontend
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
+        allowedHeaders: [
+          'Access-Control-Allow-Origin',
+          'Access-Control-Allow-Methods',
+          'x-requested-with',
+          'Access-Control-Allow-Headers',
+          'authorization',
+          'content-type',
+        ],
       }))
       .forRoutes('*');
   }
