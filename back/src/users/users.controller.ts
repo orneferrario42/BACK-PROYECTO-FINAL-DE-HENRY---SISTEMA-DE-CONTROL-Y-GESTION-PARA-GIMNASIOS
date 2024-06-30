@@ -44,9 +44,20 @@ export class UsersController {
 
   @Get('auth0')
   getAuth0(@Req() req: Request) {
-    return JSON.stringify(req.oidc.user);
+    return JSON.stringify(req.oidc.user); 
   }
 
+  @Post('exist')
+  userExist(@Body() data): Promise<boolean> {
+    const {email} = data
+    return this.usersService.findUserByEmail(email)
+  }
+
+
+  @Get(':id')
+  updateStatus(@Param('id') id: string){
+    return this.usersService.updateState(id);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -61,8 +72,5 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
-  }
+  
 }
