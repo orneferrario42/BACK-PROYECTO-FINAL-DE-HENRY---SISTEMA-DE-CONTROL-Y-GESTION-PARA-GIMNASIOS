@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
-import { Role } from 'src/guards/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import { Pago } from 'src/pagos/entities/pago.entity';
 import { Plan } from 'src/pagos/entities/plan.entity';
+import { Status } from 'src/enum/estados.enum';
 
 @Entity({
   name: 'users',
@@ -29,14 +30,14 @@ export class User {
   @Column({ type: 'varchar', length: 72, nullable: true })
   password: string;
 
-  @Column({ type: 'int' })
-  phone: number;
+  @Column({ type: 'varchar' })
+  phone: string;
 
   @Column()
   fecha_nacimiento: string;
 
-  @Column({ type: 'int' })
-  numero_dni: number;
+  @Column({ type: 'varchar' })
+  numero_dni: string;
 
   @Column({ default: Role.User })
   role: Role;
@@ -50,6 +51,9 @@ export class User {
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
+  @Column({ default: Status.Activado })
+  estado: Status;
+
   @Column({ type: 'varchar', nullable: true, default: [] })
   objetivo: string[];
 
@@ -57,6 +61,7 @@ export class User {
   @JoinColumn({ name: 'rutina' })
   rutina: Profesor;
 
+  
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago[];
 }

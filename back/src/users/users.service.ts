@@ -11,14 +11,18 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { Role } from 'src/guards/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
+  findBy(email: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>) {}
+    private userRepository: Repository<User>,
+  ) {}
 
   async seederUser() {
     try {
@@ -28,15 +32,16 @@ export class UsersService {
 
       if (!userExists) {
         const passwordHashed = await bcrypt.hash('Hola12345@', 10);
-        return await this.userRepository.save({
+        const newUser = this.userRepository.create({
           name: 'Jose',
           email: 'jose@mail.com',
           password: passwordHashed,
-          phone: 123456789,
-          fecha_nacimiento: "12-12-1994",
-          numero_dni: 12345678,
+          phone: '123456789',
+          fecha_nacimiento: '12-12-1994',
+          numero_dni: '12345678',
           role: Role.Admin,
         });
+        return await this.userRepository.save(newUser);
       }
       return;
     } catch (error) {
@@ -57,13 +62,15 @@ export class UsersService {
       throw new BadRequestException('La constraseña no pudo ser hasheada');
     }
 
-    const newUser = this.userRepository.save({
+    const newUser = this.userRepository.create({
       ...user,
       password: hashedPassword,
     });
 
-    if (newUser) {
-      return newUser;
+    const savedUser = await this.userRepository.save(newUser);
+
+    if (savedUser) {
+      return savedUser;
     } else {
       throw new BadRequestException('Error al crear el usuario');
     }
@@ -80,6 +87,7 @@ export class UsersService {
         'fecha_nacimiento',
         'numero_dni',
         'role',
+        'estado',
         'profesor',
       ],
     });
@@ -102,7 +110,9 @@ export class UsersService {
     return userWithOutPassword;
   }
 
-  async update(id: string,updateUserDto: UpdateUserDto,
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
   ): Promise<Partial<User>> {
     const updateUser = await this.userRepository.findOneBy({ id });
     if (!updateUser) {
@@ -126,5 +136,9 @@ export class UsersService {
     await this.userRepository.delete(id);
     const { password, ...userWithOutPassword } = user;
     return userWithOutPassword;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ email: email });
   }
 }

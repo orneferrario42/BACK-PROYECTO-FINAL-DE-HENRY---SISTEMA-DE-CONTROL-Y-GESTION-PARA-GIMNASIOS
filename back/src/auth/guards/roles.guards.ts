@@ -9,13 +9,12 @@ import { Observable } from 'rxjs';
 import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
-
+export class RolesGuards implements CanActivate {
+  constructor(private readonly reflector: Reflector) {} //reflector lee la meta data del controlador
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>('roles', [
+    const requireRoles = this.reflector.getAllAndOverride<Role[]>('roles', [
       context.getHandler(),
       context.getClass(),
     ]);
@@ -23,14 +22,17 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
+    //validar rol
     const hasRole = () =>
-      requiredRoles.some((role) => user?.role?.includes(role));
+      requireRoles.some((role) => user?.roles?.includes(role));
+    console.log(hasRole());
 
     const valid = user && user.role && hasRole();
 
-    if (!valid) {
-      throw new ForbiddenException('No autorizado');
-    }
+    if (!valid)
+      throw new ForbiddenException(
+        'No tienes permisos para realizar esta accion',
+      );
     return valid;
   }
 }

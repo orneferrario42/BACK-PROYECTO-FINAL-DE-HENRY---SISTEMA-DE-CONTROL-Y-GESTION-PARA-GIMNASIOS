@@ -1,3 +1,4 @@
+import { Role } from 'src/enum/roles.enum';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -13,26 +14,29 @@ export class Profesor {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;
 
-  @Column({ type: 'int' })
-  edad: number;
+  @Column({ type: 'varchar' })
+  edad: string;
 
   @Column({ type: 'varchar' })
-  dia: string;
+  dia: string[];
 
   @Column({ type: 'varchar' })
-  horario: string;
+  horario: string[];
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
   email: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 72, nullable: true })
   password: string;
 
-  // @Column({ default: Role.profesor})
-  // role:Role
+  @Column({ default: Role.Profesor })
+  role: Role;
+
+  @Column({ type: 'boolean', default: true })
+  estado: boolean;
 
   @OneToOne(() => User, (user) => user.rutina)
   rutina: User;
