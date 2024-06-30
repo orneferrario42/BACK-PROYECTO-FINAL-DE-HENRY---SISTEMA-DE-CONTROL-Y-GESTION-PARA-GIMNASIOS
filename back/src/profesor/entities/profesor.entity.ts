@@ -14,7 +14,7 @@ export class Profesor {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;
 
   @Column({ type: 'varchar' })
@@ -26,10 +26,10 @@ export class Profesor {
   @Column({ type: 'varchar' })
   horario: string[];
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
   email: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 72, nullable: true })
   password: string;
 
   @Column({ default: Role.Profesor })

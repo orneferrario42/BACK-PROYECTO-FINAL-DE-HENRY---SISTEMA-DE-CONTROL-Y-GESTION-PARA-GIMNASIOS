@@ -17,44 +17,55 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/guards/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { PutProfesorDto } from './dto/put-profesor.dto';
-
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+@ApiTags('PROFESOR')
+@ApiBearerAuth()
 @Controller('profesor')
 // @UseGuards(RolesGuard)
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
+  /**
+   * Este metodo le permite al administrador ver todos los profesores que tiene.
+   */
   @Get()
   async getAllProfesores(): Promise<Profesor[]> {
     return await this.profesorService.getProfesores();
   }
 
+  /**
+   * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
+   */
   @Get('users')
   // @Roles(Role.Profesor)
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
-
+  /**
+   *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
+   */
   @Get('users/:id')
   // @Roles(Role.Profesor)
   getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
 
+  /**
+   * Este metodo le permie al administrador crear un usuario profesor.
+   */
   @Post('create')
-  // @Roles(Role.Admin)
-  async createProfesor(
-    @Body() createProfesorDto: CreateProfesorDto,
-  ): Promise<
-    | string
-    | Omit<Profesor, 'id' | 'edad' | 'dia' | 'horario' | 'email' | 'password'>
-  > {
-    return await this.profesorService
-      .create(createProfesorDto)
-      .then((crearProfesor) => {
-        return `Se ha agregado al profesor/a ${crearProfesor.nombre} correctamente`;
-      });
+  async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {
+    const createdProfesor =
+      await this.profesorService.create(createProfesorDto);
+    return {
+      message: `Se ha agregado al profesor/a ${createdProfesor.nombre} correctamente`,
+      data: createdProfesor,
+    };
   }
 
+  /**
+   *Este metodo le permite al usuario profesor modifica su informacion personal.
+   */
   @Put(':id')
   // @Roles(Role.Admin)
   async updateProfesor(
