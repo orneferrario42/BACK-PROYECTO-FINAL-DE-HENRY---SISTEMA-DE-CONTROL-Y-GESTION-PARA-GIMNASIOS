@@ -7,13 +7,17 @@ import {
   Param,
   Delete,
   Put,
+  Req,
+
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiTags('USERS')
 @ApiBearerAuth()
+import { Request } from 'express';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -34,9 +38,17 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+
   /**
    * Este metodo permite a un usuario verla informacion de su perfil
    */
+
+  @Get('auth0')
+  getAuth0(@Req() req: Request) {
+    return JSON.stringify(req.oidc.user);
+  }
+
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);

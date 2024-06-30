@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
-import { Role } from 'src/guards/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import { Pago } from 'src/pagos/entities/pago.entity';
 import { Plan } from 'src/pagos/entities/plan.entity';
+import { Status } from 'src/enum/estados.enum';
 
 @Entity({
   name: 'users',
@@ -49,6 +50,9 @@ export class User {
 
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
+
+  @Column({ default: Status.Activado })
+  estado: Status;
 
   @Column({ type: 'varchar', nullable: true, default: [] })
   objetivo: string[];

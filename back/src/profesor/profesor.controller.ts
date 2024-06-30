@@ -14,7 +14,7 @@ import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { Profesor } from './entities/profesor.entity';
 import { User } from 'src/users/entities/user.entity';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { Role } from 'src/guards/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { PutProfesorDto } from './dto/put-profesor.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';

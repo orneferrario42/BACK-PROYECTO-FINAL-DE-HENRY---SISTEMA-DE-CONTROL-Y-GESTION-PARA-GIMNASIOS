@@ -11,7 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { Role } from 'src/guards/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -87,6 +87,7 @@ export class UsersService {
         'fecha_nacimiento',
         'numero_dni',
         'role',
+        'estado',
         'profesor',
       ],
     });
