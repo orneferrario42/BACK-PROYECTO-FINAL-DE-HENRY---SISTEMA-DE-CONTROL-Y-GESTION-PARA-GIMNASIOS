@@ -8,8 +8,8 @@ export class LoginUserDto {
     description: 'Introduzca su correo electronico',
     example: 'ejemplo@mail.com',
   })
-  // @IsNotEmpty()
-  // @IsEmail()
+  @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @ApiProperty({
@@ -17,7 +17,7 @@ export class LoginUserDto {
     example: 'Ej3mpl0!#',
   })
   @ApiProperty()
-  // @IsNotEmpty()
+  @IsNotEmpty()
   password: string;
 }
 
@@ -27,8 +27,8 @@ export class LoginProfesorDto {
     description: 'Introduzca su correo electronico',
     example: 'ejemplo@mail.com',
   })
-  // @IsNotEmpty()
-  // @IsEmail()
+  @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @ApiProperty({
@@ -36,7 +36,7 @@ export class LoginProfesorDto {
     example: 'Ej3mpl0!#',
   })
   @ApiProperty()
-  // @IsNotEmpty()
+  @IsNotEmpty()
   password: string;
 }
 export type LoginDto = LoginUserDto | LoginProfesorDto;

@@ -46,7 +46,7 @@ export class ProfesorService {
     if (newProfesor) {
       return newProfesor;
     } else {
-      throw new BadRequestException('Error al crear el usuario');
+      throw new BadRequestException('Error al agregar al nuevo profesor/a');
     }
   }
 
