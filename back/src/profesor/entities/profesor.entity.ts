@@ -1,4 +1,4 @@
-import { Role } from 'src/guards/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
