@@ -10,7 +10,7 @@ export class Plan {
   @Column({ type: 'varchar', nullable: false, length: 46 })
   name: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
   price: number;
 
   @ManyToOne(() => User, (user) => user.plan)

@@ -12,12 +12,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/LoginUserDto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
-@ApiTags('SignIn')
+@ApiTags('SINGIN')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  /**SOLICITUD SIGING */
+  /**Este metodo permite a los usuarios iniciar seccion */
   @Post('signin')
   signIn(@Body() loginUserDto: LoginDto) {
     const { email, password } = loginUserDto;
