@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/LoginUserDto';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
+import { ProfesorService } from 'src/profesor/profesor.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly profesorService: ProfesorService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async signIn(loginDto: LoginDto) {
+    const { type, email, password } = loginDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    if (type === 'user') {
+      console.log(`Buscando usuario con email: ${email}`);
+      const user = await this.usersService.findByEmail(email);
+      if (!user) {
+        console.error(`Usuario no encontrado: ${email}`);
+        throw new BadRequestException('Credenciales incorrectas user');
+      }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        console.error('Contraseña incorrecta');
+        throw new BadRequestException('Credenciales incorrectas password');
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+      console.log('Usuario autenticado correctamente');
+      const payload = { id: user.id, email: user.email, role: user.role };
+      const token = this.jwtService.sign(payload);
+      return { success: 'Inicio de sesión exitoso', token };
+    } else if (type === 'profesor') {
+      console.log(`Buscando profesor con email: ${email}`);
+      const profesor = await this.profesorService.findByEmail(email);
+      if (!profesor) {
+        console.error(`Profesor no encontrado: ${email}`);
+        throw new BadRequestException('Credenciales incorrectas');
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, profesor.password);
+      if (!isPasswordValid) {
+        console.error('Contraseña incorrecta');
+        throw new BadRequestException('Credenciales incorrectas');
+      }
+
+      console.log('Profesor autenticado correctamente');
+      const payload = {
+        id: profesor.id,
+        email: profesor.email,
+        role: profesor.role,
+      };
+      const token = this.jwtService.sign(payload);
+      return { success: 'Inicio de sesión exitoso', token };
+    } else {
+      throw new BadRequestException('Login no reconocido');
+    }
   }
 }
