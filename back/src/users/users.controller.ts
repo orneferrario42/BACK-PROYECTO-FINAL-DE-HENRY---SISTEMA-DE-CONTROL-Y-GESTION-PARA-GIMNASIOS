@@ -54,7 +54,7 @@ export class UsersController {
   }
 
 
-  @Get(':id')
+  @Put('updateState/:id')
   updateStatus(@Param('id') id: string){
     return this.usersService.updateState(id);
   }
@@ -65,12 +65,11 @@ export class UsersController {
   }
 
   /**
-   * Este metodo le permite al usiario modificar  su informacion personal
+   * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  
 }

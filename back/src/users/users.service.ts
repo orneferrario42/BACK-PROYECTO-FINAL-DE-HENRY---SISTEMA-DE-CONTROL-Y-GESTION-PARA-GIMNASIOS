@@ -132,10 +132,13 @@ export class UsersService {
     if(!user){
       throw new NotFoundException('Usuario no encontrado');
     }
+    if (user.estado === true) {
+      user.estado = false;
+    } else {
+      user.estado = true;
+    }
     
-    user.estado = Status.Desactivado
-    
-    this.userRepository.save(user)
+    await this.userRepository.save(user)
     
     const { password, ...userWithOutPassword } = user;
     

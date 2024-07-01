@@ -52,16 +52,17 @@ export class ProfesorService {
   }
   
   async updateState(id: string) {
-    const profesor =  await this.userRepository.findOneBy({id});
-    if(!profesor){
+    const profesor = await this.userRepository.findOneBy({ id });
+    if (!profesor) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    profesor.estado = Status.Desactivado
+    
+    // Alternar el estado del profesor
+    profesor.estado = profesor.estado === true ? false : true;
 
-    this.userRepository.save(profesor)
+    await this.userRepository.save(profesor); // Asegúrate de esperar el guardado
 
     const { password, ...userWithOutPassword } = profesor;
-    
     return userWithOutPassword;
   }
 
@@ -91,6 +92,8 @@ export class ProfesorService {
     }
     if (updateProfesor.estado === true) {
       updateProfesor.estado = false;
+    } else {
+      updateProfesor.estado = true;
     }
 
     return this.ProfesorRepository.save({
