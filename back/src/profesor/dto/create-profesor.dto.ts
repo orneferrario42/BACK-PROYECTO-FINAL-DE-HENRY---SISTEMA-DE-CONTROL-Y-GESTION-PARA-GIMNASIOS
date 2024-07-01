@@ -29,13 +29,13 @@ export class CreateProfesorDto {
   /**esta es la propiedad de dias disponibles del profesor */
   @IsString()
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(5)
   dia: string[];
 
   /**esta es la propiedad de horas disponibles del profesor */
   @IsString()
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(8)
   horario: string[];
 
   /**Esta es la proiedra email
