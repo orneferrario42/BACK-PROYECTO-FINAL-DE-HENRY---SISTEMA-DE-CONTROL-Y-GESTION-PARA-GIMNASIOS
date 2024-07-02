@@ -44,9 +44,20 @@ export class UsersController {
 
   @Get('auth0')
   getAuth0(@Req() req: Request) {
-    return JSON.stringify(req.oidc.user);
+    return JSON.stringify(req.oidc.user); 
   }
 
+  @Post('exist')
+  userExist(@Body() data): Promise<boolean> {
+    const {email} = data
+    return this.usersService.findUserByEmail(email)
+  }
+
+
+  @Put('updateState/:id')
+  updateStatus(@Param('id') id: string){
+    return this.usersService.updateState(id);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -54,15 +65,11 @@ export class UsersController {
   }
 
   /**
-   * Este metodo le permite al usiario modificar  su informacion personal
+   * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
-  }
 }

@@ -13,6 +13,7 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Status } from 'src/enum/estados.enum';
 
 @Injectable()
 export class UsersService {
@@ -23,13 +24,13 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-
+  
   async seederUser() {
     try {
       const userExists = await this.userRepository.findOneBy({
         email: 'jose@mail.com',
       });
-
+      
       if (!userExists) {
         const passwordHashed = await bcrypt.hash('Hola12345@', 10);
         const newUser = this.userRepository.create({
@@ -48,34 +49,34 @@ export class UsersService {
       throw new InternalServerErrorException(error);
     }
   }
-
+  
   async create(user: CreateUserDto) {
     const email = user.email;
     const userExists = await this.userRepository.findOneBy({ email });
-
+    
     if (userExists) {
       throw new HttpException('El usuario ya existe', HttpStatus.BAD_REQUEST);
     }
-
+    
     const hashedPassword = await bcrypt.hash(user.password, 10);
     if (!hashedPassword) {
       throw new BadRequestException('La constraseña no pudo ser hasheada');
     }
-
+    
     const newUser = this.userRepository.create({
       ...user,
       password: hashedPassword,
     });
-
+    
     const savedUser = await this.userRepository.save(newUser);
-
+    
     if (savedUser) {
       return savedUser;
     } else {
       throw new BadRequestException('Error al crear el usuario');
     }
   }
-
+  
   async findAll() {
     return await this.userRepository.find({
       relations: ['profesor'],
@@ -92,7 +93,7 @@ export class UsersService {
       ],
     });
   }
-
+  
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
@@ -100,16 +101,16 @@ export class UsersService {
         profesor: true,
       },
     });
-
+    
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
-
+    
     const { password, ...userWithOutPassword } = user;
-
+    
     return userWithOutPassword;
   }
-
+  
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
@@ -118,27 +119,44 @@ export class UsersService {
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
-
+    
     await this.userRepository.update(id, updateUserDto);
-
+    
     const { password, ...userWithOutPassword } = updateUser;
-
+    
     return userWithOutPassword;
   }
-
-  async remove(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
-
-    if (!user) {
+  
+  async updateState(id: string) {
+    const user =  await this.userRepository.findOneBy({id});
+    if(!user){
       throw new NotFoundException('Usuario no encontrado');
     }
-
-    await this.userRepository.delete(id);
+    if (user.estado === true) {
+      user.estado = false;
+    } else {
+      user.estado = true;
+    }
+    
+    await this.userRepository.save(user)
+    
     const { password, ...userWithOutPassword } = user;
+    
     return userWithOutPassword;
+    
   }
-
+  
   async findByEmail(email: string): Promise<User> {
     return this.userRepository.findOneBy({ email: email });
   }
+  
+  async findUserByEmail(emailUser: string): Promise<boolean> {
+    const userExist = await this.userRepository.findOneBy({email: emailUser});
+    if(!userExist){
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return true
+  } 
+
+
 }

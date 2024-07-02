@@ -51,8 +51,8 @@ export class User {
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
-  @Column({ default: Status.Activado })
-  estado: Status;
+  @Column({ default: true })
+  estado: boolean;
 
   @Column({ type: 'varchar', nullable: true, default: [] })
   objetivo: string[];
