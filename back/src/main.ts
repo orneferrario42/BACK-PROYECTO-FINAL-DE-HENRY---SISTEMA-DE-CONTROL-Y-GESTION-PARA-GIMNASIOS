@@ -7,9 +7,6 @@ import { config as auth0Config } from './config/auth0.config';
 import { loggerGlobal } from './middleware/logger.middleware';
 import { bootstrap } from './bootstrap';
 
-<<<<<<< HEAD
-
-=======
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(loggerGlobal);
@@ -41,5 +38,5 @@ async function bootstrap() {
 
   await app.listen(3001);
 }
->>>>>>> developer
+
 bootstrap();
