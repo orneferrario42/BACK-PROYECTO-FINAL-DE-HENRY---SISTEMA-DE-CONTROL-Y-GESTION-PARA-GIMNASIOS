@@ -1,5 +1,4 @@
 
-import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { auth } from 'express-openid-connect';

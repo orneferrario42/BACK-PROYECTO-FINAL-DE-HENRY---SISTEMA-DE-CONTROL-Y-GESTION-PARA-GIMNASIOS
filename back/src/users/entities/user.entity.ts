@@ -61,7 +61,6 @@ export class User {
   @JoinColumn({ name: 'rutina' })
   rutina: Profesor;
 
-  
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago[];
 }

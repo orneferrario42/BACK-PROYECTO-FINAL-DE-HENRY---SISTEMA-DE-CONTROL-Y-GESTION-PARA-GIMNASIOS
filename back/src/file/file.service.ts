@@ -7,19 +7,21 @@ import { FilesRepository } from './files.repository';
 
 @Injectable()
 export class FileService {
-  // constructor(
-  //   private readonly fileRepository: FilesRepository, // este Filerepository aun no existe ---> le corresponde a ENRRIQUE
-  //   @InjectRepository(User) private userRepository: Repository<User>,
-  // ) {}
+  constructor(
+    private readonly fileRepository: FilesRepository, // este Filerepository aun no tiene contenido ---> le corresponde a ENRRIQUE
+    // @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
-  // async uploadFile(file: Express.Multer.File, userId: string) {}
-  // create(createFileDto: CreateFileDto) {
-  //   const saveFile = await this.userRepository.uploadFile(file);
-  //   const user = await this.userRepository.findOne({
-  //     where: { id: userId },
-  //   });
-  //   if (!user) throw new NotFoundException(`User not found`);
-  // }
+  async uploadFile(file: Express.Multer.File, userId: string) {
+    // const saveFile = await this.userRepository.uploadFile(file);
+    // const user = await this.userRepository.findOne({
+    //   where: { id: userId },
+    // });
+    // if (!user) throw new NotFoundException(`User not found`);
+    // user.rutina = saveFile.secure_url;
+    // const uploadFile = await this.fileRepository.save(user);
+    // return uploadFile;
+  }
 
   findAll() {
     return `This action returns all file`;
