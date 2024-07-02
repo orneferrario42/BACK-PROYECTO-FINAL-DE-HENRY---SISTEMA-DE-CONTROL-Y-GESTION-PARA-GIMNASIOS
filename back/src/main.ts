@@ -1,5 +1,3 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -7,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { auth } from 'express-openid-connect';
 import { config as auth0Config } from './config/auth0.config';
 import { loggerGlobal } from './middleware/logger.middleware';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -39,4 +39,5 @@ async function bootstrap() {
 
   await app.listen(3001);
 }
+
 bootstrap();
