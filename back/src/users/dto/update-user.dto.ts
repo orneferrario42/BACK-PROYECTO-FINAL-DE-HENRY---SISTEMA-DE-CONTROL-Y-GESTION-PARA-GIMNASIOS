@@ -35,5 +35,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   /**en esta propiedra el usuario puede cambiar su objetivo*/
   objetivo: string[];
 
-  rutina: Profesor;
+  rutina: string;
 }

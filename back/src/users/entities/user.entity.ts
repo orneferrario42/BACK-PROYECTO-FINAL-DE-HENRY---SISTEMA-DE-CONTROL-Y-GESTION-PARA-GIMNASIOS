@@ -1,10 +1,8 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -24,6 +22,9 @@ export class User {
   @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;
 
+  @Column({ type: 'text', nullable: true })
+  perfil: string;
+
   @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
   email: string;
 
@@ -38,6 +39,12 @@ export class User {
 
   @Column({ type: 'varchar' })
   numero_dni: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  altura: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  peso: string[];
 
   @Column({ default: Role.User })
   role: Role;
@@ -57,9 +64,8 @@ export class User {
   @Column({ type: 'varchar', nullable: true, default: [] })
   objetivo: string[];
 
-  @OneToOne(() => Profesor, (profesor) => profesor.rutina)
-  @JoinColumn({ name: 'rutina' })
-  rutina: Profesor;
+  @Column({ type: 'text', nullable: true })
+  rutina: string;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago[];

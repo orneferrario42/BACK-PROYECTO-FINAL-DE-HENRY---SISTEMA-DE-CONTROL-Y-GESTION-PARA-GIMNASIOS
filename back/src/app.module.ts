@@ -9,7 +9,7 @@ import { ProfesorModule } from './profesor/profesor.module';
 import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
-import * as cors from 'cors';
+import cors from 'cors';
 
 @Module({
   imports: [
@@ -28,7 +28,11 @@ import * as cors from 'cors';
     ProfesorModule,
     PagosModule,
     SeederModule,
-    JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
+    }),
   ],
 
   controllers: [],
@@ -37,19 +41,21 @@ import * as cors from 'cors';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(cors({
-        origin: '*', // Reemplaza con el origen de tu frontend
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        credentials: true,
-        allowedHeaders: [
-          'Access-Control-Allow-Origin',
-          'Access-Control-Allow-Methods',
-          'x-requested-with',
-          'Access-Control-Allow-Headers',
-          'authorization',
-          'content-type',
-        ],
-      }))
+      .apply(
+        cors({
+          origin: '*', // Reemplaza con el origen de tu frontend
+          methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+          credentials: true,
+          allowedHeaders: [
+            'Access-Control-Allow-Origin',
+            'Access-Control-Allow-Methods',
+            'x-requested-with',
+            'Access-Control-Allow-Headers',
+            'authorization',
+            'content-type',
+          ],
+        }),
+      )
       .forRoutes('*');
   }
 }
