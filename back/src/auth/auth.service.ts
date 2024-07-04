@@ -33,7 +33,7 @@ export class AuthService {
       console.log('Usuario autenticado correctamente');
       const payload = { id: user.id, email: user.email, role: user.role };
       const token = this.jwtService.sign(payload);
-      return { success: 'Inicio de sesión exitoso', token };
+      return { success: 'Inicio de sesión exitoso', token, user: user.role };
     } else if (type === 'profesor') {
       console.log(`Buscando profesor con email: ${email}`);
       const profesor = await this.profesorService.findByEmail(email);
