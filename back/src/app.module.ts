@@ -11,7 +11,7 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
-import * as cors from 'cors';
+// import * as cors from 'cors';
 
 
 @Module({
