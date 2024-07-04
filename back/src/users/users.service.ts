@@ -40,8 +40,8 @@ export class UsersService {
           phone: '123456789',
           fecha_nacimiento: '12-12-1994',
           numero_dni: '12345678',
-          altura: 1.75,
-          peso: 70,
+          altura: "1.75",
+          peso: "70",
           role: Role.Admin,
         });
         return await this.userRepository.save(newUser);

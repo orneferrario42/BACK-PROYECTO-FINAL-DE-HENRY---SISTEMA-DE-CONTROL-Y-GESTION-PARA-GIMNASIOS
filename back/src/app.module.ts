@@ -9,9 +9,9 @@ import { ProfesorModule } from './profesor/profesor.module';
 import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
-import cors from 'cors';
+//import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
-//import * as cors from 'cors';
+// //import * as cors from 'cors';
 
 
 @Module({
