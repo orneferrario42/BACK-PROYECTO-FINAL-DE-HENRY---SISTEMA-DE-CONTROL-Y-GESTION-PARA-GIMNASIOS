@@ -1,12 +1,13 @@
 import {
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { Plan } from './plan.entity';
+import { Plan } from '../../plan/entities/plan.entity';
 import { User } from 'src/users/entities/user.entity';
 @Entity({ name: 'pagos' })
 export class Pago {
@@ -17,11 +18,12 @@ export class Pago {
   fecha_pago: Date;
 
   @Column({ type: 'varchar' })
-  metodo_pago: string;
+  metodopago: string;
 
   @OneToOne(() => User, (user) => user.pagos)
   clientes: User;
 
-  @OneToMany(() => Plan, (plan) => plan.pagos)
-  id_plan: Plan[];
+  @ManyToOne(() => Plan, (plan) => plan.pagos)
+  id_plan: Plan;
+  
 }

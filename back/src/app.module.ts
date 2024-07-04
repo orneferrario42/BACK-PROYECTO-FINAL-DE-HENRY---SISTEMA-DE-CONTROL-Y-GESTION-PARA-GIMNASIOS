@@ -9,6 +9,7 @@ import { ProfesorModule } from './profesor/profesor.module';
 import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
+import { PlanModule } from './plan/plan.module';
 import * as cors from 'cors';
 
 @Module({
@@ -29,6 +30,7 @@ import * as cors from 'cors';
     PagosModule,
     SeederModule,
     JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
+    PlanModule,
   ],
 
   controllers: [],
