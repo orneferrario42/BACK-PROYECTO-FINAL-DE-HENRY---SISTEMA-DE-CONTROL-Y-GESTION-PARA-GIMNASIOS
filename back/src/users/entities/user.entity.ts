@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Role } from 'src/enum/roles.enum';
 import { Pago } from 'src/pagos/entities/pago.entity';
-import { Plan } from 'src/pagos/entities/plan.entity';
+import { Plan } from 'src/plan/entities/plan.entity';
 import { Status } from 'src/enum/estados.enum';
 
 @Entity({
@@ -46,26 +46,39 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   peso: string[];
 
+  @Column({type: 'varchar', nullable: false})
+  altura: number;
+
+  @Column({type: 'int', nullable: false})
+  peso: number;
+
   @Column({ default: Role.User })
   role: Role;
-
+  
   @ManyToOne(() => Plan, (plan) => plan.clientes)
   plan: Plan; // Relación con el plan seleccionado
-
+  
   @ManyToOne(() => Profesor, (profesor) => profesor.users)
   profesor: Profesor;
-
+  
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
-  @Column({ default: true })
-  estado: boolean;
+  @Column('varchar', { default: [] })
+  horario: string[];
 
   @Column({ type: 'varchar', nullable: true, default: [] })
   objetivo: string[];
 
   @Column({ type: 'text', nullable: true })
   rutina: string;
+
+  @Column({ default: true })
+  estado: boolean;
+  
+  @OneToOne(() => Profesor, (profesor) => profesor.rutina)
+  @JoinColumn({ name: 'rutina' })
+  rutina: Profesor;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago[];

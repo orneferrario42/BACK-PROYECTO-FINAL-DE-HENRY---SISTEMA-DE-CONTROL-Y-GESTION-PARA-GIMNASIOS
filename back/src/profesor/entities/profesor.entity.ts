@@ -23,10 +23,10 @@ export class Profesor {
   @Column({ type: 'varchar' })
   edad: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'simple-array', nullable: true })
   dia: string[];
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'simple-array', nullable: true })
   horario: string[];
 
   @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
