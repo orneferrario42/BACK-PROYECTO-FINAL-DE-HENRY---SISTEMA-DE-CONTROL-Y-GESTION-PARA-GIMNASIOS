@@ -21,17 +21,18 @@ export class RolesGuard implements CanActivate {
     ]);
 
     const request = context.switchToHttp().getRequest();
+    
     const user = request.user;
     console.log(user)
     // const hasRole = () =>
     //   requiredRoles.some((role) => user?.role?.includes(role));
-    const rolero= user.roles
+    const rolero= user.role
     console.log(rolero)
-    const valid = user && user.roles && (requiredRoles.includes(rolero));
-    console.log(valid)
+    const valid = user && user.role && (requiredRoles.includes(rolero));
+   console.log(valid)
     if (!valid) {
       throw new ForbiddenException('No autorizado');
     }
-    return false;
+    return valid;
   }
 }
