@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
+
+import { planRepository } from './plan.repository';
 import { CreatePlanDto } from './dto/create-plan.dto';
-import { UpdatePlanDto } from './dto/update-plan.dto';
+import { UpdatePlanDto } from './dto/put-plan.dto';
 
 @Injectable()
 export class PlanService {
-  create(createPlanDto: CreatePlanDto) {
-    return 'This action adds a new plan';
+  constructor(private readonly planRepository: planRepository) {}
+  async create(createPlanDto: CreatePlanDto) {
+    return this.planRepository.createPlan(createPlanDto);
   }
 
   findAll() {
-    return `This action returns all plan`;
+    return this.planRepository.getAllPlans();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plan`;
+  findOne(id: string) {
+    return this.planRepository.getPlanById(id);
   }
 
-  update(id: number, updatePlanDto: UpdatePlanDto) {
-    return `This action updates a #${id} plan`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} plan`;
+  update(id: string, updatePlanDto: UpdatePlanDto) {
+    return this.planRepository.updatePlan(id, updatePlanDto);
   }
 }
