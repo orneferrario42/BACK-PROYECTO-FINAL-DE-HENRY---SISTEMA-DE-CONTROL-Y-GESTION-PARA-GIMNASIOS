@@ -16,4 +16,8 @@ export class CrearPagoDto {
   @IsNotEmpty()
   @IsUUID()
   id_plan: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  userEmail: string;
 }

@@ -39,10 +39,10 @@ export class User {
   @Column({ type: 'varchar' })
   numero_dni: string;
 
-  @Column({type: 'varchar', nullable: false})
+  @Column({type: 'varchar', nullable: true})
   altura: number;
 
-  @Column({type: 'int', nullable: false})
+  @Column({type: 'int', nullable: true})
   peso: number;
 
   @Column({ default: Role.User })

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpException, HttpStatus, Get } from '@nestjs/common';
 import { PagosService } from './pagos.service';
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
@@ -7,13 +7,19 @@ import { Role } from 'src/enum/roles.enum';
 import { RolesGuards } from 'src/auth/guards/roles.guards';
 
 @Controller('payments')
-@UseGuards(AuthGuard, RolesGuards)
+// @UseGuards(AuthGuard, RolesGuards)
 export class PagosController {
   constructor(private readonly pagosService: PagosService) {}
 
-  @Post()
-  @Roles(Role.User)
+  @Get()
+  // @Roles(Role.User)
   async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
-    return this.pagosService.createSubscription();
+    if (crearPagoDto.metodoPago !== 'MercadoPago') {
+      throw new HttpException(
+        'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return this.pagosService.createSubscription(crearPagoDto);
   }
 }

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -21,6 +22,7 @@ export class Pago {
   metodopago: string;
 
   @OneToOne(() => User, (user) => user.pagos)
+  @JoinColumn()
   clientes: User;
 
   @ManyToOne(() => Plan, (plan) => plan.pagos)

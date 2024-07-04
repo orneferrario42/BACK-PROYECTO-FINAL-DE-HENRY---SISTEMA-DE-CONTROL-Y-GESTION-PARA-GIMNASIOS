@@ -14,8 +14,8 @@ export class Plan {
   price: number;
 
   @ManyToOne(() => User, (user) => user.plan)
-  clientes: User;
+  clientes: User[];
 
-  @ManyToOne(() => Pago, (pago) => pago.id_plan)
-  pagos: Pago;
+  @ManyToOne(() => Pago, (pago) => pago.id_plan, {nullable: true})
+  pagos: Pago[];
 }
