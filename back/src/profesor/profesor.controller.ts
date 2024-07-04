@@ -38,8 +38,8 @@ export class ProfesorController {
   /**
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
-  @Get('users')
-  // @Roles(Role.Profesor)
+@Get('users')
+@Roles(Role.Profesor,Role.Admin)
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
