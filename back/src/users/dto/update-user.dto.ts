@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { Plan } from 'src/pagos/entities/plan.entity';
+import { Plan } from 'src/plan/entities/plan.entity';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import {
   IsOptional,
@@ -35,5 +35,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   /**en esta propiedra el usuario puede cambiar su objetivo*/
   objetivo: string[];
 
-  rutina: Profesor;
+  rutina: string;
 }

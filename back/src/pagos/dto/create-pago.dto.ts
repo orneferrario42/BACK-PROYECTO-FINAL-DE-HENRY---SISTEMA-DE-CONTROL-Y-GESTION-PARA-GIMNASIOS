@@ -1,17 +1,23 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsString, IsUUID, isNotEmpty } from 'class-validator';
+import { User } from 'src/users/entities/user.entity';
+import { Plan } from '../../plan/entities/plan.entity';
+// import { User } from 'mercadopago';
 
-export class CreatePagoDto {
-  /**
-   * Esta es la propiedra de fecha de pago
-   */
+export class CrearPagoDto {
+
   @IsNotEmpty()
   @IsDate()
   fecha_pago: Date;
 
-  /**
-   * Esta es la propiedra de metodo de pago
-   */
   @IsNotEmpty()
   @IsString()
-  metodo_pago: string;
+  metodoPago: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  id_plan: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  userEmail: string;
 }
