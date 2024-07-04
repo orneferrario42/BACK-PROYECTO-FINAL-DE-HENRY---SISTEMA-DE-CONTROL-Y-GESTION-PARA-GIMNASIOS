@@ -22,7 +22,7 @@ const config = {
   autoLoadEntities: true,
   // logging: true,
   synchronize: true,
-  // dropSchema: true,
+  dropSchema: true,
 };
 export default registerAs('typeorm', () => config);
 export const connectionSource = new DataSource(config as DataSourceOptions);
