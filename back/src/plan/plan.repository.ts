@@ -6,7 +6,7 @@ import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/put-plan.dto';
 
 @Injectable()
-export class planRepository {
+export class PlanRepository {
   constructor(
     @InjectRepository(Plan) private planRepository: Repository<Plan>,
   ) {}

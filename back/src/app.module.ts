@@ -28,10 +28,12 @@ import { NotificationsModule } from './notifications/notifications.module';
     }),
     UsersModule,
     AuthModule,
-    FileModule,
     ProfesorModule,
+    PlanModule,
     PagosModule,
+    FileModule,
     SeederModule,
+    NotificationsModule,
 
     JwtModule.register({
       global: true,

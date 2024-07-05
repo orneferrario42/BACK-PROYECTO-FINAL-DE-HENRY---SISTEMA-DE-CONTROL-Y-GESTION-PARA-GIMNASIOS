@@ -14,6 +14,8 @@ import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
+import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { Plan } from 'src/plan/entities/plan.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +25,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Plan)
+    private planRepository: Repository<Plan>,
+    @InjectRepository(Profesor)
+    private profesorRepository: Repository<Profesor>,
   ) {}
   
   async seederUser() {
@@ -127,20 +133,61 @@ export class UsersService {
     return userWithOutPassword;
   }
   
+  // async update(
+  //   id: string,
+  //   updateUserDto: UpdateUserDto,
+  // ): Promise<Partial<User>> {
+  //   const updateUser = await this.userRepository.findOneBy({ id });
+  //   if (!updateUser) {
+  //     throw new NotFoundException('Usuario no encontrado');
+  //   }
+    
+  //   await this.userRepository.update(id, updateUserDto);
+    
+    
+  //   const { password, ...userWithOutPassword } = updateUser;
+    
+  //   return userWithOutPassword;
+  // }
+
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<Partial<User>> {
-    const updateUser = await this.userRepository.findOneBy({ id });
+    const updateUser = await this.userRepository.findOne({
+      where: { id },
+      relations: ['plan', 'profesor'],
+    });
+
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    
+
+    if (updateUserDto.plan) {
+      const plan = await this.planRepository.findOne({ where: { id: updateUserDto.plan.id } });
+      if (!plan) {
+        throw new BadRequestException('Plan no encontrado');
+      }
+      updateUserDto.plan = plan;
+    }
+
+    if (updateUserDto.profesor) {
+      const profesor = await this.profesorRepository.findOne({ where: { id: updateUserDto.profesor.id } });
+      if (!profesor) {
+        throw new BadRequestException('Profesor no encontrado');
+      }
+      updateUserDto.profesor = profesor;
+    }
+
     await this.userRepository.update(id, updateUserDto);
-    
-    
-    const { password, ...userWithOutPassword } = updateUser;
-    
+
+    const updatedUser = await this.userRepository.findOne({
+      where: { id },
+      relations: ['plan', 'profesor'],
+    });
+
+    const { password, ...userWithOutPassword } = updatedUser;
+
     return userWithOutPassword;
   }
   

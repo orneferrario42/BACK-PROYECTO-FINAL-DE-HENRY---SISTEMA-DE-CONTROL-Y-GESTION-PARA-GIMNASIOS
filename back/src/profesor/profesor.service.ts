@@ -8,7 +8,7 @@ import {
   Search,
 } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
-import { Connection, Repository } from 'typeorm';
+import {  Repository } from 'typeorm';
 import { Profesor } from './entities/profesor.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
@@ -24,11 +24,11 @@ export class ProfesorService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Profesor)
-    private readonly ProfesorRepository: Repository<Profesor>,
+    private readonly profesorRepository: Repository<Profesor>,
   ) {}
   async create(createProfesorDto: CreateProfesorDto): Promise<Profesor> {
     const email = createProfesorDto.email;
-    const profesorExist = await this.ProfesorRepository.findOneBy({ email });
+    const profesorExist = await this.profesorRepository.findOneBy({ email });
     if (profesorExist) {
       throw new HttpException('el profesor ya existe', HttpStatus.BAD_REQUEST);
     }
@@ -39,7 +39,7 @@ export class ProfesorService {
       throw new BadRequestException('La constraseña no pudo ser hasheada');
     }
     
-    const newProfesor = this.ProfesorRepository.save({
+    const newProfesor = this.profesorRepository.save({
       ...createProfesorDto,
       password: hashedPassword,
     });
@@ -67,11 +67,11 @@ export class ProfesorService {
   }
 
   getProfesores() {
-    return this.ProfesorRepository.find();
+    return this.profesorRepository.find();
   }
 
   findByEmail(email: string): Promise<Profesor> {
-    return this.ProfesorRepository.findOneBy({ email: email });
+    return this.profesorRepository.findOneBy({ email: email });
   }
   getUsers(): Promise<User[]> {
     return this.userRepository.find();
@@ -85,7 +85,7 @@ export class ProfesorService {
     id: string,
     updateProfesorDto: PutProfesorDto,
   ): Promise<Profesor> {
-    const updateProfesor = await this.ProfesorRepository.findOneBy({ id });
+    const updateProfesor = await this.profesorRepository.findOneBy({ id });
 
     if (!updateProfesor) {
       throw new NotFoundException('Profesor/a no encontrado/a');
@@ -96,7 +96,7 @@ export class ProfesorService {
       updateProfesor.estado = true;
     }
 
-    return this.ProfesorRepository.save({
+    return this.profesorRepository.save({
       ...updateProfesor,
       ...updateProfesorDto,
     });
