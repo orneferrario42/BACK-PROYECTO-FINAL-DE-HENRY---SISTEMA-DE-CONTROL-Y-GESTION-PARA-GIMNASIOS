@@ -5,6 +5,7 @@ import { Profesor } from 'src/profesor/entities/profesor.entity';
 import {
   IsOptional,
   IsString,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
@@ -23,9 +24,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   password: string;
   /**en esta propiedra el usuario puede cambiar el plan donde esta inscripto */
   @IsOptional()
+  @IsUUID()
   plan: Plan;
+
   /**en esta propiedra el usuario puede cambiar de profesor */
   @IsOptional()
+  @IsUUID()
   profesor: Profesor;
 
   /**en esta propiedra el usuario puede cambiar de los dias de asistencia */

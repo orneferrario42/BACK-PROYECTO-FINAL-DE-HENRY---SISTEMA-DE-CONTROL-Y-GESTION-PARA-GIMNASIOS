@@ -131,12 +131,12 @@ export class UsersService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<Partial<User>> {
-    // await this.userRepository.update(id, updateUserDto);
     const updateUser = await this.userRepository.findOneBy({ id });
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
     
+    await this.userRepository.update(id, updateUserDto);
     
     
     const { password, ...userWithOutPassword } = updateUser;
