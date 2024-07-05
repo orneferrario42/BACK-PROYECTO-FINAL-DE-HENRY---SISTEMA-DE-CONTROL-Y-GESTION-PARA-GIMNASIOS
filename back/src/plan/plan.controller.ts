@@ -15,6 +15,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { ApiTags } from '@nestjs/swagger';
 
+
 @Controller('plan')
 @ApiTags('CrearPlan')
 export class PlanController {
