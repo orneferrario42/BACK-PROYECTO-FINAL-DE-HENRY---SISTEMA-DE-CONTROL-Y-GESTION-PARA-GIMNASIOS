@@ -11,7 +11,7 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
-import * as cors from 'cors';
+
 
 
 @Module({
@@ -50,7 +50,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(
         cors({
-          origin: '*', // Reemplaza con el origen de tu frontend
+          origin: 'http://localhost:3000', // Reemplaza con el origen de tu frontend
           methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
           credentials: true,
           allowedHeaders: [

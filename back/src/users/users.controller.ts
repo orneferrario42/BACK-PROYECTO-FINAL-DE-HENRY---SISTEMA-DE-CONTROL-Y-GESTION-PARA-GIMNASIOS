@@ -15,9 +15,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import { ParseUUIDPipe } from '@nestjs/common';
 @ApiTags('USERS')
 @ApiBearerAuth()
 @Controller('users')
+
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -56,6 +58,7 @@ export class UsersController {
 
   @Put('updateState/:id')
   updateStatus(@Param('id') id: string){
+    console.log(id)
     return this.usersService.updateState(id);
   }
 
@@ -68,7 +71,7 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
