@@ -5,9 +5,6 @@ import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class FilesRepository {
-  save(user: User) {
-    throw new Error('Method not implemented.');
-  }
   async uploadFile(file: Express.Multer.File): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
       const upload = cloudinary.uploader.upload_stream(
