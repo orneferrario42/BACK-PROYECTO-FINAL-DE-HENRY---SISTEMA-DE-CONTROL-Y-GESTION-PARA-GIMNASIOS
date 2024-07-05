@@ -138,6 +138,7 @@ export class UsersService {
     
     await this.userRepository.update(id, updateUserDto);
     
+    
     const { password, ...userWithOutPassword } = updateUser;
     
     return userWithOutPassword;

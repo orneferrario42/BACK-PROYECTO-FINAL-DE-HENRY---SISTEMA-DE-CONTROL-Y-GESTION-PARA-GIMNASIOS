@@ -20,6 +20,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 @ApiTags('USERS')
 @ApiBearerAuth()
 @Controller('users')
+
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -61,6 +62,7 @@ export class UsersController {
   @Put('updateState/:id')
   @Roles(Role.Admin)
   updateStatus(@Param('id') id: string){
+    console.log(id)
     return this.usersService.updateState(id);
   }
 
