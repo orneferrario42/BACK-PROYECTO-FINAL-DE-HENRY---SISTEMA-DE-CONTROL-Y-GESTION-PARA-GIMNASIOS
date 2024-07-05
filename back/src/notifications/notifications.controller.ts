@@ -6,6 +6,7 @@ import { NotificationsService } from './notifications.service';
 export class NotificationsController {
 constructor(private notificationsService: NotificationsService) {}
 
+
 @Post('rutinaSubida')
 @UseInterceptors(FileInterceptor('file'))
 uploadRoutine(@UploadedFile() file, @Body('userId') userId: string) {
