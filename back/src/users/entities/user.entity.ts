@@ -3,7 +3,6 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -70,7 +69,6 @@ export class User {
 
   @Column({ default: true })
   estado: boolean;
-
 
   @Column({ nullable: true })
   nivelActividad: string; 
