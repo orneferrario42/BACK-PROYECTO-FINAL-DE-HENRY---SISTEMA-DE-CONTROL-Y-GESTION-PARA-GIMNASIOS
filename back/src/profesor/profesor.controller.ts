@@ -38,14 +38,16 @@ export class ProfesorController {
   /**
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
-  @Get('users')
-  // @Roles(Role.Profesor)
+@Get('users')
+@Roles(Role.Profesor,Role.Admin)
+@UseGuards(AuthGuard,RolesGuard)
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
 
 
   @Get(':id')
+  @Roles(Role.Profesor,Role.Admin)
   updateStatus(@Param('id') id: string){
     return this.profesorService.updateState(id);
   }
@@ -54,7 +56,7 @@ export class ProfesorController {
    *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
    */
   @Get('users/:id')
-  // @Roles(Role.Profesor)
+  @Roles(Role.Profesor,Role.Admin)
   getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
@@ -63,7 +65,7 @@ export class ProfesorController {
    * Este metodo le permie al administrador crear un usuario profesor.
    */
   @Post('create')
-  // @Roles(Role.Admin)
+  @Roles(Role.Admin)
   async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {
     const createdProfesor =
       await this.profesorService.create(createProfesorDto);

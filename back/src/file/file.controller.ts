@@ -15,12 +15,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { ProfileProfesorDto } from './dto/profile-profesor.dto';
 import { ProfileUserDto } from './dto/profile-user.dto';
+import { Role } from 'src/enum/roles.enum';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post('uploadFile/:id')
+  @Roles(Role.Profesor,Role.Admin)
   @UseInterceptors(FileInterceptor('rutina'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -47,6 +50,7 @@ export class FileController {
   }
 
   @Post('profileProfesor/:id')
+  @Roles(Role.Profesor,Role.Admin)
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -73,6 +77,7 @@ export class FileController {
   }
 
   @Post('profileUser/:id')
+  @Roles(Role.User)
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({

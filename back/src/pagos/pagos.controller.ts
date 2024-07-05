@@ -12,7 +12,7 @@ export class PagosController {
   constructor(private readonly pagosService: PagosService) {}
 
   @Get()
-  // @Roles(Role.User)
+  @Roles(Role.User,Role.Admin)
   async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
     if (crearPagoDto.metodoPago !== 'MercadoPago') {
       throw new HttpException(
