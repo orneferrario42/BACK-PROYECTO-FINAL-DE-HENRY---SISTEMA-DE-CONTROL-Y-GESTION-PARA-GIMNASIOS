@@ -11,8 +11,10 @@ import {
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/put-plan.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('plan')
+@ApiTags('CrearPlan')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 

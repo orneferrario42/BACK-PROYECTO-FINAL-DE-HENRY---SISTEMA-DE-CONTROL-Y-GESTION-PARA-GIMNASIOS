@@ -11,6 +11,7 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
+import { NotificationsModule } from './notifications/notifications.module';
 // import * as cors from 'cors';
 
 
@@ -40,6 +41,7 @@ import { PlanModule } from './plan/plan.module';
 
     JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
     PlanModule,
+    NotificationsModule,
   ],
 
   controllers: [],
