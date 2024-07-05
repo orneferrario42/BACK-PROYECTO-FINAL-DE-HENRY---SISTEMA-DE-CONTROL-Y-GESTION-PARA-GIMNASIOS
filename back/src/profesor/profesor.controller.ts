@@ -23,7 +23,7 @@ import { RolesGuards } from 'src/auth/guards/roles.guards';
 @ApiTags('PROFESOR')
 @ApiBearerAuth()
 @Controller('profesor')
-// @UseGuards(RolesGuard, AuthGuard)
+
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
@@ -40,14 +40,17 @@ export class ProfesorController {
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
 @Get('users')
+
+@UseGuards(AuthGuard,RolesGuard)
 @Roles(Role.Profesor,Role.Admin)
-// @UseGuards(RolesGuard)
+
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
 
 
   @Get(':id')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Profesor,Role.Admin)
   @UseGuards(RolesGuards, AuthGuard)
   updateStatus(@Param('id') id: string){
@@ -58,6 +61,7 @@ export class ProfesorController {
    *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
    */
   @Get('users/:id')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Profesor,Role.Admin)
   @UseGuards(RolesGuards, AuthGuard)
   getUsersById(@Param('id') id: string) {
@@ -68,6 +72,7 @@ export class ProfesorController {
    * Este metodo le permie al administrador crear un usuario profesor.
    */
   @Post('create')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   @UseGuards(RolesGuards, AuthGuard)
   async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {

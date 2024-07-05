@@ -18,11 +18,12 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
-import { RolesGuards } from 'src/auth/guards/roles.guards';
+import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 @ApiTags('USERS')
 @ApiBearerAuth()
 @Controller('users')
+
 
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -31,6 +32,7 @@ export class UsersController {
    * Este metodo permite a los usuarios no registrador inscribir se en la pagina
    */
   @Post('register')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.User,Role.Admin)
   @UseGuards(RolesGuards, AuthGuard)
   create(@Body() createUserDto: CreateUserDto) {
@@ -41,6 +43,7 @@ export class UsersController {
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   // @UseGuards(RolesGuards)
   findAll() {
@@ -65,6 +68,7 @@ export class UsersController {
 
 
   @Put('updateState/:id')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   @UseGuards(RolesGuards, AuthGuard)
   updateStatus(@Param('id') id: string){
@@ -73,6 +77,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.User)
   @UseGuards(RolesGuards, AuthGuard)
   findOne(@Param('id') id: string) {
@@ -83,6 +88,7 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin,Role.User)
   @UseGuards(RolesGuards, AuthGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
