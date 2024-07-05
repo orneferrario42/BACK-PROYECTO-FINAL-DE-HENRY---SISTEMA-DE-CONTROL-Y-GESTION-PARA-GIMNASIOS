@@ -7,6 +7,7 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  UseGuards,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { CreateFileDto } from './dto/create-file.dto';
@@ -17,13 +18,17 @@ import { ProfileProfesorDto } from './dto/profile-profesor.dto';
 import { ProfileUserDto } from './dto/profile-user.dto';
 import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuards } from 'src/auth/guards/roles.guards';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
-  @Post('uploadFile/:id')
+  @Post(':id')
   @Roles(Role.Profesor,Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
   @UseInterceptors(FileInterceptor('rutina'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -35,7 +40,7 @@ export class FileController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 300000,
+            maxSize: 300000000,
             message: 'File is too large',
           }),
           new FileTypeValidator({
@@ -62,7 +67,7 @@ export class FileController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 300000,
+            maxSize: 300000000,
             message: 'File is too large',
           }),
           new FileTypeValidator({

@@ -33,6 +33,6 @@ export class RolesGuard implements CanActivate {
     if (!valid) {
       throw new ForbiddenException('No autorizado');
     }
-    return valid;
+    return  valid;
   }
 }

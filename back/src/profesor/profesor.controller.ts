@@ -19,6 +19,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { PutProfesorDto } from './dto/put-profesor.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RolesGuards } from 'src/auth/guards/roles.guards';
 @ApiTags('PROFESOR')
 @ApiBearerAuth()
 @Controller('profesor')
@@ -40,7 +41,7 @@ export class ProfesorController {
    */
 @Get('users')
 @Roles(Role.Profesor,Role.Admin)
-@UseGuards(AuthGuard,RolesGuard)
+// @UseGuards(RolesGuard)
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
@@ -48,6 +49,7 @@ export class ProfesorController {
 
   @Get(':id')
   @Roles(Role.Profesor,Role.Admin)
+  @UseGuards(RolesGuards, AuthGuard)
   updateStatus(@Param('id') id: string){
     return this.profesorService.updateState(id);
   }
@@ -57,6 +59,7 @@ export class ProfesorController {
    */
   @Get('users/:id')
   @Roles(Role.Profesor,Role.Admin)
+  @UseGuards(RolesGuards, AuthGuard)
   getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
@@ -66,6 +69,7 @@ export class ProfesorController {
    */
   @Post('create')
   @Roles(Role.Admin)
+  @UseGuards(RolesGuards, AuthGuard)
   async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {
     const createdProfesor =
       await this.profesorService.create(createProfesorDto);
@@ -79,7 +83,8 @@ export class ProfesorController {
    *Este metodo le permite al usuario profesor modifica su informacion personal.
    */
   @Put(':id')
-  // @Roles(Role.Admin)
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuards, AuthGuard)
   async updateProfesor(
     id: string,
     updateProfesorDto: PutProfesorDto,

@@ -9,9 +9,9 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-  
     const token = request.headers.authorization?.split(' ')[1];
-    if(!token) throw new UnauthorizedException('No autorizado');
+    console.log(token)
+    if(!token) throw new UnauthorizedException('No autorizado auth guard');
 
     try {
       const secret = process.env.JWT_SECRET;

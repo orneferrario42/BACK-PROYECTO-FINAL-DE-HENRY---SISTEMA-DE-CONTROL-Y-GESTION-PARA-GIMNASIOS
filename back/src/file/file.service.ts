@@ -26,7 +26,7 @@ export class FileService {
       where: { id: userId },
       relations: ['profesor'],
     });
-
+    console.log(user)
     if (!user) throw new NotFoundException(`User not found`);
 
     if (!user.role) {
@@ -34,11 +34,17 @@ export class FileService {
     }
 
     // Permitir que tanto profesores como administradores suban archivos
-    if (user.role !== Role.Profesor && user.role !== Role.Admin) {
-      throw new ForbiddenException(
-        'Only professors and admins can upload files',
-      );
-    }
+    // if (user.role !== Role.Profesor || Role.Admin) {
+    //   throw new ForbiddenException(
+    //     'Only professors and admins can upload files',
+    //   );
+    // }
+    // if (user.profesor) {
+    //   const profesorRole = user.profesor.role;
+    //   if (profesorRole !== Role.Profesor) {
+    //     throw new ForbiddenException("Only profesdors can upload files");
+    //       }
+    // }
 
     user.rutina = saveFile.secure_url;
     await this.userRepository.save(user);
