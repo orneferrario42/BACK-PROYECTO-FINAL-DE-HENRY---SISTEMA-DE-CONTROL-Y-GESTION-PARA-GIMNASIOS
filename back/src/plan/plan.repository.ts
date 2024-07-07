@@ -14,12 +14,12 @@ export class PlanRepository {
     const plan = this.planRepository.create(createPlanDto);
     return await this.planRepository.save(plan);
   }
-  async getPlanById(id: string) {
+  async getPlanById(id: number) {
     const plan = await this.planRepository.findOne({ where: { id } });
     if (!plan) throw new NotFoundException(`Plan with id ${id} not found`);
     return plan;
   }
-  async updatePlan(id: string, updatePlanDto: UpdatePlanDto) {
+  async updatePlan(id: number, updatePlanDto: UpdatePlanDto) {
     await this.planRepository.update(id, updatePlanDto);
     const updatePlan = await this.planRepository.findOneBy({ id });
     if (!updatePlan)

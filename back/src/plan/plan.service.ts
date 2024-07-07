@@ -15,11 +15,11 @@ export class PlanService {
     return this.planRepository.getAllPlans();
   }
 
-  findOne(id: string) {
+  findOne(id: number) {
     return this.planRepository.getPlanById(id);
   }
 
-  update(id: string, updatePlanDto: UpdatePlanDto) {
+  update(id: number, updatePlanDto: UpdatePlanDto) {
     return this.planRepository.updatePlan(id, updatePlanDto);
   }
 }
