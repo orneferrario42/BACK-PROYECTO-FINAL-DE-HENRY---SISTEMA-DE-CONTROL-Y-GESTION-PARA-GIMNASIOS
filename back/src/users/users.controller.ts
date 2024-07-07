@@ -20,6 +20,7 @@ import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RolesGuards } from 'src/auth/guards/roles.guards';
 @ApiTags('USERS')
 @ApiBearerAuth()
 @Controller('users')
@@ -32,9 +33,8 @@ export class UsersController {
    * Este metodo permite a los usuarios no registrador inscribir se en la pagina
    */
   @Post('register')
-  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.User,Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
+  // @UseGuards(AuthGuard,RolesGuards)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -43,7 +43,7 @@ export class UsersController {
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
-  @UseGuards(AuthGuard,RolesGuard)
+  // @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
   // @UseGuards(RolesGuards)
   findAll() {
@@ -68,18 +68,16 @@ export class UsersController {
 
 
   @Put('updateState/:id')
-  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
+  // @UseGuards(AuthGuard,RolesGuards)
   updateStatus(@Param('id') id: string){
     console.log(id)
     return this.usersService.updateState(id);
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.User)
-  @UseGuards(RolesGuards, AuthGuard)
+  // @UseGuards(AuthGuard,RolesGuard)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -88,9 +86,8 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
-  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin,Role.User)
-  @UseGuards(RolesGuards, AuthGuard)
+  // @UseGuards(AuthGuard,RolesGuards)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }

@@ -10,6 +10,7 @@ sendNotification(userId: string, message: string): void {
     message,
     timestamp: new Date(),
     };
+    console.log(notification)
     this.notificationsGateway.sendNotificationToUser(userId, notification);
 }
 }

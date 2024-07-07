@@ -1,7 +1,13 @@
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, ConnectedSocket } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 export class NotificationsGateway {
   @WebSocketServer() server: Server;
   private userSockets: Map<string, Socket> = new Map();
@@ -21,8 +27,10 @@ export class NotificationsGateway {
 
   sendNotificationToUser(userId: string, notification: any): void {
     const userSocket = this.userSockets.get(userId);
+    console.log(userSocket);
     if (userSocket) {
       userSocket.emit('newNotification', notification);
     }
   }
+
 }
