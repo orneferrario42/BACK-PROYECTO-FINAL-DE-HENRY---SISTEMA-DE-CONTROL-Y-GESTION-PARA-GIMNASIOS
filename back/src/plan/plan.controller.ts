@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Put,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
@@ -14,7 +15,6 @@ import { UpdatePlanDto } from './dto/put-plan.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { ApiTags } from '@nestjs/swagger';
-
 
 @Controller('plan')
 @ApiTags('CrearPlan')
@@ -34,14 +34,17 @@ export class PlanController {
   }
 
   @Get(':id')
-  @Roles(Role.User,Role.Admin)
-  findOne(@Param('id') id: string) {
+  @Roles(Role.User, Role.Admin)
+  findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.planService.findOne(id);
   }
 
   @Put(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
+  update(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() updatePlanDto: UpdatePlanDto,
+  ) {
     return this.planService.update(id, updatePlanDto);
   }
 }

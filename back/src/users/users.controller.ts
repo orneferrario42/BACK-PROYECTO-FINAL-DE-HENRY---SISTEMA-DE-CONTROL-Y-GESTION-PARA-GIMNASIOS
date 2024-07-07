@@ -9,7 +9,6 @@ import {
   Put,
   Req,
   UseGuards,
-
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,8 +22,6 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 @ApiTags('USERS')
 @ApiBearerAuth()
 @Controller('users')
-
-
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -32,9 +29,9 @@ export class UsersController {
    * Este metodo permite a los usuarios no registrador inscribir se en la pagina
    */
   @Post('register')
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.User,Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
+  // @UseGuards(AuthGuard,RolesGuard)
+  // @Roles(Role.User,Role.Admin)
+  // @UseGuards(RolesGuard, AuthGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -43,13 +40,12 @@ export class UsersController {
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
-  @UseGuards(AuthGuard,RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
   // @UseGuards(RolesGuards)
   findAll() {
     return this.usersService.findAll();
   }
-
 
   /**
    * Este metodo permite a un usuario verla informacion de su perfil
@@ -57,29 +53,28 @@ export class UsersController {
 
   @Get('auth0')
   getAuth0(@Req() req: Request) {
-    return JSON.stringify(req.oidc.user); 
+    return JSON.stringify(req.oidc.user);
   }
 
   @Post('exist')
   userExist(@Body() data): Promise<boolean> {
-    const {email} = data
-    return this.usersService.findUserByEmail(email)
+    const { email } = data;
+    return this.usersService.findUserByEmail(email);
   }
 
-
   @Put('updateState/:id')
-  @UseGuards(AuthGuard,RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
-  updateStatus(@Param('id') id: string){
-    console.log(id)
+  @UseGuards(RolesGuard, AuthGuard)
+  updateStatus(@Param('id') id: string) {
+    console.log(id);
     return this.usersService.updateState(id);
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard,RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User)
-  @UseGuards(RolesGuards, AuthGuard)
+  @UseGuards(RolesGuard, AuthGuard)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -88,11 +83,9 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.Admin,Role.User)
-  @UseGuards(RolesGuards, AuthGuard)
+  // @Roles(Role.Admin,Role.User)
+  // @UseGuards(RolesGuard, AuthGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
-
 }
