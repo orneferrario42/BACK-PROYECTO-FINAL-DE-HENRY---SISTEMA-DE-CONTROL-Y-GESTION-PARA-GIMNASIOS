@@ -166,7 +166,7 @@ export class UsersService {
 
     if (updateUserDto.plan) {
       const plan = await this.planRepository.findOne({
-        where: { id: updateUserDto.plan.id },
+        where: { id: updateUserDto.plan as unknown as number },
       });
       if (!plan) {
         throw new NotFoundException('Plan no encontrado');
