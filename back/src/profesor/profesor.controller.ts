@@ -25,26 +25,31 @@ import { RolesGuards } from 'src/auth/guards/roles.guards';
 @ApiBearerAuth()
 @Controller('profesor')
 
+
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
   /**
    * Este metodo le permite al administrador ver todos los profesores que tiene.
    */
+
   @Get('profesores')
-  // @Roles(Role.Admin)
-  async getAllProfesores(@Query('id') id: string ): Promise<Profesor[]> {
-    return await this.profesorService.getProfesores(id);
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles(Role.Admin)
+  async getAllProfesores(): Promise<Profesor[]> {
+    return await this.profesorService.getProfesores();
+  }
+  @Get('cupos')
+  async getCupoProfesores(@Query('id') id: string ): Promise<number[]> {
+    return await this.profesorService.getCupoProfesores(id);
   }
 
   /**
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
 @Get('users')
-
 @UseGuards(AuthGuard,RolesGuard)
 @Roles(Role.Profesor,Role.Admin)
-
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
@@ -53,7 +58,6 @@ export class ProfesorController {
   @Get(':id')
   @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Profesor,Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
   updateStatus(@Param('id') id: string){
     return this.profesorService.updateState(id);
   }
@@ -64,7 +68,6 @@ export class ProfesorController {
   @Get('users/:id')
   @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Profesor,Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
   getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
@@ -75,7 +78,6 @@ export class ProfesorController {
   @Post('create')
   @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
   async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {
     const createdProfesor =
       await this.profesorService.create(createProfesorDto);
@@ -89,8 +91,8 @@ export class ProfesorController {
    *Este metodo le permite al usuario profesor modifica su informacion personal.
    */
   @Put(':id')
+  @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.Admin)
-  @UseGuards(RolesGuards, AuthGuard)
   async updateProfesor(
     id: string,
     updateProfesorDto: PutProfesorDto,

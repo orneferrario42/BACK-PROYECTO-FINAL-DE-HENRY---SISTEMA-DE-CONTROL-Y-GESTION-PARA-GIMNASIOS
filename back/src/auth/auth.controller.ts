@@ -17,10 +17,10 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  /**Este metodo permite a los usuarios iniciar seccion */
+  /*Este metodo permite a los usuarios iniciar seccion/*/
+
   @Post('signin')
   signIn(@Body() loginUserDto: LoginDto) {
-    const { email, password } = loginUserDto;
     return this.authService.signIn(loginUserDto);
   }
 }
