@@ -78,5 +78,5 @@ export class User {
   // rutina: Profesor;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago[];
+  pagos: Pago;
 }

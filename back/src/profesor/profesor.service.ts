@@ -65,9 +65,18 @@ export class ProfesorService {
     const { password, ...userWithOutPassword } = profesor;
     return userWithOutPassword;
   }
+  async getProfesores(id:string) {
+    const veriTurnos =  await this.profesorRepository.find( {where: { id }});
 
-  getProfesores() {
-    return this.profesorRepository.find();
+    veriTurnos[0].horario.map(async(h)=>{
+              const nT = h.replace(/a/g, '-');
+              console.log(nT) 
+              const validaCupo=await this.userRepository.find({where:{horario:nT}})
+          console.log(validaCupo.length)
+
+          })
+
+    return  []
   }
 
   findByEmail(email: string): Promise<Profesor> {
