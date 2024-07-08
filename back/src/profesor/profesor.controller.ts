@@ -33,8 +33,22 @@ export class ProfesorController {
    */
   @Get('profesores')
   // @Roles(Role.Admin)
-  async getAllProfesores(@Query('id') id: string ): Promise<Profesor[]> {
-    return await this.profesorService.getProfesores(id);
+  async getAllProfesores(@Query('id') id: string ){
+    const datosJSON = [];
+    const datoRecibidos = await this.profesorService.getProfesores(id);
+    console.log(datoRecibidos)
+    console.log('horarios benditos')
+    for (let i = 0; i < datoRecibidos.length; i += 2) {
+      const franjaHoraria = datoRecibidos[i];
+      const cupo = datoRecibidos[i + 1];
+      const objetoJSON = {
+        horario: franjaHoraria,
+        cupos: cupo
+      };
+      datosJSON.push(objetoJSON);
+    }
+    const json = JSON.stringify(datosJSON);
+    return json
   }
 
   /**
