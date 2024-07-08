@@ -24,8 +24,6 @@ import { RolesGuards } from 'src/auth/guards/roles.guards';
 @ApiTags('PROFESOR')
 @ApiBearerAuth()
 @Controller('profesor')
-
-
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
@@ -39,9 +37,23 @@ export class ProfesorController {
   async getAllProfesores(): Promise<Profesor[]> {
     return await this.profesorService.getProfesores();
   }
+
   @Get('cupos')
-  async getCupoProfesores(@Query('id') id: string ): Promise<number[]> {
-    return await this.profesorService.getCupoProfesores(id);
+  async getCupoProfesores(@Query('id') id: string) {
+    const datosJSON = [];
+    const datoRecibidos = await this.profesorService.getCupoProfesores(id);
+    console.log(datoRecibidos);
+    for (let i = 0; i < datoRecibidos.length; i += 2) {
+      const franjaHoraria = datoRecibidos[i];
+      const cupo = datoRecibidos[i + 1];
+      const objetoJSON = {
+        horario: franjaHoraria,
+        cupos: cupo,
+      };
+      datosJSON.push(objetoJSON);
+    }
+    const json = JSON.stringify(datosJSON);
+    return json;
   }
 
   /**
@@ -53,7 +65,6 @@ export class ProfesorController {
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
-
 
   @Get(':id')
   // @UseGuards(AuthGuard,RolesGuard)
@@ -99,6 +110,4 @@ export class ProfesorController {
   ): Promise<Profesor> {
     return this.profesorService.updateProfesor(id, updateProfesorDto);
   }
-
-  
 }

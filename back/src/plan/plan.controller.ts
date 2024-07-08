@@ -27,12 +27,14 @@ export class PlanController {
   @Post('createplan')
   // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   create(@Body() createPlanDto: CreatePlanDto) {
     return this.planService.create(createPlanDto);
   }
 
   @Get()
-  // @UseGuards(AuthGuard,RolesGuard)
+  // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
   findAll() {
     return this.planService.findAll();
@@ -44,9 +46,10 @@ export class PlanController {
   findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.planService.findOne(id);
   }
+}
 
   @Put(':id')
-  // @UseGuards(AuthGuard,RolesGuard)
+  // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
   update(
     @Param('id', new ParseIntPipe()) id: number,
