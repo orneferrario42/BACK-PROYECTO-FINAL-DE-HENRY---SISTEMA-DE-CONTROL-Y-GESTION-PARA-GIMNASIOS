@@ -47,7 +47,6 @@ import { Role } from 'src/enum/roles.enum';
 //   rutina: string;
 // }
 export class UpdateUserDto {
-  
   name?: string;
   email?: string;
   phone?: string;
@@ -62,3 +61,5 @@ export class UpdateUserDto {
   profesor?: Profesor;
   metodoPago?: string;
 }
+
+
