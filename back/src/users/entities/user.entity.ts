@@ -71,7 +71,7 @@ export class User {
   estado: boolean;
 
   @Column({ type: 'varchar', nullable: true, default: [] })
-  metodoPago: string[];
+  metodoPago: string;
 
 
   @Column({ nullable: true })

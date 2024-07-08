@@ -60,4 +60,5 @@ export class UpdateUserDto {
   estado?: boolean;
   plan?: Plan;
   profesor?: Profesor;
+  metodoPago?: string;
 }
