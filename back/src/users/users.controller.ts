@@ -77,9 +77,13 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
-  @Roles(Role.Admin,Role.User)
-  @UseGuards(AuthGuard,RolesGuard)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  // @Roles(Role.Admin,Role.User)
+  // @UseGuards(AuthGuard,RolesGuard)
+  update(
+    @Param('id') id: string,
+    @Body()
+    updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.update(id, updateUserDto);
   }
 }
