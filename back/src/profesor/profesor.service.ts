@@ -65,18 +65,30 @@ export class ProfesorService {
     const { password, ...userWithOutPassword } = profesor;
     return userWithOutPassword;
   }
-  async getProfesores(id:string) {
-    const veriTurnos =  await this.profesorRepository.find( {where: { id }});
 
-    veriTurnos[0].horario.map(async(h)=>{
-              const nT = h.replace(/a/g, '-');
-              console.log(nT) 
-              const validaCupo=await this.userRepository.find({where:{horario:nT}})
-          console.log(validaCupo.length)
+  getProfesores() {
+    return this.profesorRepository.find();
+  }
 
-          })
-
-    return  []
+  public async processTurnos(id) {
+    const veriTurnos = await this.profesorRepository.find({where:{id:id}})
+      const results = []; 
+  
+      for (const horario of veriTurnos[0].horario) {
+        //const nT = horario.replace(/a/g, '-');
+        console.log(horario)
+        const validaCupoPromise = this.userRepository.find({ where: { horario: horario } });
+  
+        // Wait for the promise to resolve and get the actual data
+        const validaCupo = await validaCupoPromise;
+        results.push(horario,validaCupo.length);
+      }
+  
+    return results; 
+    }
+  async getCupoProfesores(id:string) {
+    const cupos = this.processTurnos(id)
+  return cupos
   }
 
   findByEmail(email: string): Promise<Profesor> {
