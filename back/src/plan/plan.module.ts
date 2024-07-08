@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { PlanController } from './plan.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Plan } from './entities/plan.entity';
-import { planRepository } from './plan.repository';
+import { PlanRepository } from './plan.repository';
+import { ProfesorModule } from 'src/profesor/profesor.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Plan])],
+  imports: [
+    TypeOrmModule.forFeature([Plan]),
+    forwardRef(() => ProfesorModule) // Uso de forwardRef para evitar dependencias circulares
+  ],
   controllers: [PlanController],
-  providers: [PlanService, planRepository],
+  providers: [PlanService, PlanRepository],
+  exports: [PlanRepository],
 })
 export class PlanModule {}

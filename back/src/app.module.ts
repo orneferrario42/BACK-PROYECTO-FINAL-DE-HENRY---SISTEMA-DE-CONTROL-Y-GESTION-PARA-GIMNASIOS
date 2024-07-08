@@ -11,7 +11,8 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
-
+import { NotificationsModule } from './notifications/notifications.module';
+// import * as cors from 'cors';
 
 
 @Module({
@@ -27,10 +28,12 @@ import { PlanModule } from './plan/plan.module';
     }),
     UsersModule,
     AuthModule,
-    FileModule,
     ProfesorModule,
+    PlanModule,
     PagosModule,
+    FileModule,
     SeederModule,
+    NotificationsModule,
 
     JwtModule.register({
       global: true,
@@ -40,6 +43,7 @@ import { PlanModule } from './plan/plan.module';
 
     JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
     PlanModule,
+    NotificationsModule,
   ],
 
   controllers: [],
@@ -50,7 +54,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(
         cors({
-          origin: '*', // Reemplaza con el origen de tu frontend
+          origin: 'http://localhost:3000', // Reemplaza con el origen de tu frontend
           methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
           credentials: true,
           allowedHeaders: [

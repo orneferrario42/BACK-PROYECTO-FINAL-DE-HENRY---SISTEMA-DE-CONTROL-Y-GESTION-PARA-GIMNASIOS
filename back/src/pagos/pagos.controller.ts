@@ -5,8 +5,10 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Roles } from 'src/Decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { RolesGuards } from 'src/auth/guards/roles.guards';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('payments')
+@ApiTags('Pagos')
 // @UseGuards(AuthGuard, RolesGuards)
 export class PagosController {
   constructor(private readonly pagosService: PagosService) {}

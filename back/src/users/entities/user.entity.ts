@@ -3,7 +3,6 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -74,6 +73,13 @@ export class User {
   @Column({ default: true })
   estado: boolean;
 
+  @Column({ nullable: true })
+  //nivelActividad: string; 
+  
+  // @OneToOne(() => Profesor, (profesor) => profesor.rutina)
+  // @JoinColumn({ name: 'rutina' })
+  // rutina: Profesor;
+
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago[];
+  pagos: [Pago];
 }
