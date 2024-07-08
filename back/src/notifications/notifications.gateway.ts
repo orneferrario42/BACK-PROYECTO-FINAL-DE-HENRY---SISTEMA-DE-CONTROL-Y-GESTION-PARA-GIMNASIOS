@@ -36,4 +36,10 @@ export class NotificationsGateway {
       userSocket.emit('newNotification', notification);
     }
   }
+
+  sendNotificationToAll(notification: any): void {
+    this.userSockets.forEach((socket) => {
+      socket.emit('newNotification', notification);
+    });
+  }
 }
