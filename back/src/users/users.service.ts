@@ -8,23 +8,27 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
+import { And, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
+import { query } from 'express';
+import { Profesor } from 'src/profesor/entities/profesor.entity';
 
 @Injectable()
 export class UsersService {
-  findBy(email: string) {
-    throw new Error('Method not implemented.');
-  }
+ 
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    
   ) {}
+
+ 
   
+
   async seederUser() {
     try {
       const userExists = await this.userRepository.findOneBy({
@@ -78,6 +82,8 @@ export class UsersService {
       throw new BadRequestException('Error al crear el usuario');
     }
   }
+
+  
   
   async findAll() {
     return await this.userRepository.find({
@@ -131,11 +137,14 @@ export class UsersService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<Partial<User>> {
+    
     const updateUser = await this.userRepository.findOneBy({ id });
+    console.log(id)
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    
+    console.log('aqui esta el problema')
+    console.log(updateUserDto)
     await this.userRepository.update(id, updateUserDto);
     
     const { password, ...userWithOutPassword } = updateUser;

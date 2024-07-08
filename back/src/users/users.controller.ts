@@ -8,6 +8,9 @@ import {
   Delete,
   Put,
   Req,
+  ParseIntPipe,
+  Query,
+  ParseUUIDPipe,
 
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -42,6 +45,9 @@ export class UsersController {
   }
 
 
+
+
+
   /**
    * Este metodo permite a un usuario verla informacion de su perfil
    */
@@ -64,6 +70,7 @@ export class UsersController {
     return this.usersService.updateState(id);
   }
 
+  
   @Get(':id')
   @Roles(Role.User)
   findOne(@Param('id') id: string) {

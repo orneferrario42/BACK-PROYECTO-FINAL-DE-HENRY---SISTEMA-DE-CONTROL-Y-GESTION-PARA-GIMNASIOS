@@ -21,9 +21,11 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
       'Password invalida. Debe contener al menos una mayuscula, una minuscula, un numero y un caracter especial (!@#$%^&*)',
   })
   password: string;
+
   /**en esta propiedra el usuario puede cambiar el plan donde esta inscripto */
   @IsOptional()
   plan: Plan;
+
   /**en esta propiedra el usuario puede cambiar de profesor */
   @IsOptional()
   profesor: Profesor;

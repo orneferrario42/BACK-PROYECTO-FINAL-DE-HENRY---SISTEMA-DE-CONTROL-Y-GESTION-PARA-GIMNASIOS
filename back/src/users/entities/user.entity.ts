@@ -45,6 +45,9 @@ export class User {
   altura: string;
 
   @Column({type: 'varchar', nullable: true})
+  nivelActividad: string;
+
+  @Column({type: 'varchar', nullable: true})
   peso: string;
 
   @Column({ default: Role.User })

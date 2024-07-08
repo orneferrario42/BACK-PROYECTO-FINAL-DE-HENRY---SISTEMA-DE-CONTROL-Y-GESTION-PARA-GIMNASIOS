@@ -8,6 +8,7 @@ import {
   Delete,
   Put,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
@@ -31,8 +32,8 @@ export class ProfesorController {
    */
   @Get('profesores')
   // @Roles(Role.Admin)
-  async getAllProfesores(): Promise<Profesor[]> {
-    return await this.profesorService.getProfesores();
+  async getAllProfesores(@Query('id') id: string): Promise<Profesor[]> {
+    return await this.profesorService.getProfesores(id);
   }
 
   /**

@@ -66,8 +66,27 @@ export class ProfesorService {
     return userWithOutPassword;
   }
 
-  getProfesores() {
-    return this.ProfesorRepository.find();
+
+  // public async contador(horario:string,id:string) {
+  //   const contUser = await this.userRepository.find({
+  //     relations: ['profesor'],
+  //   })
+  
+      
+  // }
+
+  async getProfesores(id) {
+    const veriTurnos =  await this.ProfesorRepository.find( {where: { id }});
+      
+    veriTurnos[0].horario.map(async(h)=>{          
+              const nT = h.replace(/a/g, '-');
+              console.log(nT) 
+              const validaCupo=await this.userRepository.find({where:{horario:nT}})
+          console.log(validaCupo.length)  
+      
+          })
+
+    return  []
   }
 
   findByEmail(email: string): Promise<Profesor> {

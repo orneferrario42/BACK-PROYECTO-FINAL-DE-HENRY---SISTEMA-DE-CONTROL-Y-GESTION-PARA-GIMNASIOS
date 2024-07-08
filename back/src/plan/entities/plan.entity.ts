@@ -1,3 +1,4 @@
+
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Pago } from '../../pagos/entities/pago.entity';
