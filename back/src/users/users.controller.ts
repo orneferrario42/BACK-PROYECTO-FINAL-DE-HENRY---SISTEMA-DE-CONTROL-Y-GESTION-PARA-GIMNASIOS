@@ -71,6 +71,7 @@ export class UsersController {
     return this.usersService.updateState(id);
   }
 
+  
   @Get(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User)

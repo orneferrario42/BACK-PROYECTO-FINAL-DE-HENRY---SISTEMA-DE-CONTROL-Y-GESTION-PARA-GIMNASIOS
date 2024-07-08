@@ -44,6 +44,9 @@ export class User {
   altura: string;
 
   @Column({type: 'varchar', nullable: true})
+  nivelActividad: string;
+
+  @Column({type: 'varchar', nullable: true})
   peso: string;
 
   @Column({ default: Role.User })
@@ -71,12 +74,12 @@ export class User {
   estado: boolean;
 
   @Column({ nullable: true })
-  nivelActividad: string; 
+  //nivelActividad: string; 
   
   // @OneToOne(() => Profesor, (profesor) => profesor.rutina)
   // @JoinColumn({ name: 'rutina' })
   // rutina: Profesor;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago;
+  pagos: string;
 }

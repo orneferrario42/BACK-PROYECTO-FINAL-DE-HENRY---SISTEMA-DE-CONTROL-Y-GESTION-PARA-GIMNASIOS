@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
+import { And, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
@@ -19,9 +19,7 @@ import { Plan } from 'src/plan/entities/plan.entity';
 
 @Injectable()
 export class UsersService {
-  findBy(email: string) {
-    throw new Error('Method not implemented.');
-  }
+ 
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,

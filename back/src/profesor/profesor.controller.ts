@@ -33,7 +33,9 @@ export class ProfesorController {
    */
   @Get('profesores')
   // @Roles(Role.Admin)
+ 
   async getAllProfesores(@Query('id') id: string ){
+    return await this.profesorService.getProfesores(id); 
     const datosJSON = [];
     const datoRecibidos = await this.profesorService.getProfesores(id);
     console.log(datoRecibidos)
