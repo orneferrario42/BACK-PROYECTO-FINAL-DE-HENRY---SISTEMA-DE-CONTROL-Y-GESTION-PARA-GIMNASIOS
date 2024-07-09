@@ -61,3 +61,5 @@ export class UpdateUserDto {
   profesor?: Profesor;
   metodoPago?: string;
 }
+
+

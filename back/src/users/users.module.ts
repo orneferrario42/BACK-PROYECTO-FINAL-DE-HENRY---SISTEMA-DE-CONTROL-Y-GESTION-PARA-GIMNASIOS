@@ -10,7 +10,11 @@ import { Plan } from 'src/plan/entities/plan.entity';
 import { ProfesorService } from 'src/profesor/profesor.service';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { NotificationsService } from 'src/notifications/notifications.service';
-import { notificationRepository } from 'src/notifications/notifications.repository';
+import { NotificationsGateway } from 'src/notifications/notifications.gateway';
+import { Notificaciones } from 'src/notifications/entity/notificaciones.entity';
+import { NotificationsModule } from 'src/notifications/notifications.module';
+import { UsersRepository } from './users.repository';
+
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Plan, Profesor])],
@@ -20,7 +24,8 @@ import { notificationRepository } from 'src/notifications/notifications.reposito
     PlanRepository,
     ProfesorService,
     NotificationsService,
-    notificationRepository,
+    NotificationsGateway,
+    
   ],
   exports: [UsersService],
 })
