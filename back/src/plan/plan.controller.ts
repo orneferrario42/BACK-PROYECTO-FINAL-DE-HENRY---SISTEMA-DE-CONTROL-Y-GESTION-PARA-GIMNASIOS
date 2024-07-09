@@ -25,8 +25,8 @@ export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @Post('createplan')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(AuthGuard,RolesGuard)
+  // @Roles(Role.Admin)
   create(@Body() createPlanDto: CreatePlanDto) {
     return this.planService.create(createPlanDto);
   }
@@ -39,15 +39,16 @@ export class PlanController {
   }
 
   @Get(':id')
-  // @UseGuards(AuthGuard, RolesGuard)
+  // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.User, Role.Admin)
   findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.planService.findOne(id);
   }
 
+
   @Put(':id')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Roles(Role.Admin)
   update(
     @Param('id', new ParseIntPipe()) id: number,
     @Body() updatePlanDto: UpdatePlanDto,
