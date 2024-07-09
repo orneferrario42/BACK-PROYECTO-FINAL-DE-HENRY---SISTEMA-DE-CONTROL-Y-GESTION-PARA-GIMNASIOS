@@ -33,7 +33,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     PagosModule,
     FileModule,
     SeederModule,
-    NotificationsModule,
+    // NotificationsModule,
 
     JwtModule.register({
       global: true,
