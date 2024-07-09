@@ -8,6 +8,7 @@ import {
   Delete,
   Put,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
@@ -19,33 +20,55 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { PutProfesorDto } from './dto/put-profesor.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RolesGuards } from 'src/auth/guards/roles.guards';
 @ApiTags('PROFESOR')
 @ApiBearerAuth()
 @Controller('profesor')
-// @UseGuards(RolesGuard, AuthGuard)
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
   /**
    * Este metodo le permite al administrador ver todos los profesores que tiene.
    */
+
   @Get('profesores')
+  // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.Admin)
   async getAllProfesores(): Promise<Profesor[]> {
     return await this.profesorService.getProfesores();
   }
 
+  @Get('cupos')
+  async getCupoProfesores(@Query('id') id: string) {
+    const datosJSON = [];
+    const datoRecibidos = await this.profesorService.getCupoProfesores(id);
+    console.log(datoRecibidos);
+    for (let i = 0; i < datoRecibidos.length; i += 2) {
+      const franjaHoraria = datoRecibidos[i];
+      const cupo = datoRecibidos[i + 1];
+      const objetoJSON = {
+        horario: franjaHoraria,
+        cupos: cupo,
+      };
+      datosJSON.push(objetoJSON);
+    }
+    const json = JSON.stringify(datosJSON);
+    return json;
+  }
+
   /**
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
-  @Get('users')
-  // @Roles(Role.Profesor)
+@Get('users')
+// @UseGuards(AuthGuard,RolesGuard)
+// @Roles(Role.Profesor,Role.Admin)
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
 
-
   @Get(':id')
+  // @UseGuards(AuthGuard,RolesGuard)
+  // @Roles(Role.Profesor,Role.Admin)
   updateStatus(@Param('id') id: string){
     return this.profesorService.updateState(id);
   }
@@ -54,7 +77,8 @@ export class ProfesorController {
    *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
    */
   @Get('users/:id')
-  // @Roles(Role.Profesor)
+  // @UseGuards(AuthGuard,RolesGuard)
+  // @Roles(Role.Profesor,Role.Admin)
   getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
@@ -63,6 +87,7 @@ export class ProfesorController {
    * Este metodo le permie al administrador crear un usuario profesor.
    */
   @Post('create')
+  // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.Admin)
   async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {
     const createdProfesor =
@@ -77,6 +102,7 @@ export class ProfesorController {
    *Este metodo le permite al usuario profesor modifica su informacion personal.
    */
   @Put(':id')
+  // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.Admin)
   async updateProfesor(
     id: string,

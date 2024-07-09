@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength } from 'class-validator';
 
-export class CreateFileDto {
+export class ProfileProfesorDto {
   @ApiProperty({
-    description: 'add an file',
+    description: 'add profile  picture for the professor',
     type: 'string',
     format: 'binary',
   })
   @IsString()
   @MaxLength(255)
-  rutina?: string;
+  perfil?: string;
 }

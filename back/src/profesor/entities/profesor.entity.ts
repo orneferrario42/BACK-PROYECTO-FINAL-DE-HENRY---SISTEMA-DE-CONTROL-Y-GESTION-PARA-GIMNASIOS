@@ -17,13 +17,16 @@ export class Profesor {
   @Column({ type: 'varchar', length: 50, nullable: false })
   nombre: string;
 
+  @Column({ type: 'text', nullable: true })
+  perfil: string;
+
   @Column({ type: 'varchar' })
   edad: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'simple-array', nullable: true })
   dia: string[];
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'simple-array', nullable: true })
   horario: string[];
 
   @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
@@ -37,9 +40,6 @@ export class Profesor {
 
   @Column({ type: 'boolean', default: true })
   estado: boolean;
-
-  @OneToOne(() => User, (user) => user.rutina)
-  rutina: User;
 
   @OneToMany(() => User, (user) => user.profesor)
   @JoinColumn({ name: 'id_users' })

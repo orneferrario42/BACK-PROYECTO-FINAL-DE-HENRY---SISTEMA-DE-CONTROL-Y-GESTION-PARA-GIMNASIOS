@@ -1,35 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpException, HttpStatus, Get } from '@nestjs/common';
 import { PagosService } from './pagos.service';
-import { CreatePagoDto } from './dto/create-pago.dto';
-import { UpdatePagoDto } from './dto/update-pago.dto';
+import { CrearPagoDto } from './dto/create-pago.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Roles } from 'src/Decorators/roles.decorator';
+import { Role } from 'src/enum/roles.enum';
+import { RolesGuards } from 'src/auth/guards/roles.guards';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('pagos')
+@Controller('payments')
+@ApiTags('Pagos')
 export class PagosController {
   constructor(private readonly pagosService: PagosService) {}
 
-  @Post()
-  create(@Body() createPagoDto: CreatePagoDto) {
-    return this.pagosService.create(createPagoDto);
-  }
-
   @Get()
-  findAll() {
-    //return this.pagosService.findAll();
-    return "hola probando remoto";
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pagosService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePagoDto: UpdatePagoDto) {
-    return this.pagosService.update(+id, updatePagoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pagosService.remove(+id);
+  async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
+    if (crearPagoDto.metodoPago !== 'MercadoPago') {
+      throw new HttpException(
+        'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return this.pagosService.createSubscription(crearPagoDto);
   }
 }
