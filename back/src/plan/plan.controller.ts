@@ -32,8 +32,8 @@ export class PlanController {
   }
 
   @Get()
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Roles(Role.Admin)
   findAll() {
     return this.planService.findAll();
   }
