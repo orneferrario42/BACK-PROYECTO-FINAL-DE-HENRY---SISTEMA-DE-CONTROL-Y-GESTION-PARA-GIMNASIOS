@@ -15,13 +15,7 @@ import { notificationRepository } from 'src/notifications/notifications.reposito
 @Module({
   imports: [TypeOrmModule.forFeature([User, Plan, Profesor])],
   controllers: [UsersController],
-  providers: [
-    UsersService,
-    PlanRepository,
-    ProfesorService,
-    NotificationsService,
-    notificationRepository,
-  ],
+  providers: [UsersService, PlanRepository, ProfesorService],
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {

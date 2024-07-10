@@ -98,6 +98,13 @@ export class UsersService {
         'role',
         'estado',
         'profesor',
+        'altura',
+        'peso',
+        'nivelActividad',
+        'plan',
+        'horario',
+        'objetivo',
+        'metodoPago',
       ],
     });
   }
@@ -119,8 +126,13 @@ export class UsersService {
         'role',
         'estado',
         'profesor',
+        'altura',
+        'peso',
+        'nivelActividad',
         'plan',
-        'pagos',
+        'horario',
+        'objetivo',
+        'metodoPago',
       ],
     });
 
