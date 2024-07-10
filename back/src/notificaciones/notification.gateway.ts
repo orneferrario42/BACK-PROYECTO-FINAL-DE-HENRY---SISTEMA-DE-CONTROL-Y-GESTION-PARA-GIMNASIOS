@@ -19,12 +19,19 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     server: Server;
 
     handleConnection(client: Socket) {
-        const userId = client.handshake.query.userId;
+        let userId = client.handshake.query.userId;
+        if (Array.isArray(userId)){
+        userId = userId[0]
+        }
         client.join(userId);
     }
 
     handleDisconnect(client: Socket) {
-        const userId = Array.isArray(client.handshake.query.userId) ? client.handshake.query.userId[0] : client.handshake.query.userId;
+        // const userId = Array.isArray(client.handshake.query.userId) ? client.handshake.query.userId[0] : client.handshake.query.userId;
+        let userId = client.handshake.query.userId;
+        if (Array.isArray(userId)){
+            userId = userId[0]
+        }
         client.leave(userId);
     }
 
