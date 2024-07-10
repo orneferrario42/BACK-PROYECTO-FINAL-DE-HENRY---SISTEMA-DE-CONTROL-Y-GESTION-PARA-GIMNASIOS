@@ -12,9 +12,6 @@ import { Plan } from '../../plan/entities/plan.entity';
 // import { User } from 'mercadopago';
 
 export class CrearPagoDto {
-  @IsNotEmpty()
-  @IsDate()
-  fecha_pago: Date;
 
   @IsNotEmpty()
   @IsString()
