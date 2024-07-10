@@ -11,7 +11,8 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
-import { NotificationsModule } from './notifications/notifications.module';
+import { AvisosModule } from './avisos/avisos.module';
+import { NotificationModule } from './notificaciones/notification.module';
 // import * as cors from 'cors';
 
 
@@ -32,18 +33,16 @@ import { NotificationsModule } from './notifications/notifications.module';
     PlanModule,
     PagosModule,
     FileModule,
-    SeederModule,
-    // NotificationsModule,
+    AvisosModule,
+    NotificationModule,
+  
 
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-
-    JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
-    PlanModule,
-    NotificationsModule,
+    
   ],
 
   controllers: [],

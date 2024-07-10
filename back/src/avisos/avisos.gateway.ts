@@ -13,7 +13,7 @@ import { Server, Socket } from 'socket.io';
     credentials: true,
   },
 })
-export class NotificationsGateway {
+export class AvisosGateway {
   @WebSocketServer() server: Server;
   private userSockets: Map<string, Socket> = new Map();
 
@@ -23,23 +23,23 @@ export class NotificationsGateway {
   }
 
   handleDisconnect(client: Socket) {
-    this.userSockets.forEach((socket, userId) => {
+    this.userSockets.forEach((socket, user) => {
       if (socket === client) {
-        this.userSockets.delete(userId);
+        this.userSockets.delete(user);
       }
     });
   }
 
-  sendNotificationToUser(userId: string, notification: any): void {
+  sendAvisosToUser(userId: string, avisos: any): void {
     const userSocket = this.userSockets.get(userId);
     if (userSocket) {
-      userSocket.emit('newNotification', notification);
+      userSocket.emit('newavisos', avisos);
     }
   }
 
-  sendNotificationToAll(notification: any): void {
+  sendAvisosToAll(avisos: any): void {
     this.userSockets.forEach((socket) => {
-      socket.emit('newNotification', notification);
+      socket.emit('newavisos', avisos);
     });
   }
 }

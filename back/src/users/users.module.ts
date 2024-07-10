@@ -9,11 +9,11 @@ import { PlanRepository } from 'src/plan/plan.repository';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { ProfesorService } from 'src/profesor/profesor.service';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
-import { NotificationsService } from 'src/notifications/notifications.service';
-import { NotificationsGateway } from 'src/notifications/notifications.gateway';
-import { Notificaciones } from 'src/notifications/entity/notificaciones.entity';
-import { NotificationsModule } from 'src/notifications/notifications.module';
 import { UsersRepository } from './users.repository';
+import { NotificationGateway } from 'src/notificaciones/notification.gateway';
+import { NotificationService } from 'src/notificaciones/notification.service';
+import { AvisosGateway } from 'src/avisos/avisos.gateway';
+import { AvisosService } from 'src/avisos/avisos.service';
 
 
 @Module({
@@ -23,8 +23,10 @@ import { UsersRepository } from './users.repository';
     UsersService,
     PlanRepository,
     ProfesorService,
-    NotificationsService,
-    NotificationsGateway,
+    NotificationService,
+    NotificationGateway,
+    AvisosGateway,
+    AvisosService
     
   ],
   exports: [UsersService],
