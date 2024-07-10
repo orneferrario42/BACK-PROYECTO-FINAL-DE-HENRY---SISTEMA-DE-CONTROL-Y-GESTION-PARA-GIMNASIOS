@@ -16,6 +16,7 @@ const config = {
   password: process.env.POSTGRES_PASSWORD,
   extra: {
     ssl: 'true',
+    rejectUnauthorized: 'false',
   },
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/migrations/*{.ts,.js}'],
