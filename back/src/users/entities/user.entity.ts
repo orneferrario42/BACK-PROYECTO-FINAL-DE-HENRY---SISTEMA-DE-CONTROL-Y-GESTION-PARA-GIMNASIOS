@@ -11,6 +11,7 @@ import { Role } from 'src/enum/roles.enum';
 import { Pago } from 'src/pagos/entities/pago.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { Status } from 'src/enum/estados.enum';
+import { Notification } from 'src/notificaciones/entitites/notification.entity';
 
 @Entity({
   name: 'users',
@@ -82,4 +83,7 @@ export class User {
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: Pago;
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+notifications: Notification[];
 }

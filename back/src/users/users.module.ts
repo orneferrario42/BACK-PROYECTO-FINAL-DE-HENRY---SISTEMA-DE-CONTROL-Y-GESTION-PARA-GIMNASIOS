@@ -14,17 +14,16 @@ import { NotificationGateway } from 'src/notificaciones/notification.gateway';
 import { NotificationService } from 'src/notificaciones/notification.service';
 import { AvisosGateway } from 'src/avisos/avisos.gateway';
 import { AvisosService } from 'src/avisos/avisos.service';
+import { NotificationModule } from 'src/notificaciones/notification.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Plan, Profesor])],
+  imports: [TypeOrmModule.forFeature([User, Plan, Profesor]), NotificationModule],
   controllers: [UsersController],
   providers: [
     UsersService,
     PlanRepository,
     ProfesorService,
-    NotificationService,
-    NotificationGateway,
     AvisosGateway,
     AvisosService
     
