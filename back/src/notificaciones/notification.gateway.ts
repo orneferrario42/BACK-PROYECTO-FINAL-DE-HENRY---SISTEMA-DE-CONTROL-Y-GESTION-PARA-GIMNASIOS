@@ -6,7 +6,13 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({
+    cors: {
+        origin: 'http://localhost:3000/',
+        methods: ['GET', 'POST'],
+        credentials: true,
+    },
+})
 export class NotificationGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server: Server;
@@ -17,7 +23,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     }
 
     handleDisconnect(client: Socket) {
-        const userId = Array.isArray (client.handshake.query.userId) ? client.handshake.query.userId[0]:client.handshake.query.userId;
+        const userId = Array.isArray(client.handshake.query.userId) ? client.handshake.query.userId[0] : client.handshake.query.userId;
         client.leave(userId);
     }
 
