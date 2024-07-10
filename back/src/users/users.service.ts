@@ -49,16 +49,7 @@ export class UsersService {
           altura: '1.75',
           peso: '70',
           role: Role.Admin,
-          plan: null,
           estado: true,
-          profesor: null,
-          diasSeleccionados: null,
-          horario: null,
-          objetivo: null,
-          rutina: null,
-          metodoPago: null,
-          nivelActividad: null,
-          pagos: null,
         });
         return await this.userRepository.save(newUser);
       }
