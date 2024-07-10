@@ -33,6 +33,7 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     FileModule,
     SeederModule,
 
+
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,

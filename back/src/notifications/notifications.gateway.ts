@@ -5,7 +5,6 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { NotificationsService } from './notifications.service';
 
 @WebSocketGateway({
   cors: {
@@ -15,18 +14,12 @@ import { NotificationsService } from './notifications.service';
   },
 })
 export class NotificationsGateway {
-  constructor(private notificactionesService: NotificationsService) {}
   @WebSocketServer() server: Server;
   private userSockets: Map<string, Socket> = new Map();
 
   @SubscribeMessage('register')
-  async handleRegister(@ConnectedSocket() client: Socket, payload: string) {
+  handleRegister(@ConnectedSocket() client: Socket, payload: string): void {
     this.userSockets.set(payload, client);
-    const notifications =
-      await this.notificactionesService.getUserNotification(payload);
-    notifications.forEach((notification) => {
-      client.emit('new  notification', notifications);
-    });
   }
 
   handleDisconnect(client: Socket) {
@@ -43,9 +36,10 @@ export class NotificationsGateway {
       userSocket.emit('newNotification', notification);
     }
   }
+
   sendNotificationToAll(notification: any): void {
-    this.userSockets.forEach((Socket) => {
-      Socket.emit('new notification', notification);
+    this.userSockets.forEach((socket) => {
+      socket.emit('newNotification', notification);
     });
   }
 }
