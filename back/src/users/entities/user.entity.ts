@@ -73,6 +73,10 @@ export class User {
   @Column({ default: true })
   estado: boolean;
 
+  @Column({ type: 'varchar', nullable: true, default: [] })
+  metodoPago: string[];
+
+
   @Column({ nullable: true })
   //nivelActividad: string; 
   

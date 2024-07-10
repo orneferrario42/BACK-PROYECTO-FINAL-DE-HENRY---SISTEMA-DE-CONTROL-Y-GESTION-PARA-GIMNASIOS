@@ -9,6 +9,7 @@ import {
   Put,
   Req,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +20,7 @@ import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Response } from  'express' 
 @ApiTags('USERS')
 @ApiBearerAuth()
 @Controller('users')
@@ -29,11 +31,14 @@ export class UsersController {
    * Este metodo permite a los usuarios no registrador inscribir se en la pagina
    */
   @Post('register')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.User,Role.Admin)
-  // @UseGuards(RolesGuard, AuthGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+  
+  @Get('generaqr/:id')
+  generaqr(@Param('id')id:string){
+    return this.usersService.generaqr(id)
+  
   }
 
   /**
@@ -42,7 +47,6 @@ export class UsersController {
   @Get()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  // @UseGuards(RolesGuards)
   findAll() {
     return this.usersService.findAll();
   }
@@ -65,7 +69,6 @@ export class UsersController {
   @Put('updateState/:id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @UseGuards(RolesGuard, AuthGuard)
   updateStatus(@Param('id') id: string) {
     console.log(id);
     return this.usersService.updateState(id);
@@ -75,7 +78,6 @@ export class UsersController {
   @Get(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User)
-  @UseGuards(RolesGuard, AuthGuard)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -84,9 +86,10 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
-  // @Roles(Role.Admin,Role.User)
-  // @UseGuards(RolesGuard, AuthGuard)
+  @Roles(Role.Admin,Role.User)
+  @UseGuards(AuthGuard,RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
+
 }

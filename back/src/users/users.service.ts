@@ -16,6 +16,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
+import {v4} from 'uuid';
+import {toString} from 'qrcode';
+
 
 @Injectable()
 export class UsersService {
@@ -222,5 +225,44 @@ export class UsersService {
       throw new NotFoundException('Usuario no encontrado');
     }
     return true;
+  }
+
+ async generaqr(id:string){
+    const dataqr = await this.userRepository.findOne({where:{id:id}})
+    const str = JSON.stringify( dataqr.diasSeleccionados)  
+    const regex = /[^A-Za-z,]/g;
+    const filteredString = str.replace(regex, '').slice(0, -1); 
+    const dias =filteredString.split(',')
+  
+ 
+    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
+    const today = new Date();
+    const dayNumber = today.getDay();
+   
+   const pago = dataqr.estado;
+const diaHoy = daysOfWeek[dayNumber]
+let valido=false;
+dias.forEach((d)=>{
+  console.log(d +  ' === ' + diaHoy)
+  if(d === diaHoy){
+    valido=true
+  }
+})
+console.log(valido)
+
+if(valido && dataqr.estado==true){
+const messageQR = `Estado = ${dataqr.estado}`;
+   toString(
+    messageQR,    
+    {type:'svn'},
+    (error,data)=>{
+      console.log(data)
+    return data
+    })
+}else{
+  const message2 =  "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
+  return message2;
+} 
+
   }
 }

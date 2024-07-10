@@ -8,7 +8,7 @@ import {
   Search,
 } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
-import {  Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Profesor } from './entities/profesor.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
@@ -34,29 +34,29 @@ export class ProfesorService {
     }
     const hashedPassword = await bcrypt.hash(createProfesorDto.password, 10);
     console.log(hashedPassword);
-    
+
     if (!hashedPassword) {
       throw new BadRequestException('La constraseña no pudo ser hasheada');
     }
-    
+
     const newProfesor = this.profesorRepository.save({
       ...createProfesorDto,
       password: hashedPassword,
     });
-    
+
     if (newProfesor) {
       return newProfesor;
     } else {
       throw new BadRequestException('Error al agregar al nuevo profesor/a');
     }
   }
-  
+
   async updateState(id: string) {
     const profesor = await this.userRepository.findOneBy({ id });
     if (!profesor) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    
+
     // Alternar el estado del profesor
     profesor.estado = profesor.estado === true ? false : true;
 
@@ -66,23 +66,30 @@ export class ProfesorService {
     return userWithOutPassword;
   }
 
-
- public async processTurnos(id) {
-  const veriTurnos = await this.profesorRepository.find({where:{id:id}})
-    const results = [];   
-    for (const horario of veriTurnos[0].horario) {
-      //const nT = horario.replace(/a/g, '-');
-      const validaCupoPromise = this.userRepository.find({ where: { horario: horario } });          
-      // Wait for the promise to resolve and get the actual data
-      const validaCupo = await validaCupoPromise;
-      results.push(horario,validaCupo.length);
-    }  
-  return results; 
+  getProfesores() {
+    return this.profesorRepository.find();
   }
 
-  async getProfesores(id:string) {
-    const cupos = await this.processTurnos(id)      
-    return  cupos
+  public async processTurnos(id) {
+    const veriTurnos = await this.profesorRepository.find({
+      where: { id: id },
+    });
+    const results = [];
+    for (const horario of veriTurnos[0].horario) {
+      //const nT = horario.replace(/a/g, '-');
+      const validaCupoPromise = this.userRepository.find({
+        where: { horario: horario },
+      });
+      // Wait for the promise to resolve and get the actual data
+      const validaCupo = await validaCupoPromise;
+      results.push(horario, validaCupo.length);
+    }
+    return results;
+  }
+
+  async getCupoProfesores(id: string) {
+    const cupos = this.processTurnos(id);
+    return cupos;
   }
 
   findByEmail(email: string): Promise<Profesor> {
