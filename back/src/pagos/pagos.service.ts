@@ -1,13 +1,13 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as mercadopago from 'mercadopago';
-import { CrearPagoDto } from "./dto/create-pago.dto";
+import { CrearPagoDto } from './dto/create-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Plan } from "../plan/entities/plan.entity";
-import { Pago } from "./entities/pago.entity";
-import axios from "axios";
-import { User } from "src/users/entities/user.entity";
+import { Plan } from '../plan/entities/plan.entity';
+import { Pago } from './entities/pago.entity';
+import axios from 'axios';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PagosService {
@@ -44,7 +44,7 @@ export class PagosService {
   //     const nuevoPago = new Pago();
   //     nuevoPago.fecha_pago = fecha_pago;
   //     nuevoPago.metodopago = metodoPago;
-  //     nuevoPago.id_plan = plan;  
+  //     nuevoPago.id_plan = plan;
 
   //     await this.pagosRepository.save(nuevoPago);
 
@@ -55,16 +55,19 @@ export class PagosService {
   // }
 
   async createSubscription(crearPagoDto: CrearPagoDto) {
-    const url = "https://api.mercadopago.com/preapproval";
+    const url = 'https://api.mercadopago.com/preapproval';
 
-    const plan = await this.planRepository.findOne({ where: { id: crearPagoDto.id_plan } });
+    const plan = await this.planRepository.findOne({
+      where: { id: crearPagoDto.id_plan },
+    });
 
     if (!plan) {
       throw new HttpException('Plan no encontrado', HttpStatus.NOT_FOUND);
     }
-    
-    const user = await this.userRepository.findOne({ where: { email: crearPagoDto.userEmail } });
-   console.log(user.email);
+
+    const user = await this.userRepository.findOne({
+      where: { email: crearPagoDto.userEmail },
+    });
 
     if (!user) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
@@ -74,26 +77,25 @@ export class PagosService {
       reason: `Suscripcion al plan: ${plan.name}`,
       auto_recurring: {
         frequency: 1,
-        frequency_type: "months",
+        frequency_type: 'months',
         transaction_amount: plan.price,
-        currency_id: "ARS",
+        currency_id: 'ARS',
       },
-      back_url: "https://google.com.ar", /* website */
+      back_url: 'https://google.com.ar' /* website */,
       payer_email: /*"test_user_46945293@testuser.com"*/ user.email,
     };
 
     try {
       const subscription = await axios.post(url, body, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`
-        }
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
+        },
       });
 
       // Actualizar el plan del usuario
       user.plan = plan;
       await this.userRepository.save(user);
-
 
       //Guardar información del pago en la base de datos
       const pago = new Pago();
@@ -103,15 +105,16 @@ export class PagosService {
       pago.clientes = user;
 
       console.log(pago);
-      
+
       await this.pagosRepository.save(pago);
 
       return subscription.data;
-      
     } catch (error) {
       console.log(error);
-      throw new HttpException("No se pudo realizar el pago", HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'No se pudo realizar el pago',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-
-}
+  }
 }

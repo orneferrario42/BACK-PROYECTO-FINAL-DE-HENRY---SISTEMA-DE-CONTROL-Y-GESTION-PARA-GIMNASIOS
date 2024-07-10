@@ -40,24 +40,21 @@ export class User {
   @Column({ type: 'varchar' })
   numero_dni: string;
 
-  @Column({type: 'varchar', nullable: true})
+  @Column({ type: 'varchar', nullable: true })
   altura: string;
 
-  @Column({type: 'varchar', nullable: true})
-  nivelActividad: string;
-
-  @Column({type: 'varchar', nullable: true})
+  @Column({ type: 'varchar', nullable: true })
   peso: string;
 
   @Column({ default: Role.User })
   role: Role;
-  
+
   @ManyToOne(() => Plan, (plan) => plan.clientes)
   plan: Plan; // Relación con el plan seleccionado
-  
+
   @ManyToOne(() => Profesor, (profesor) => profesor.users)
   profesor: Profesor;
-  
+
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
@@ -74,12 +71,11 @@ export class User {
   estado: boolean;
 
   @Column({ type: 'varchar', nullable: true, default: [] })
-  metodoPago: string[];
-
+  metodoPago: string;
 
   @Column({ nullable: true })
-  //nivelActividad: string; 
-  
+  nivelActividad: string;
+
   // @OneToOne(() => Profesor, (profesor) => profesor.rutina)
   // @JoinColumn({ name: 'rutina' })
   // rutina: Profesor;

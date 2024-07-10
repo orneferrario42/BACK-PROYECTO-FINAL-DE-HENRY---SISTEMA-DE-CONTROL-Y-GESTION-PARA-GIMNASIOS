@@ -22,7 +22,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Response } from  'express' 
 @ApiTags('USERS')
-@ApiBearerAuth()
+// @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -45,8 +45,8 @@ export class UsersController {
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Roles(Role.Admin)
   findAll() {
     return this.usersService.findAll();
   }
@@ -67,8 +67,8 @@ export class UsersController {
   }
 
   @Put('updateState/:id')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Roles(Role.Admin)
   updateStatus(@Param('id') id: string) {
     console.log(id);
     return this.usersService.updateState(id);
@@ -76,8 +76,8 @@ export class UsersController {
 
   
   @Get(':id')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.User)
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Roles(Role.User)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -86,8 +86,8 @@ export class UsersController {
    * Este metodo le permite al usuario modificar  su informacion personal
    */
   @Put(':id')
-  @Roles(Role.Admin,Role.User)
-  @UseGuards(AuthGuard,RolesGuard)
+  // @Roles(Role.Admin,Role.User)
+  // @UseGuards(AuthGuard,RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }

@@ -4,15 +4,18 @@ import { NotificationsService } from './notifications.service';
 
 @Controller('notifications')
 export class NotificationsController {
-constructor(private notificationsService: NotificationsService) {}
+  constructor(private notificationsService: NotificationsService) {}
 
+  @Post('rutinaSubida')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadRoutine(@UploadedFile() file, @Body('userId') userId: string, @Body('message') message: string) {
+    this.notificationsService.sendNotification(userId, message);
+    return { message };
+  }
 
-@Post('rutinaSubida')
-@UseInterceptors(FileInterceptor('file'))
-uploadRoutine(@UploadedFile() file, @Body('userId') userId: string) {
-    
-    this.notificationsService.sendNotification(userId, 'Tu profesor ha subido una nueva rutina');
-
-    return { message: 'Rutina subida con éxito' };
-}
+  @Post('sendToAll')
+  sendToAll(@Body('message') message: string) {
+    this.notificationsService.sendNotificationToAll(message);
+    return { message };
+  }
 }

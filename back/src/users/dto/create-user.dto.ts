@@ -1,4 +1,6 @@
 import {
+  IsArray,
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -63,4 +65,44 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Validate(MatchPassword, ['password'])
   confirmPassword: string;
+
+  /** Esta es la propiedad de perfil */
+  @IsString()
+  perfil: string;
+
+  /** Esta es la propiedad de altura */
+  @IsString()
+  altura: string;
+
+  /** Esta es la propiedad de peso */
+  @IsString()
+  peso: string;
+
+  /** Esta es la propiedad de dias seleccionados */
+  @IsArray()
+  diasSeleccionados: string[];
+
+  /** Esta es la propiedad de horario */
+  @IsArray()
+  horario: string[];
+
+  /** Esta es la propiedad de objetivo */
+  @IsArray()
+  objetivo: string[];
+
+  /** Esta es la propiedad de rutina */
+  @IsString()
+  rutina: string;
+
+  /** Esta es la propiedad de nivel de actividad */
+  @IsString()
+  nivelActividad: string;
+
+  /** Esta es la propiedad de metodo de pago */
+  @IsArray()
+  metodoPago: string;
+
+  /** Esta es la propiedad de estado */
+  @IsBoolean()
+  estado: boolean;
 }
