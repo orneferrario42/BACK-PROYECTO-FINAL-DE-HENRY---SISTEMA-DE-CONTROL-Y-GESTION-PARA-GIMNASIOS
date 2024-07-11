@@ -19,6 +19,7 @@ import { UsersRepository } from './users.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Plan, Profesor])],
   controllers: [UsersController],
+
   providers: [
     UsersService,
     PlanRepository,
@@ -27,6 +28,7 @@ import { UsersRepository } from './users.repository';
     NotificationsGateway,
     
   ],
+
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {

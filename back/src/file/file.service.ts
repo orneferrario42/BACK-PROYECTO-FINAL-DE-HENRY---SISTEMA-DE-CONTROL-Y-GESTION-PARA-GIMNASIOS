@@ -3,14 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateFileDto } from './dto/create-file.dto';
-import { UpdateFileDto } from './dto/update-file.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { FilesRepository } from './files.repository';
 import { Repository } from 'typeorm';
-import { Role } from 'src/enum/roles.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { Express } from 'express';
 
 @Injectable()
 export class FileService {
