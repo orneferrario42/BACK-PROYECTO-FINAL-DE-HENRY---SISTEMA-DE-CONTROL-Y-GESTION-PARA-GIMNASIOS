@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Pago } from '../../pagos/entities/pago.entity';
 import { User } from 'src/users/entities/user.entity';
 @Entity({ name: 'planes' })
@@ -20,6 +15,8 @@ export class Plan {
   @ManyToOne(() => User, (user) => user.plan)
   clientes: User[];
 
-  @ManyToOne(() => Pago, (pago) => pago.id_plan, { nullable: true })
+  @ManyToOne(() => Pago, (pago) => pago.id_plan, {
+    nullable: true,
+  })
   pagos: Pago[];
 }

@@ -14,10 +14,10 @@ import { NotificationsGateway } from 'src/notifications/notifications.gateway';
 import { Notificaciones } from 'src/notifications/entity/notificaciones.entity';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { UsersRepository } from './users.repository';
-
+import { Pago } from 'src/pagos/entities/pago.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Plan, Profesor])],
+  imports: [TypeOrmModule.forFeature([User, Plan, Profesor, Pago])],
   controllers: [UsersController],
 
   providers: [
@@ -26,7 +26,6 @@ import { UsersRepository } from './users.repository';
     ProfesorService,
     NotificationsService,
     NotificationsGateway,
-    
   ],
 
   exports: [UsersService],
