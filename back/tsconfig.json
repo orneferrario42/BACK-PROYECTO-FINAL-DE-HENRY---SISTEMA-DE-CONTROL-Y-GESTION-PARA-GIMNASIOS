@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "noUnusedLocals": false,
     "resolveJsonModule": true,
-    "types": ["Multer"],
+    "types": ["multer", "node"],
     "moduleResolution": "node",
     "esModuleInterop": true
   }
