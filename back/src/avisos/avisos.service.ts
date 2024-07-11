@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { Avisos } from './entity/avisos.entity';
 import { AvisosGateway } from './avisos.gateway';
 import { User } from 'src/users/entities/user.entity';
@@ -16,10 +16,14 @@ export class AvisosService {
     private avisossGateway: AvisosGateway
   ) {}
 
-  async sendavisosToAll(message: string): Promise<void> {
+  async sendavisosToAll(message: string,durationInHours: number): Promise<void> {
     // Fetch all users from the database
     const users = await this.userRepository.find();
 
+    // Calculate expiration time
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + durationInHours);
+    
     // Create a new aviso for each user
     const avisosToSave = users.map(user => {
       const aviso = new Avisos();
@@ -32,7 +36,13 @@ export class AvisosService {
     await this.avisosRepository.save(avisosToSave);
   }
 
-  getAll() {
-    return this.avisosRepository.find();
-  }
+  async getValidAvisos(): Promise<Avisos[]> {
+    const currentTimestamp = new Date();
+    return await this.avisosRepository.find({
+      where: {
+        expiresAt: MoreThan(currentTimestamp)
+      },
+      relations: ['user']
+    });
+}
 }

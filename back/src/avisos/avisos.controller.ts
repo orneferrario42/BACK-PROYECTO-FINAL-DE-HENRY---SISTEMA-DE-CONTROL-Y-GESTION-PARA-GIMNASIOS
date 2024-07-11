@@ -7,13 +7,13 @@ export class AvisosController {
   constructor(private avisosService: AvisosService) {}
 
   @Post('enviarAtodos')
-  async sendToAll(@Body('message') message: string) {
-    await this.avisosService.sendavisosToAll(message);
+  async sendToAll(@Body('message') message: string, @Body('durationInHours') durationInHours: number) {
+    await this.avisosService.sendavisosToAll(message,durationInHours);
     return { message };
   }
 
-  @Get('obtenerAvisos')
-  async getAllAvisos() {
-    return await this.avisosService.getAll();
+  @Get()
+  async getValidAvisos() {
+    return this.avisosService.getValidAvisos();
   }
 }

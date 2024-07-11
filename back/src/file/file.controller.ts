@@ -42,7 +42,7 @@ export class FileController {
             message: 'File is too large',
           }),
           new FileTypeValidator({
-            fileType: /(pdf|doc|docx|txt|rtf|odt|html|md)/,
+            fileType: /(jpg|jpeg|png|webp|gif|doc|docx|txt|rtf|odt|html|md)/,
           }),
         ],
       }),

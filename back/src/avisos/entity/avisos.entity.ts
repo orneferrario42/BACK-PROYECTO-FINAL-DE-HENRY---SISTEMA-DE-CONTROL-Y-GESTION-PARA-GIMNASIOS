@@ -14,6 +14,9 @@ export class Avisos {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
 
+  @Column({ type: 'timestamp' })
+  expiresAt: Date;
+
   @ManyToOne(() => User, (user) => user.avisos)
   @JoinColumn({ name: 'userId' })
   user: User;
