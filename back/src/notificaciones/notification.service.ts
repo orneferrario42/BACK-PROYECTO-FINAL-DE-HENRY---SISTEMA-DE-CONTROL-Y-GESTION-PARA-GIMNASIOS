@@ -39,4 +39,8 @@ export class NotificationService {
       order: { createdAt: 'DESC' }
     });
   }
+
+  async markAsRead(notificationId: string) {
+    await this.notificationRepository.update(notificationId, { read: true });
+  }
 }
