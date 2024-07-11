@@ -1,6 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
-@Entity()
+@Entity({ 
+    name: 'notifications' 
+})
 export class Notification {
     @PrimaryGeneratedColumn('uuid')
     id: string;
