@@ -1,7 +1,9 @@
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsString,
+  Max,
   MaxLength,
   Min,
   MinLength,
@@ -9,6 +11,15 @@ import {
 } from 'class-validator';
 
 export class CreatePlanDto {
+  /**Esta es el id o numero de dias del plan
+   * @example 1
+   */
+  @IsNotEmpty()
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  id: number;
+
   /**Esta es la propiedad name
    * @example plan premium 3 dias
    */

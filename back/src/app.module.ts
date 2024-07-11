@@ -41,9 +41,8 @@ import { NotificationsModule } from './notifications/notifications.module';
       signOptions: { expiresIn: '24h' },
     }),
 
-    JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
+    // JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
     PlanModule,
-    NotificationsModule,
   ],
 
   controllers: [],

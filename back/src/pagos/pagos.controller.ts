@@ -1,10 +1,6 @@
-import { Controller, Post, Body, UseGuards, HttpException, HttpStatus, Get } from '@nestjs/common';
+import { Controller, Body, HttpException, HttpStatus, Get } from '@nestjs/common';
 import { PagosService } from './pagos.service';
 import { CrearPagoDto } from './dto/create-pago.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { Roles } from 'src/Decorators/roles.decorator';
-import { Role } from 'src/enum/roles.enum';
-import { RolesGuards } from 'src/auth/guards/roles.guards';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('payments')

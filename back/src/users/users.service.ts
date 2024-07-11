@@ -49,6 +49,7 @@ export class UsersService {
           altura: '1.75',
           peso: '70',
           role: Role.Admin,
+          estado: true,
         });
         return await this.userRepository.save(newUser);
       }
