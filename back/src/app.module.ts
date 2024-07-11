@@ -32,6 +32,7 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     PagosModule,
     FileModule,
     SeederModule,
+    ChatbotModule,
 
 
     JwtModule.register({
@@ -39,8 +40,6 @@ import { ChatbotModule } from './chatbot/chatbot.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-
-    ChatbotModule,
   ],
 
   controllers: [],

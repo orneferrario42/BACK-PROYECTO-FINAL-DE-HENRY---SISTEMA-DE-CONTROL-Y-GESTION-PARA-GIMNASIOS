@@ -14,14 +14,14 @@ const config = {
   port: process.env.DB_PORT,
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
-  extra: {
-    ssl: 'true',
+  ssl: {
+    rejectUnauthorized: false, // Desactiva la verificación del certificado
   },
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
-  logging: true,
-  // synchronize: true,
+  // logging: true,
+  synchronize: true,
   // dropSchema: true,
 };
 export default registerAs('typeorm', () => config);
