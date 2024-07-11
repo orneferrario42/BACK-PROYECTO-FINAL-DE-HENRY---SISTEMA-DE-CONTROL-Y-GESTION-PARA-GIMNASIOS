@@ -28,8 +28,6 @@ export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post(':id')
-  @Roles(Role.Profesor,Role.Admin)
-  @UseGuards(AuthGuard,RolesGuard)
   @UseInterceptors(FileInterceptor('rutina'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -45,7 +43,7 @@ export class FileController {
             message: 'File is too large',
           }),
           new FileTypeValidator({
-            fileType: /(pdf|doc|docx|txt|rtf|odt|html|md)/,
+            fileType: /(jpg|jpeg|png|webp|gif|doc|docx|txt|rtf|odt|html|md)/,
           }),
         ],
       }),
@@ -55,7 +53,6 @@ export class FileController {
   }
 
   @Post('profileProfesor/:id')
-  @Roles(Role.Profesor,Role.Admin)
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -82,7 +79,6 @@ export class FileController {
   }
 
   @Post('profileUser/:id')
-  @Roles(Role.User)
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
