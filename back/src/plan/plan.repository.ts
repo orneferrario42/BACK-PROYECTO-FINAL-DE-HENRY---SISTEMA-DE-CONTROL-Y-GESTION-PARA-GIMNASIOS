@@ -29,4 +29,8 @@ export class PlanRepository {
   async getAllPlans() {
     return await this.planRepository.find();
   }
+
+  async findByIdNotThrow(id: number) {
+    return await this.planRepository.findOne({ where: { id } });
+  }
 }

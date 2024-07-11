@@ -21,14 +21,13 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuards } from 'src/auth/guards/roles.guards';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Express } from 'express';
 
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post(':id')
-  @Roles(Role.Profesor,Role.Admin)
-  @UseGuards(AuthGuard,RolesGuard)
   @UseInterceptors(FileInterceptor('rutina'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -44,18 +43,16 @@ export class FileController {
             message: 'File is too large',
           }),
           new FileTypeValidator({
-            fileType: /(pdf|doc|docx|txt|rtf|odt|html|md)/,
+            fileType: /(jpg|jpeg|png|webp|gif|doc|docx|txt|rtf|odt|html|md)/,
           }),
         ],
       }),
     )
-    file: Express.Multer.File,
-  ) {
+    file: Express.Multer.File) {
     return await this.fileService.uploadFile(file, userId);
   }
 
   @Post('profileProfesor/:id')
-  @Roles(Role.Profesor,Role.Admin)
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -82,7 +79,6 @@ export class FileController {
   }
 
   @Post('profileUser/:id')
-  @Roles(Role.User)
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({

@@ -27,8 +27,9 @@ export class PlanController {
   @Post('createplan')
   // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.Admin)
-  create(@Body() createPlanDto: CreatePlanDto) {
-    return this.planService.create(createPlanDto);
+  async create(@Body() createPlanDto: CreatePlanDto) {
+    const response = await this.planService.create(createPlanDto);
+    return response;
   }
 
   @Get()
@@ -44,7 +45,6 @@ export class PlanController {
   findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.planService.findOne(id);
   }
-
 
   @Put(':id')
   // @UseGuards(AuthGuard, RolesGuard)

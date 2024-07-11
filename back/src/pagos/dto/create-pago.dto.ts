@@ -13,10 +13,6 @@ import { Plan } from '../../plan/entities/plan.entity';
 
 export class CrearPagoDto {
   @IsNotEmpty()
-  @IsDate()
-  fecha_pago: Date;
-
-  @IsNotEmpty()
   @IsString()
   metodoPago: string;
 

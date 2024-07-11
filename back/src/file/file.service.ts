@@ -3,14 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateFileDto } from './dto/create-file.dto';
-import { UpdateFileDto } from './dto/update-file.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { FilesRepository } from './files.repository';
 import { Repository } from 'typeorm';
-import { Role } from 'src/enum/roles.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { NotificationService } from 'src/notificaciones/notification.service';
+import { Express } from 'express';
 
 @Injectable()
 export class FileService {
@@ -19,6 +18,7 @@ export class FileService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Profesor)
     private profesorReposotory: Repository<Profesor>,
+    private readonly notificationService: NotificationService,
   ) {}
   async uploadFile(file: Express.Multer.File, userId: string) {
     const saveFile = await this.fileRepository.uploadFile(file);
@@ -33,41 +33,13 @@ export class FileService {
       throw new Error('User does not have a role defined');
     }
 
-    // Permitir que tanto profesores como administradores suban archivos
-    // if (user.role !== Role.Profesor || Role.Admin) {
-    //   throw new ForbiddenException(
-    //     'Only professors and admins can upload files',
-    //   );
-    // }
-    // if (user.profesor) {
-    //   const profesorRole = user.profesor.role;
-    //   if (profesorRole !== Role.Profesor) {
-    //     throw new ForbiddenException("Only profesdors can upload files");
-    //       }
-    // }
-
     user.rutina = saveFile.secure_url;
     await this.userRepository.save(user);
+    this.notificationService.sendNotification(userId, 'Tu rutina ha sido cargada');
+
     return user;
   }
-  // async uploadFile(file: Express.Multer.File, userId: string) {
-  //   const saveFile = await this.fileRepository.uploadFile(file);
-  //   const user = await this.userRepository.findOne({
-  //     where: { id: userId },
-  //     relations: ['profesor'],
-  //   });
-  //   if (!user) throw new NotFoundException(`User not found`);
-
-  //   // if (user.profesor.role !== Role.Profesor) {
-  //   //   throw new ForbiddenException('Only profesdors can upload files');
-  //   // }
-  //   if (!user.role) {
-  //     throw new Error('User does not have a role defined');
-  //   }
-  //   user.rutina = saveFile.secure_url;
-  //   await this.userRepository.save(user);
-  //   return user;
-  // }
+  
 
   async profilPRofesor(file: Express.Multer.File, profesorId: string) {
     const saveFile = await this.fileRepository.uploadFile(file);

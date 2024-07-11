@@ -11,6 +11,8 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
+import { AvisosModule } from './avisos/avisos.module';
+import { NotificationModule } from './notificaciones/notification.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
 // import * as cors from 'cors';
 
@@ -28,20 +30,20 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     UsersModule,
     AuthModule,
     ProfesorModule,
-    PlanModule,
     PagosModule,
     FileModule,
+    AvisosModule,
+    NotificationModule,
+    ChatbotModule,
     SeederModule,
+    PlanModule,
 
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-
-    ChatbotModule,
   ],
-
   controllers: [],
   providers: [],
 })
