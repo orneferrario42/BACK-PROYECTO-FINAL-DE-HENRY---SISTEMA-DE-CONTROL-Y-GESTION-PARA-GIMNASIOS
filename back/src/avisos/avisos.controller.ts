@@ -6,6 +6,7 @@ import { AvisosService} from './avisos.service';
 export class AvisosController {
   constructor(private avisosService: AvisosService) {}
 
+  
   @Post('enviarAtodos')
   async sendToAll(@Body('message') message: string, @Body('durationInHours') durationInHours: number) {
     await this.avisosService.sendavisosToAll(message,durationInHours);
