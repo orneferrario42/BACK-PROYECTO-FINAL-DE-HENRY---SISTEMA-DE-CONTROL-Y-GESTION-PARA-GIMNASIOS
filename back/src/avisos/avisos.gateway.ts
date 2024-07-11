@@ -30,13 +30,6 @@ export class AvisosGateway {
     });
   }
 
-  sendAvisosToUser(userId: string, avisos: any): void {
-    const userSocket = this.userSockets.get(userId);
-    if (userSocket) {
-      userSocket.emit('newavisos', avisos);
-    }
-  }
-
   sendAvisosToAll(avisos: any): void {
     this.userSockets.forEach((socket) => {
       socket.emit('newavisos', avisos);

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'avisos'
@@ -8,11 +9,12 @@ export class Avisos {
   id: string;
 
   @Column()
-  userId: string;
-
-  @Column()
   message: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
+
+  @ManyToOne(() => User, (user) => user.avisos)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }
