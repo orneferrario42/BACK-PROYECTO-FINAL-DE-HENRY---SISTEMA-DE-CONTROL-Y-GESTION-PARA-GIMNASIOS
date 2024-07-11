@@ -14,7 +14,7 @@ export class Avisos {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable:  true })
   expiresAt: Date;
 
   @ManyToOne(() => User, (user) => user.avisos)

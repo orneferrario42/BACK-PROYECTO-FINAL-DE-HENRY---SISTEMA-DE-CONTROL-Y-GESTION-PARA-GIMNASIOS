@@ -28,6 +28,7 @@ export class AvisosService {
     const avisosToSave = users.map(user => {
       const aviso = new Avisos();
       aviso.message = message;
+      aviso.expiresAt = expiresAt;
       aviso.user = user; // Ensure user entity is set
       return aviso;
     });
