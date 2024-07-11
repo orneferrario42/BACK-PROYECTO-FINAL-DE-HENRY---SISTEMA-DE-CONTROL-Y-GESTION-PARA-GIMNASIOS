@@ -275,7 +275,8 @@ export class MercadoPagoService {
   }
 
   async getOne(id: string) {
-    return this.pagosRepository.findOne({ where: { id } });
+    const pago =  this.pagosRepository.findOne({ where: { id } });
+    return pago;
   }
 
   async updateOne(id: string, dto: UpdatePagoDto) {
