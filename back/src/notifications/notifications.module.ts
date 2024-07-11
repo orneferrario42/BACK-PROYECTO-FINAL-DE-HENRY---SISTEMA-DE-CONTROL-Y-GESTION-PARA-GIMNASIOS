@@ -1,3 +1,4 @@
+
 import { Module } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { NotificationsGateway } from './notifications.gateway';
@@ -15,3 +16,4 @@ import { UsersRepository } from 'src/users/users.repository';
 
 })
 export class NotificationsModule {}
+

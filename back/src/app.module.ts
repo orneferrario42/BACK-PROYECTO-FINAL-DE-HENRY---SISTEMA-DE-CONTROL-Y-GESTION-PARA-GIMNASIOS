@@ -11,9 +11,8 @@ import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
-import { NotificationsModule } from './notifications/notifications.module';
+import { ChatbotModule } from './chatbot/chatbot.module';
 // import * as cors from 'cors';
-
 
 @Module({
   imports: [
@@ -33,7 +32,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     PagosModule,
     FileModule,
     SeederModule,
-    // NotificationsModule,
+
 
     JwtModule.register({
       global: true,
@@ -41,9 +40,7 @@ import { NotificationsModule } from './notifications/notifications.module';
       signOptions: { expiresIn: '24h' },
     }),
 
-    JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
-    PlanModule,
-    NotificationsModule,
+    ChatbotModule,
   ],
 
   controllers: [],
