@@ -13,10 +13,11 @@ import { NotificationModule } from 'src/notificaciones/notification.module';
 import { AvisosModule } from 'src/avisos/avisos.module';
 import { NotificationService } from 'src/notificaciones/notification.service';
 import { NotificationGateway } from 'src/notificaciones/notification.gateway';
+import { Notification } from 'src/notificaciones/entitites/notification.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Plan, Profesor, Pago]),
+    TypeOrmModule.forFeature([User, Plan, Profesor, Pago, Notification]),
     NotificationModule,
     AvisosModule,
   ],
