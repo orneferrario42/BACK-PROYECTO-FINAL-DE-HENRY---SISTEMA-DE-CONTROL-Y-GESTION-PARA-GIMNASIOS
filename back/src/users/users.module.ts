@@ -14,6 +14,7 @@ import { AvisosModule } from 'src/avisos/avisos.module';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Plan, Profesor]), NotificationModule,AvisosModule],
   controllers: [UsersController],
+
   providers: [
     UsersService,
     PlanRepository,
@@ -22,6 +23,7 @@ import { AvisosModule } from 'src/avisos/avisos.module';
 
     
   ],
+
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {

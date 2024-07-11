@@ -12,7 +12,6 @@ import { Plan } from '../../plan/entities/plan.entity';
 // import { User } from 'mercadopago';
 
 export class CrearPagoDto {
-
   @IsNotEmpty()
   @IsString()
   metodoPago: string;

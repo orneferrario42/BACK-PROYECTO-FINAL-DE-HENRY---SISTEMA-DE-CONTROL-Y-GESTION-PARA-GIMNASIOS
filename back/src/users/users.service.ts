@@ -49,6 +49,7 @@ export class UsersService {
           altura: '1.75',
           peso: '70',
           role: Role.Admin,
+          estado: true,
         });
         return await this.userRepository.save(newUser);
       }
@@ -98,6 +99,13 @@ export class UsersService {
         'role',
         'estado',
         'profesor',
+        'altura',
+        'peso',
+        'nivelActividad',
+        'plan',
+        'horario',
+        'objetivo',
+        'metodoPago',
       ],
     });
   }
@@ -119,8 +127,13 @@ export class UsersService {
         'role',
         'estado',
         'profesor',
+        'altura',
+        'peso',
+        'nivelActividad',
         'plan',
-        'pagos',
+        'horario',
+        'objetivo',
+        'metodoPago',
       ],
     });
 

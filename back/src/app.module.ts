@@ -13,8 +13,9 @@ import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
 import { AvisosModule } from './avisos/avisos.module';
 import { NotificationModule } from './notificaciones/notification.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { ChatbotModule } from './chatbot/chatbot.module';
 // import * as cors from 'cors';
-
 
 @Module({
   imports: [
@@ -30,21 +31,20 @@ import { NotificationModule } from './notificaciones/notification.module';
     UsersModule,
     AuthModule,
     ProfesorModule,
-    PlanModule,
     PagosModule,
     FileModule,
     AvisosModule,
     NotificationModule,
-  
+    ChatbotModule,
+    SeederModule,
+    PlanModule,
 
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-    
   ],
-
   controllers: [],
   providers: [],
 })

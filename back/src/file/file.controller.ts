@@ -21,6 +21,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuards } from 'src/auth/guards/roles.guards';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Express } from 'express';
 
 @Controller('file')
 export class FileController {
@@ -47,8 +48,7 @@ export class FileController {
         ],
       }),
     )
-    file: Express.Multer.File,
-  ) {
+    file: Express.Multer.File) {
     return await this.fileService.uploadFile(file, userId);
   }
 
