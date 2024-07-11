@@ -1,7 +1,15 @@
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+  Get,
+  Put,
+} from '@nestjs/common';
 
-import { Controller, Post, Body, UseGuards, HttpException, HttpStatus, Get, Put } from '@nestjs/common';
-
-import { PagosService } from './pagos.service';
+// import { PagosService } from './pagos.service';
 
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { ApiTags } from '@nestjs/swagger';
