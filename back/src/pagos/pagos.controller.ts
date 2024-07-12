@@ -1,16 +1,5 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  HttpException,
-  HttpStatus,
-  Get,
-  Put,
-} from '@nestjs/common';
-
+import { Controller, Post, Body, UseGuards, HttpException, HttpStatus, Get, Put, Param } from '@nestjs/common';
 // import { PagosService } from './pagos.service';
-
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { MercadoPagoService } from './pagos.service';
@@ -23,7 +12,7 @@ export class PagosController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
   // @Post()
-  @Get('create')
+  @Post('')
   async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
     // if (crearPagoDto.metodoPago !== 'MercadoPago') {
     //   throw new HttpException(
@@ -41,7 +30,7 @@ export class PagosController {
   }
 
   @Get(':id')
-  async getOne(@Body() id: string) {
+  async getOne(@Param('id') id: string) {
     return this.mercadoPagoService.getOne(id);
   }
 
