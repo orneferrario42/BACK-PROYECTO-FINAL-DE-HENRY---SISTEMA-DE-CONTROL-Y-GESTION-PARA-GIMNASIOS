@@ -270,19 +270,23 @@ export class MercadoPagoService {
     }
   }
 
-  async getAll() {
-    return this.pagosRepository.find();
+  async getAll(page: number, limit: number): Promise<Pago[]> {
+    let pagos = await this.pagosRepository.find();
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    pagos = pagos.slice(start, end);
+    return pagos;
   }
 
   async getOne(id: string) {
-    const pago =  this.pagosRepository.findOne({ where: { id } });
+    const pago = this.pagosRepository.findOne({ where: { id } });
     return pago;
   }
 
   async updateOne(id: string, dto: UpdatePagoDto) {
     const updatePago = await this.pagosRepository.findOneBy({ id });
 
-    if (!updatePago){
+    if (!updatePago) {
       throw new HttpException('El pago no existe', HttpStatus.NOT_FOUND);
     }
 

@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
@@ -35,8 +36,11 @@ export class PlanController {
   @Get()
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
-  findAll() {
-    return this.planService.findAll();
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    if (page && limit) {
+      return this.planService.findAll(page, limit);
+    }
+    return this.planService.findAll(page, limit);
   }
 
   /**

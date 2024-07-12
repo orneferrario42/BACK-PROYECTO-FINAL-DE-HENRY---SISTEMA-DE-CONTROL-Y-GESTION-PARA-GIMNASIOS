@@ -1,8 +1,15 @@
-
-
-
-import { Controller, Post, Body, UseGuards, HttpException, HttpStatus, Get, Put, Param } from '@nestjs/common';
-
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+  Get,
+  Put,
+  Param,
+  Query,
+} from '@nestjs/common';
 
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -34,8 +41,11 @@ export class PagosController {
    * este metodo permite ver al admin todos los pagos
    */
   @Get()
-  async getAll() {
-    return this.mercadoPagoService.getAll();
+  async getAll(@Query('page') page: number, @Query('limit') limit: number) {
+    if (page && limit) {
+      return await this.mercadoPagoService.getAll(page, limit);
+    }
+    return await this.mercadoPagoService.getAll(page, limit);
   }
   /**
    * este metodo permite ver al admin un pago

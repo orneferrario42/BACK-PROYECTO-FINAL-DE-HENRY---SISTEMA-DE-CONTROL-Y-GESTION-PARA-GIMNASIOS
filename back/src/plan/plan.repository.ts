@@ -30,8 +30,13 @@ export class PlanRepository {
       throw new NotFoundException(`Plan with id ${id} not found `);
     return updatePlan;
   }
-  async getAllPlans() {
-    return await this.planRepository.find();
+  async getAllPlans(page: number, limit: number): Promise<Plan[]> {
+    let planes = await this.planRepository.find();
+
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    planes = planes.slice(start, end);
+    return planes;
   }
 
   async findByIdNotThrow(id: number) {

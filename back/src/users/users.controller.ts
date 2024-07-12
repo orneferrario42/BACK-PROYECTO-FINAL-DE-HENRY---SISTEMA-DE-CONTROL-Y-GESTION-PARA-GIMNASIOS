@@ -9,6 +9,7 @@ import {
   Put,
   Req,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -39,8 +40,11 @@ export class UsersController {
   @Get()
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    if (page && limit) {
+      return this.usersService.findAll(page, limit);
+    }
+    return this.usersService.findAll(page, limit);
   }
 
   /**
