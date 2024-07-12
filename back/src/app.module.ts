@@ -15,7 +15,6 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { EmailModule } from './email/email.module';
 // import * as cors from 'cors';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,9 +29,11 @@ import { EmailModule } from './email/email.module';
     UsersModule,
     AuthModule,
     ProfesorModule,
-    PlanModule,
     PagosModule,
     FileModule,
+    AvisosModule,
+    NotificationModule,
+    ChatbotModule,
     SeederModule,
     EmailModule,
     // NotificationsModule,
@@ -42,12 +43,7 @@ import { EmailModule } from './email/email.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-
-    JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
-    PlanModule,
-    NotificationsModule,
   ],
-
   controllers: [],
   providers: [],
 })
