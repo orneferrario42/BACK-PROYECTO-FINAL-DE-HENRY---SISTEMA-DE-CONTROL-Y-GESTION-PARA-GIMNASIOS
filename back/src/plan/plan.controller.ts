@@ -3,21 +3,15 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
   ParseIntPipe,
-  UseGuards,
 } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/put-plan.dto';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/enum/roles.enum';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('plan')
 @ApiTags('PLAN')
@@ -66,5 +60,10 @@ export class PlanController {
     @Body() updatePlanDto: UpdatePlanDto,
   ) {
     return this.planService.update(id, updatePlanDto);
+  }
+
+  @Delete(':id')
+  async removePlan(@Param('id', new ParseIntPipe()) id: number) {
+    return this.planService.removePlan(id);
   }
 }

@@ -27,4 +27,8 @@ export class PlanService {
   update(id: number, updatePlanDto: UpdatePlanDto) {
     return this.planRepository.updatePlan(id, updatePlanDto);
   }
+
+  removePlan(id: number) {
+    return this.planRepository.deletePlan(id);
+  }
 }

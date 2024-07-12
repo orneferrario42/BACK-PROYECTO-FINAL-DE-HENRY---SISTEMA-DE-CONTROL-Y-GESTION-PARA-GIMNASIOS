@@ -48,12 +48,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "save": "^2.9.0",
-    "typeorm": "^0.3.20",
-    "migration:run": "npm run typeorm migration:run -- -d ./src/config/typeorm.ts",
-    "migration:generate": "npm run typeorm -- -d ./src/config/typeorm.ts migration:generate",
-    "migration:create": "npm run typeorm migration:create",
-    "migration:revert": "npm run typeorm -- -d ./src/config/typeorm.ts migration:revert",
-    "migration:show": "npm run typeorm -- -d ./src/config/typeorm.ts migration:show"
+    "typeorm": "^0.3.20"
+    
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
