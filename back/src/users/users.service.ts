@@ -87,9 +87,10 @@ export class UsersService {
     }
   }
 
+
   async findAll(page: number, limit: number): Promise<User[]> {
     let users = await this.userRepository.find({
-      relations: ['profesor'],
+      relations: ['profesor','plan','pagos'],
       select: [
         'id',
         'name',
@@ -116,12 +117,14 @@ export class UsersService {
     return users;
   }
 
+  
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: {
         profesor: true,
         plan: true,
+        pagos: true,
       },
       select: [
         'id',
