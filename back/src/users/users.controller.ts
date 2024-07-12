@@ -52,20 +52,24 @@ export class UsersController {
   }
 
   /**
-   * Este metodo permite a un usuario verla informacion de su perfil
+   * Este metodo permite al usuario ingresar con una cuenta externa de google entre otras...
    */
 
   @Get('auth0')
   getAuth0(@Req() req: Request) {
     return JSON.stringify(req.oidc.user);
   }
-
+  /***
+   *Este metodo verifica si el usuario  existe
+   */
   @Post('exist')
   userExist(@Body() data): Promise<boolean> {
     const { email } = data;
     return this.usersService.findUserByEmail(email);
   }
-
+  /***
+   * Ese metodo permite a admin activar o desactivar un usuaruio
+   */
   @Put('updateState/:id')
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
@@ -74,7 +78,11 @@ export class UsersController {
     return this.usersService.updateState(id);
   }
 
-  
+
+  /***
+   * Este metodo le permite al usuario ver su informacion personal
+   */
+
   @Get(':id')
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.User)

@@ -12,14 +12,25 @@ import { Plan } from '../../plan/entities/plan.entity';
 // import { User } from 'mercadopago';
 
 export class CrearPagoDto {
+  /**
+   * Esta es la propiedra de metodo de pago
+   * @example pago en linea
+   */
   @IsNotEmpty()
   @IsString()
   metodoPago: string;
 
+  /**
+   * Esta es la propiedra del plan
+   * @example 1
+   */
   @IsNotEmpty()
   @IsNumber()
   id_plan: number;
-
+  /**
+   * Esta es la propiedra del usuario
+   * @example sfjkn15615DK
+   */
   @IsNotEmpty()
   @IsUUID()
   userEmail: string;

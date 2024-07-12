@@ -14,10 +14,13 @@ import { UpdatePlanDto } from './dto/put-plan.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('plan')
-@ApiTags('CrearPlan')
+@ApiTags('PLAN')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
+  /**
+   * Esta es el metodo que permite al admin crear planes
+   */
   @Post('createplan')
   // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.Admin)
@@ -26,6 +29,9 @@ export class PlanController {
     return response;
   }
 
+  /**
+   * Este es el metodo que permite al admin ver todos los planes disponibles
+   */
   @Get()
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
@@ -33,6 +39,9 @@ export class PlanController {
     return this.planService.findAll();
   }
 
+  /**
+   * Este es el metodo que permite al admin ver un plan
+   */
   @Get(':id')
   // @UseGuards(AuthGuard,RolesGuard)
   // @Roles(Role.User, Role.Admin)
@@ -40,6 +49,9 @@ export class PlanController {
     return this.planService.findOne(id);
   }
 
+  /**
+   *Este metodo permite al admin modificar los planes
+   */
   @Put(':id')
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
