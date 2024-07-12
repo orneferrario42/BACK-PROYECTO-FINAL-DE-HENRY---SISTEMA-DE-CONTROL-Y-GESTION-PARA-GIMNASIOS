@@ -6,13 +6,23 @@ dotenv.config()
 @Injectable()
 export class Email {
 
-    transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
+    // transporter = nodemailer.createTransport({
+    //     host: process.env.EMAIL_HOST,
+    //     port: process.env.EMAIL_PORT,
+    //     secure: false, 
+    //     auth: {
+    //       user: process.env.EMAIL_USER,
+    //       pass: process.env.EMAIL_PASSWORD,
+    //     },
+    //   });
+
+      transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
         secure: false, 
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD,
+          user: "maddison53@ethereal.email",
+          pass: "jn7jnAPss4f63QBp6D  ",
         },
       });
 

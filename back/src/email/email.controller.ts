@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { EmailService } from './services/email/email.service';
 import { SendEmailDto } from './dtos/send-email.dto';
 
-@Controller('api/email')
+@Controller('email')
 export class EmailController {
 
     constructor(
@@ -20,8 +20,11 @@ export class EmailController {
         }
     }
 
+
+    
     @Post('send-email')
     async sendEmail(@Body() body: SendEmailDto, @Res() res: Response){
+        
         try {
             const response = await this.emailService.sendEmail(body)
             res.status(HttpStatus.OK).send(response)
