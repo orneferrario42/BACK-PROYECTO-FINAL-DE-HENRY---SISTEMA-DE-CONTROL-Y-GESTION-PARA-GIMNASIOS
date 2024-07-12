@@ -15,31 +15,35 @@ export class PagosController {
   // constructor(private readonly pagosService: PagosService) {}
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
-  // @Post()
+  
   @Post('')
   async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
-    // if (crearPagoDto.metodoPago !== 'MercadoPago') {
-    //   throw new HttpException(
-    //     'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
-    //     HttpStatus.BAD_REQUEST
-    //   );
-    // }
-    // return this.pagosService.createSubscription(crearPagoDto);
-    return this.mercadoPagoService.createPreference(crearPagoDto);
+    if (crearPagoDto.metodoPago !== 'MercadoPago') {
+      throw new HttpException(
+        'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return await this.mercadoPagoService.createPreference(crearPagoDto);
+  }
+
+  @Post('efectivo')
+  async createEfectivo(@Body() crearPagoDto: CrearPagoDto) {
+    return await this.mercadoPagoService.createEfectivo(crearPagoDto);
   }
 
   @Get()
   async getAll() {
-    return this.mercadoPagoService.getAll();
+    return  this.mercadoPagoService.getAll();
   }
 
   @Get(':id')
   async getOne(@Param('id') id: string) {
-    return this.mercadoPagoService.getOne(id);
+    return await this.mercadoPagoService.getOne(id);
   }
 
   @Put(':id')
   async updateOne(@Body() id: string, @Body() dto: UpdatePagoDto) {
-    return this.mercadoPagoService.updateOne(id, dto);
+    return await this.mercadoPagoService.updateOne(id, dto);
   }
 }

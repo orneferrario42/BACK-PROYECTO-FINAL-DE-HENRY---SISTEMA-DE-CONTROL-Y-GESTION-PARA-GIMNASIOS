@@ -88,7 +88,7 @@ export class UsersService {
 
   async findAll() {
     return await this.userRepository.find({
-      relations: ['profesor'],
+      relations: ['profesor', 'plan','pagos'],
       select: [
         'id',
         'name',
@@ -116,6 +116,7 @@ export class UsersService {
       relations: {
         profesor: true,
         plan: true,
+        pagos: true,
       },
       select: [
         'id',
