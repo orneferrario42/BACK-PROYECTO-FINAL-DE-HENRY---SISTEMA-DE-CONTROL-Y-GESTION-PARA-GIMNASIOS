@@ -12,6 +12,7 @@ import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { EmailModule } from './email/email.module';
 // import * as cors from 'cors';
 
 
@@ -33,6 +34,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     PagosModule,
     FileModule,
     SeederModule,
+    EmailModule,
     // NotificationsModule,
 
     JwtModule.register({

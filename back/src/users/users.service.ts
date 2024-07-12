@@ -229,9 +229,12 @@ export class UsersService {
 
  async generaqr(id:string){
     const dataqr = await this.userRepository.findOne({where:{id:id}})
+    if(!dataqr){
+      return 'No existen Usuario Con Este Id'
+    }
     const str = JSON.stringify( dataqr.diasSeleccionados)  
     const regex = /[^A-Za-z,]/g;
-    const filteredString = str.replace(regex, '').slice(0, -1); 
+    const filteredString = str.replace(regex, '').slice(0); 
     const dias =filteredString.split(',')
   
  
@@ -244,14 +247,20 @@ const diaHoy = daysOfWeek[dayNumber]
 let valido=false;
 dias.forEach((d)=>{
   console.log(d +  ' === ' + diaHoy)
-  if(d === diaHoy){
+  if(d.trim() === diaHoy){
     valido=true
   }
 })
 console.log(valido)
 
 if(valido && dataqr.estado==true){
-const messageQR = `Estado = ${dataqr.estado}`;
+const messageQR = `Id:${dataqr.id}
+                   Nombre : ${dataqr.name} 
+                   DNI : ${dataqr.numero_dni} 
+                   Estado : ${dataqr.estado} 
+                   Plan:${dias}
+                   Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
+                   `;
    toString(
     messageQR,    
     {type:'svn'},
