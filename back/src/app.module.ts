@@ -13,7 +13,6 @@ import cors from 'cors';
 import { PlanModule } from './plan/plan.module';
 import { AvisosModule } from './avisos/avisos.module';
 import { NotificationModule } from './notificaciones/notification.module';
-import { NotificationsModule } from './notifications/notifications.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
 // import * as cors from 'cors';
 
