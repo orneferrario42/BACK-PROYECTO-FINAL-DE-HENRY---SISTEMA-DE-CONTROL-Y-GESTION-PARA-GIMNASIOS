@@ -10,6 +10,7 @@ export class EmailService {
     ){}
 
     async sendEmail(body: SendEmailDto){
+        
         try {
             const { from, subjectEmail, sendTo } = body
             const html = this.getTemplate(body)
@@ -38,7 +39,8 @@ export class EmailService {
     }
 
     private getTemplateFile(template){
-        const path = '../../templates'
+        console.log(template)
+        const path = '../../templates/'
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const templateFile = require(`${path}/${template}`)
         return templateFile

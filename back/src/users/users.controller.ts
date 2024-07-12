@@ -105,4 +105,10 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @Get('generaqr/:id')
+  generaqr(@Param('id')id:string){
+    return this.usersService.generaqr(id)
+  
+  }
+
 }

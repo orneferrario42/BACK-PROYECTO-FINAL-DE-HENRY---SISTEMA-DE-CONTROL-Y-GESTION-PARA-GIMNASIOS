@@ -246,7 +246,7 @@ export class UsersService {
     return true;
   }
 
- async generaqr(id:string){
+  async generaqr(id:string){
     const dataqr = await this.userRepository.findOne({where:{id:id}})
     if(!dataqr){
       return 'No existen Usuario Con Este Id'
@@ -259,38 +259,38 @@ export class UsersService {
  
     const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
     const today = new Date();
-    const dayNumber = today.getDay();
-   
-   const pago = dataqr.estado;
-const diaHoy = daysOfWeek[dayNumber]
-let valido=false;
-dias.forEach((d)=>{
-  console.log(d +  ' === ' + diaHoy)
-  if(d.trim() === diaHoy){
-    valido=true
-  }
-})
-console.log(valido)
+    const dayNumber = today.getDay();   
+    const pago = dataqr.estado;
+    const diaHoy = daysOfWeek[dayNumber]
+    let valido=false;
+         dias.forEach((d)=>{
+              console.log(d +  ' === ' + diaHoy)
+              if(d.trim() === diaHoy){
+                 valido=true
+              }
+          })
+             console.log(valido)
 
-if(valido && dataqr.estado==true){
-const messageQR = `Id:${dataqr.id}
+        if(valido && dataqr.estado==true){
+              const messageQR = `Id:${dataqr.id}
                    Nombre : ${dataqr.name} 
                    DNI : ${dataqr.numero_dni} 
                    Estado : ${dataqr.estado} 
                    Plan:${dias}
                    Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
                    `;
-   toString(
-    messageQR,    
-    {type:'svn'},
-    (error,data)=>{
-      console.log(data)
-    return data
-    })
-}else{
-  const message2 =  "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
-  return message2;
-} 
+      toString(
+         messageQR,    
+        {type:'svn'},
+        (error,data)=>{
+        console.log(data)
+        return data
+      })
+  }else{
+     const message2 =  "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
+     return message2;
+  } 
 
   }
+
 }
