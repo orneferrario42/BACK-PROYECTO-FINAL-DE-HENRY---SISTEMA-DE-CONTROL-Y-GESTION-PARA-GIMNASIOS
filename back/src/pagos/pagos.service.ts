@@ -95,13 +95,18 @@ export class MercadoPagoService {
       throw new Error(`Error creating preference: ${error.message}`);
     }
   }
+
   
-  async getAll() {
-    return this.pagosRepository.find();
+  async getAll(page: number, limit: number): Promise<Pago[]> {
+    let pagos = await this.pagosRepository.find();
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    pagos = pagos.slice(start, end);
+    return pagos;
   }
   
   async getOne(id: string) {
-    const pago =  this.pagosRepository.findOne({ where: { id } });
+    const pago = this.pagosRepository.findOne({ where: { id } });
     return pago;
   }
   
@@ -109,6 +114,8 @@ export class MercadoPagoService {
     const updatePago = await this.pagosRepository.findOneBy({ id });
     
     if (!updatePago){
+
+    if (!updatePago) {
       throw new HttpException('El pago no existe', HttpStatus.NOT_FOUND);
     }
     
@@ -116,6 +123,7 @@ export class MercadoPagoService {
     
     return updatePago;
   }
+    
   async createEfectivo(crearPagoDto: CrearPagoDto) {
     const plan = await this.planRepository.findOne({
       where: { id: crearPagoDto.id_plan },

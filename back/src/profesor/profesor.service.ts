@@ -66,8 +66,12 @@ export class ProfesorService {
     return userWithOutPassword;
   }
 
-  getProfesores() {
-    return this.profesorRepository.find();
+  async getProfesores(page: number, limit: number) {
+    let profesores = await this.profesorRepository.find();
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    profesores = profesores.slice(start, end);
+    return profesores;
   }
 
   public async processTurnos(id) {

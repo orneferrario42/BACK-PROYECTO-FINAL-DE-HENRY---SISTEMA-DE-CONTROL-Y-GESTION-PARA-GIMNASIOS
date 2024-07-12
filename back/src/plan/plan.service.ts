@@ -16,8 +16,8 @@ export class PlanService {
       : this.planRepository.createPlan(createPlanDto);
   }
 
-  findAll() {
-    return this.planRepository.getAllPlans();
+  findAll(page: number, limit: number) {
+    return this.planRepository.getAllPlans(page, limit);
   }
 
   findOne(id: number) {
