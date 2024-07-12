@@ -35,7 +35,9 @@ export class ProfesorController {
   async getAllProfesores(): Promise<Profesor[]> {
     return await this.profesorService.getProfesores();
   }
-
+  /**
+   * Este metodo permite contar cuantos cupos disponibles hay por clase de cada profesor
+   */
   @Get('cupos')
   async getCupoProfesores(@Query('id') id: string) {
     const datosJSON = [];
@@ -57,13 +59,15 @@ export class ProfesorController {
   /**
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
-@Get('users')
+  @Get('users')
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
-
+  /**
+   * Este metodo permite al admin activar o desactivar profesores
+   */
   @Get(':id')
-  updateStatus(@Param('id') id: string){
+  updateStatus(@Param('id') id: string) {
     return this.profesorService.updateState(id);
   }
 
@@ -71,7 +75,7 @@ export class ProfesorController {
    *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
    */
   @Get('users/:id')
-    getUsersById(@Param('id') id: string) {
+  getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
 
