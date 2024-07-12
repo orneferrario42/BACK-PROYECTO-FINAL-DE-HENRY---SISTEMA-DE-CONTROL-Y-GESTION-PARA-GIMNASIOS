@@ -9,6 +9,9 @@ import {
   Put,
   Req,
   UseGuards,
+
+  Query,
+
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -47,8 +50,11 @@ export class UsersController {
   @Get()
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.Admin)
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    if (page && limit) {
+      return this.usersService.findAll(page, limit);
+    }
+    return this.usersService.findAll(page, limit);
   }
 
   /**
@@ -82,7 +88,6 @@ export class UsersController {
   /***
    * Este metodo le permite al usuario ver su informacion personal
    */
-
   @Get(':id')
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.User)

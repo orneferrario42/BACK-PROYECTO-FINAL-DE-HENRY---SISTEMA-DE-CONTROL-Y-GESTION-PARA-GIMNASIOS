@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -11,8 +11,28 @@ export class NotificationController {
    *Este metodo permite mandar notificaciones a los usuarios
    */
   @Get(':userId')
+
+  async getNotifications(
+    @Param('userId') userId: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    if (page && limit) {
+      return await this.notificationService.getNotificationsForUser(
+        userId,
+        page,
+        limit,
+      );
+    }
+    return await this.notificationService.getNotificationsForUser(
+      userId,
+      page,
+      limit,
+    );
+
   async getNotifications(@Param('userId') userId: string) {
     return await this.notificationService.getNotificationsForUser(userId);
+
   }
 
   /**

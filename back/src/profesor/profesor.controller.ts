@@ -32,8 +32,14 @@ export class ProfesorController {
    */
 
   @Get('profesores')
-  async getAllProfesores(): Promise<Profesor[]> {
-    return await this.profesorService.getProfesores();
+  async getAllProfesores(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ): Promise<Profesor[]> {
+    if (page && limit) {
+      return await this.profesorService.getProfesores(page, limit);
+    }
+    return await this.profesorService.getProfesores(page, limit);
   }
   /**
    * Este metodo permite contar cuantos cupos disponibles hay por clase de cada profesor

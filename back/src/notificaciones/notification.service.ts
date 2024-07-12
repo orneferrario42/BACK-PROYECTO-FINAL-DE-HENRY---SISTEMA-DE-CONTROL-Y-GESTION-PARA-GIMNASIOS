@@ -20,7 +20,7 @@ export class NotificationService {
   constructor(
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
-    private readonly notificationGateway: NotificationGateway
+    private readonly notificationGateway: NotificationGateway,
   ) {}
 
   async sendNotification(userId: string, message: string) {
@@ -33,11 +33,15 @@ export class NotificationService {
     this.notificationGateway.sendNotification(userId, message);
   }
 
-  async getNotificationsForUser(userId: string) {
-    return await this.notificationRepository.find({
+  async getNotificationsForUser(userId: string, page: number, limit: number) {
+    let notification = await this.notificationRepository.find({
       where: { user: { id: userId } },
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    notification = notification.slice(start, end);
+    return notification;
   }
 
   async markAsRead(notificationId: string) {
