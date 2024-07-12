@@ -11,6 +11,7 @@ export class NotificationController {
    *Este metodo permite mandar notificaciones a los usuarios
    */
   @Get(':userId')
+
   async getNotifications(
     @Param('userId') userId: string,
     @Query('page') page: number,
@@ -28,6 +29,10 @@ export class NotificationController {
       page,
       limit,
     );
+
+  async getNotifications(@Param('userId') userId: string) {
+    return await this.notificationService.getNotificationsForUser(userId);
+
   }
 
   /**
