@@ -82,4 +82,11 @@ export class UsersController {
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
+
+  @Get('generaqr/:id')
+  generaqr(@Param('id')id:string){
+    return this.usersService.generaqr(id)
+  
+  }
+
 }
