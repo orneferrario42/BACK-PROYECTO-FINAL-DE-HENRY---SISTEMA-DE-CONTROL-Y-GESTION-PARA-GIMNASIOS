@@ -51,7 +51,9 @@ export class User {
   @Column({ default: Role.User })
   role: Role;
 
-  @ManyToOne(() => Plan, (plan) => plan.clientes)
+  @ManyToOne(() => Plan, (plan) => plan.clientes, {
+    nullable: true,
+  })
   plan: Plan; // Relación con el plan seleccionado
 
   @ManyToOne(() => Profesor, (profesor) => profesor.users)
@@ -83,11 +85,5 @@ export class User {
   // rutina: Profesor;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago;
-
-  @OneToMany(() => Notification, (notification) => notification.user)
-notifications: Notification[];
-
-@OneToMany(() => Avisos, (avisos) => avisos.user)
-avisos: Avisos[];
+  pagos: string;
 }

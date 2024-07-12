@@ -9,6 +9,7 @@ import {
   Put,
   Req,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +20,7 @@ import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Response } from  'express' 
 @ApiTags('USERS')
 // @ApiBearerAuth()
 @Controller('users')
@@ -31,6 +33,12 @@ export class UsersController {
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+  
+  @Get('generaqr/:id')
+  generaqr(@Param('id')id:string){
+    return this.usersService.generaqr(id)
+  
   }
 
   /**
@@ -70,9 +78,11 @@ export class UsersController {
     return this.usersService.updateState(id);
   }
 
+
   /***
    * Este metodo le permite al usuario ver su informacion personal
    */
+
   @Get(':id')
   // @UseGuards(AuthGuard, RolesGuard)
   // @Roles(Role.User)
@@ -89,4 +99,5 @@ export class UsersController {
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
+
 }

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
+import { And, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
@@ -16,12 +16,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
+import {v4} from 'uuid';
+import {toString} from 'qrcode';
+
 
 @Injectable()
 export class UsersService {
-  findBy(email: string) {
-    throw new Error('Method not implemented.');
-  }
+ 
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -237,5 +238,53 @@ export class UsersService {
       throw new NotFoundException('Usuario no encontrado');
     }
     return true;
+  }
+
+ async generaqr(id:string){
+    const dataqr = await this.userRepository.findOne({where:{id:id}})
+    if(!dataqr){
+      return 'No existen Usuario Con Este Id'
+    }
+    const str = JSON.stringify( dataqr.diasSeleccionados)  
+    const regex = /[^A-Za-z,]/g;
+    const filteredString = str.replace(regex, '').slice(0); 
+    const dias =filteredString.split(',')
+  
+ 
+    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
+    const today = new Date();
+    const dayNumber = today.getDay();
+   
+   const pago = dataqr.estado;
+const diaHoy = daysOfWeek[dayNumber]
+let valido=false;
+dias.forEach((d)=>{
+  console.log(d +  ' === ' + diaHoy)
+  if(d.trim() === diaHoy){
+    valido=true
+  }
+})
+console.log(valido)
+
+if(valido && dataqr.estado==true){
+const messageQR = `Id:${dataqr.id}
+                   Nombre : ${dataqr.name} 
+                   DNI : ${dataqr.numero_dni} 
+                   Estado : ${dataqr.estado} 
+                   Plan:${dias}
+                   Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
+                   `;
+   toString(
+    messageQR,    
+    {type:'svn'},
+    (error,data)=>{
+      console.log(data)
+    return data
+    })
+}else{
+  const message2 =  "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
+  return message2;
+} 
+
   }
 }
