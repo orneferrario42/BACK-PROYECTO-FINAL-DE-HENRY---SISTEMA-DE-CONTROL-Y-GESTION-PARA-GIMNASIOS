@@ -51,7 +51,9 @@ export class UsersController {
   getAuth0(@Req() req: Request) {
     return JSON.stringify(req.oidc.user);
   }
-
+  /***
+   *Este metodo verifica si el usuario  existe
+   */
   @Post('exist')
   userExist(@Body() data): Promise<boolean> {
     const { email } = data;
