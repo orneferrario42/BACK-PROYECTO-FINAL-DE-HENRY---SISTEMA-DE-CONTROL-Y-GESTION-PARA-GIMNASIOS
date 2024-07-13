@@ -38,13 +38,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
   
-  @Get('generaqr/:id')
-  generaqr(@Param('id')id:string){
-    return this.usersService.generaqr(id)
-  
-  }
-
-  /**
+    /**
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
@@ -108,7 +102,5 @@ export class UsersController {
   @Get('generaqr/:id')
   generaqr(@Param('id')id:string){
     return this.usersService.generaqr(id)
-  
   }
-
 }
