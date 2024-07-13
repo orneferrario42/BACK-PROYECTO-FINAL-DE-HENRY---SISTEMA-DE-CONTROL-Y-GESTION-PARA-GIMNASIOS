@@ -12,15 +12,12 @@ export class NotificationController {
    */
   @Get(':userId')
 
-  async getNotifications(
-    @Param('userId') userId: string,
-    @Query('page') page: number,
-    @Query('limit') limit: number,
-  ) {
+  async getNotifications(@Param('userId') userId: string,@Query('page') page: number, @Query('limit') limit: number,
+  ){
     if (page && limit) {
       return await this.notificationService.getNotificationsForUser(
         userId,
-        page,
+        page,          
         limit,
       );
     }
@@ -29,10 +26,6 @@ export class NotificationController {
       page,
       limit,
     );
-
-  async getNotifications(@Param('userId') userId: string) {
-    return await this.notificationService.getNotificationsForUser(userId);
-
   }
 
   /**

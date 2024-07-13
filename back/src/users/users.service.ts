@@ -16,13 +16,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
-import {v4} from 'uuid';
-import {toString} from 'qrcode';
+import { toString } from 'qrcode';
 
 
 @Injectable()
 export class UsersService {
- 
+
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -30,7 +29,7 @@ export class UsersService {
     private planRepository: Repository<Plan>,
     @InjectRepository(Profesor)
     private profesorRepository: Repository<Profesor>,
-  ) {}
+  ) { }
 
   async seederUser() {
     try {
@@ -90,7 +89,7 @@ export class UsersService {
 
   async findAll(page: number, limit: number): Promise<User[]> {
     let users = await this.userRepository.find({
-      relations: ['profesor','plan','pagos'],
+      relations: ['profesor', 'plan', 'pagos'],
       select: [
         'id',
         'name',
@@ -117,7 +116,7 @@ export class UsersService {
     return users;
   }
 
-  
+
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
@@ -249,33 +248,33 @@ export class UsersService {
     return true;
   }
 
-  async generaqr(id:string){
-    const dataqr = await this.userRepository.findOne({where:{id:id}})
-    if(!dataqr){
+  async generaqr(id: string) {
+    const dataqr = await this.userRepository.findOne({ where: { id: id } })
+    if (!dataqr) {
       return 'No existen Usuario Con Este Id'
     }
-    const str = JSON.stringify( dataqr.diasSeleccionados)  
+    const str = JSON.stringify(dataqr.diasSeleccionados)
     const regex = /[^A-Za-z,]/g;
-    const filteredString = str.replace(regex, '').slice(0); 
-    const dias =filteredString.split(',')
-  
- 
+    const filteredString = str.replace(regex, '').slice(0);
+    const dias = filteredString.split(',')
+
+
     const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
     const today = new Date();
-    const dayNumber = today.getDay();   
+    const dayNumber = today.getDay();
     const pago = dataqr.estado;
     const diaHoy = daysOfWeek[dayNumber]
-    let valido=false;
-         dias.forEach((d)=>{
-              console.log(d +  ' === ' + diaHoy)
-              if(d.trim() === diaHoy){
-                 valido=true
-              }
-          })
-             console.log(valido)
+    let valido = false;
+    dias.forEach((d) => {
+      console.log(d + ' === ' + diaHoy)
+      if (d.trim() === diaHoy) {
+        valido = true
+      }
+    })
+    console.log(valido)
 
-        if(valido && dataqr.estado==true){
-              const messageQR = `Id:${dataqr.id}
+    if (valido && dataqr.estado == true) {
+      const messageQR = `Id:${dataqr.id}
                    Nombre : ${dataqr.name} 
                    DNI : ${dataqr.numero_dni} 
                    Estado : ${dataqr.estado} 
@@ -283,16 +282,16 @@ export class UsersService {
                    Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
                    `;
       toString(
-         messageQR,    
-        {type:'svn'},
-        (error,data)=>{
-        console.log(data)
-        return data
-      })
-  }else{
-     const message2 =  "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
-     return message2;
-  } 
+        messageQR,
+        { type: 'svn' },
+        (error, data) => {
+          console.log(data)
+          return data
+        })
+    } else {
+      const message2 = "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
+      return message2;
+    }
 
   }
 

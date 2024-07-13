@@ -10,7 +10,6 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { MercadoPagoService } from './pagos.service';
@@ -19,17 +18,13 @@ import { UpdatePagoDto } from './dto/update-pago.dto';
 @Controller('payments')
 @ApiTags('PAGOS')
 export class PagosController {
-  // constructor(private readonly pagosService: PagosService) {}
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
-
-
 
   /**
    * Este es el metodo para crear el metodo de pago
    */
-  // @Post()
 
-  @Post('')
+  @Post()
   async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
     if (crearPagoDto.metodoPago !== 'MercadoPago') {
       throw new HttpException(
@@ -49,15 +44,13 @@ export class PagosController {
    * este metodo permite ver al admin todos los pagos
    */
   @Get()
-  async getAll() {
-    return  this.mercadoPagoService.getAll();
-
   async getAll(@Query('page') page: number, @Query('limit') limit: number) {
     if (page && limit) {
       return await this.mercadoPagoService.getAll(page, limit);
     }
     return await this.mercadoPagoService.getAll(page, limit);
   }
+
   /**
    * este metodo permite ver al admin un pago
    */
@@ -67,7 +60,7 @@ export class PagosController {
   }
 
   /**
-   * este metodo permite actualizar ls pagos
+   * este metodo permite actualizar los pagos
    */
   @Put(':id')
   async updateOne(@Body() id: string, @Body() dto: UpdatePagoDto) {

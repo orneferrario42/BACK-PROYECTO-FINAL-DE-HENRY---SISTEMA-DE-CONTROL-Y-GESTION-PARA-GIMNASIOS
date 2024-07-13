@@ -122,7 +122,7 @@ export class MercadoPagoService {
     const update = await this.pagosRepository.save({ ...updatePago, ...dto });
     
     return updatePago;
-  }
+  }}
     
   async createEfectivo(crearPagoDto: CrearPagoDto) {
     const plan = await this.planRepository.findOne({
@@ -132,7 +132,7 @@ export class MercadoPagoService {
     const user = await this.userRepository.findOne({
       where: { email: crearPagoDto.userEmail },
     })
-    
+  
     const pago = new Pago();
     pago.fecha_pago = new Date();
     pago.metodopago = 'Efectivo';
@@ -141,3 +141,4 @@ export class MercadoPagoService {
     return await this.pagosRepository.save(pago);
   }
 }
+
