@@ -1,17 +1,40 @@
-import { Controller, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import { NotificationService } from './notification.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('NOTIFICATION')
 @Controller('notifications')
 export class NotificationController {
-    constructor(private readonly notificationService: NotificationService) { }
+  constructor(private readonly notificationService: NotificationService) {}
 
-    @Get(':userId')
-    async getNotifications(@Param('userId') userId: string) {
-        return await this.notificationService.getNotificationsForUser(userId);
+  /**
+   *Este metodo permite mandar notificaciones a los usuarios
+   */
+  @Get(':userId')
+  async getNotifications(
+    @Param('userId') userId: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    if (page && limit) {
+      return await this.notificationService.getNotificationsForUser(
+        userId,
+        page,
+        limit,
+      );
     }
+    return await this.notificationService.getNotificationsForUser(
+      userId,
+      page,
+      limit,
+    );
+  }
 
-    @Patch(':id/read')
-    async markAsRead(@Param('id') id: string) {
-        await this.notificationService.markAsRead(id);
-    }
+  /**
+   * este metodo permite actualizar las notificaciones
+   */
+  @Patch(':id/read')
+  async markAsRead(@Param('id') id: string) {
+    await this.notificationService.markAsRead(id);
+  }
 }

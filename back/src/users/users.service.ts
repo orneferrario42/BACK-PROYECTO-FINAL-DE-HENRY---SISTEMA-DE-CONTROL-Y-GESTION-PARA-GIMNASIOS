@@ -86,8 +86,8 @@ export class UsersService {
     }
   }
 
-  async findAll() {
-    return await this.userRepository.find({
+  async findAll(page: number, limit: number): Promise<User[]> {
+    let users = await this.userRepository.find({
       relations: ['profesor'],
       select: [
         'id',
@@ -106,8 +106,13 @@ export class UsersService {
         'horario',
         'objetivo',
         'metodoPago',
+        'rutina',
       ],
     });
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    users = users.slice(start, end);
+    return users;
   }
 
   async findOne(id: string) {
@@ -134,6 +139,7 @@ export class UsersService {
         'horario',
         'objetivo',
         'metodoPago',
+        'rutina',
       ],
     });
 

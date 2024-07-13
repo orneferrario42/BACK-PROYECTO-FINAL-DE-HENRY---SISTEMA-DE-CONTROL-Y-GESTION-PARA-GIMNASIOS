@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+
 @Entity({ name: 'profesor' })
 export class Profesor {
   @PrimaryGeneratedColumn('uuid')
