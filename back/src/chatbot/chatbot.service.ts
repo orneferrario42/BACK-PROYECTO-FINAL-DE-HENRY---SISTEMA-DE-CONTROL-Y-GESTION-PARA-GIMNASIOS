@@ -1,6 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
+import { log } from 'console';
 import { witIAConfig } from 'src/config/witIa';
+import { Plan } from 'src/plan/entities/plan.entity';
+import { PlanService } from 'src/plan/plan.service';
+import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { ProfesorService } from 'src/profesor/profesor.service';
+import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ChatbotService {
@@ -8,6 +16,10 @@ export class ChatbotService {
   private readonly witApiVersion: string = witIAConfig.witApiVersion;
   private readonly witBaseUrl: string = witIAConfig.witBaseUrl;
 
+  constructor(
+    private readonly profesorService: ProfesorService,
+    private readonly planesService: PlanService,
+  ) {}
   async getResponse(message: string): Promise<any> {
     const url = `${this.witBaseUrl}?v=${this.witApiVersion}&q=${encodeURIComponent(message)}`;
     const headers = {
@@ -47,8 +59,38 @@ export class ChatbotService {
         return 'Power Training es un gimnasio se dedica a brindar servicios de entrenamiento físico  y acondicionamiento deportivo o terapéutico personalizado para personas de todas las edades y niveles de condición física.';
       case 'payments':
         return 'Claro, te comento que tenemos metodos de pago en efectivo en nuestras instalaciones y pagos en linea con mercado pago';
+      case 'professor':
+        const profesoresDb = await this.profesorService.getProfesores(1, 2);
+        const info = this.formatProfessorInf(profesoresDb);
+        console.log(info);
+        return info;
+      case 'planes':
+        const planesDb = await this.planesService.findAll(1, 5);
+        const infoPlan = this.formatPlanesInf(planesDb);
+        return infoPlan;
       default:
         return 'Lo siento, no entendí eso.';
     }
+  }
+  async formatProfessorInf(profesores: Profesor[]) {
+    return `Estos son los profesores de Power Trainig:
+${profesores.map(
+  (profesor) => `
+Nombre: ${profesor.nombre}
+Días disponibles: ${profesor.dia.join(' ')}
+Horas disponibles: ${profesor.horario.join(' | ')}
+      `,
+)}
+¿Algo más en lo que te pueda ayudar?`;
+  }
+  async formatPlanesInf(planes: Plan[]) {
+    return `Estos son los planes con los que contamos:
+${planes.map(
+  (plan) => `
+  Plan: ${plan.name}
+  Precio: ${plan.price}
+  `,
+)}
+¿Algo más en lo que te pueda ayudar?`;
   }
 }
