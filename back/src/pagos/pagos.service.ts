@@ -98,10 +98,12 @@ export class MercadoPagoService {
 
   
   async getAll(page: number, limit: number): Promise<Pago[]> {
-    let pagos = await this.pagosRepository.find();
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    pagos = pagos.slice(start, end);
+    const pagos = await this.pagosRepository.find({
+      relations: ['clientes', 'id_plan'],
+    });
+    // const start = (page - 1) * limit;
+    // const end = start + limit;
+    // pagos = pagos.slice(start, end);
     return pagos;
   }
   

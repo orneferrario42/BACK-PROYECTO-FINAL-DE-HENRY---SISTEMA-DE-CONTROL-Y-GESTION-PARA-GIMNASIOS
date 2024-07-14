@@ -108,7 +108,8 @@ export class UsersService {
         'objetivo',
         'metodoPago',
         'rutina',
-        'pagos'
+        'pagos',
+        'diasSeleccionados'
       ],
     });
     // const start = (page - 1) * limit;
@@ -144,6 +145,8 @@ export class UsersService {
         'objetivo',
         'metodoPago',
         'rutina',
+        'pagos',
+        'diasSeleccionados'
       ],
     });
 
@@ -184,9 +187,6 @@ export class UsersService {
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
-
-    console.log('PASA POR AQUI', updateUserDto);
-
     if (updateUserDto.plan) {
       const plan = await this.planRepository.findOne({
         where: { id: updateUserDto.plan as unknown as number },
@@ -260,7 +260,7 @@ export class UsersService {
     const dias = filteredString.split(',')
 
 
-    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
+    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
     const today = new Date();
     const dayNumber = today.getDay();
     const pago = dataqr.estado;
