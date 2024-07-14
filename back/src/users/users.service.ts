@@ -88,7 +88,7 @@ export class UsersService {
 
 
   async findAll(page: number, limit: number): Promise<User[]> {
-    let users = await this.userRepository.find({
+    const users = await this.userRepository.find({
       relations: ['profesor', 'plan', 'pagos'],
       select: [
         'id',
@@ -108,11 +108,12 @@ export class UsersService {
         'objetivo',
         'metodoPago',
         'rutina',
+        'pagos'
       ],
     });
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    users = users.slice(start, end);
+    // const start = (page - 1) * limit;
+    // const end = start + limit;
+    // users = users.slice(start, end);
     return users;
   }
 
@@ -284,7 +285,7 @@ export class UsersService {
       toString(
         messageQR,
         { type: 'svn' },
-        (error, data) => {
+        (error: any, data: any) => {
           console.log(data)
           return data
         })

@@ -62,8 +62,8 @@ export class PagosController {
   /**
    * este metodo permite actualizar los pagos
    */
-  @Put(':id')
-  async updateOne(@Body() id: string, @Body() dto: UpdatePagoDto) {
-    return await this.mercadoPagoService.updateOne(id, dto);
+  @Put(':userId')
+  async updateOne(@Param('userId') userId: string, @Body() dto: UpdatePagoDto) {
+    return await this.mercadoPagoService.updateOne(userId, dto);
   }
 }
