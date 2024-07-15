@@ -45,7 +45,7 @@ export class PagosController {
     if (page && limit) {
       return await this.mercadoPagoService.getAll(page, limit);
     }
-    return await this.mercadoPagoService.getAll(page, limit);
+    return await this.mercadoPagoService.getAll(1, 5);
   }
   /**
    * este metodo permite ver al admin un pago

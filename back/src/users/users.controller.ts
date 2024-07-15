@@ -44,7 +44,7 @@ export class UsersController {
     if (page && limit) {
       return this.usersService.findAll(page, limit);
     }
-    return this.usersService.findAll(page, limit);
+    return this.usersService.findAll(1, 5);
   }
 
   /**

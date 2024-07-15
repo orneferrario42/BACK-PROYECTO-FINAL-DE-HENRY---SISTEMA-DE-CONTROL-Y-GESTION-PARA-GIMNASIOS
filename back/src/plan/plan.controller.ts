@@ -40,7 +40,7 @@ export class PlanController {
     if (page && limit) {
       return this.planService.findAll(page, limit);
     }
-    return this.planService.findAll(page, limit);
+    return this.planService.findAll(1, 5);
   }
 
   /**

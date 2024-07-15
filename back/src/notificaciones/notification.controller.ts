@@ -23,11 +23,7 @@ export class NotificationController {
         limit,
       );
     }
-    return await this.notificationService.getNotificationsForUser(
-      userId,
-      page,
-      limit,
-    );
+    return await this.notificationService.getNotificationsForUser(userId, 1, 8);
   }
 
   /**
