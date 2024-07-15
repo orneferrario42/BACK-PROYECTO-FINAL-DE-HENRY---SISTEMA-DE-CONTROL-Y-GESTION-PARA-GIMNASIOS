@@ -23,8 +23,6 @@ export class PlanController {
    * Esta es el metodo que permite al admin crear planes
    */
   @Post('createplan')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.Admin)
   async create(@Body() createPlanDto: CreatePlanDto) {
     const response = await this.planService.create(createPlanDto);
     return response;
@@ -34,8 +32,6 @@ export class PlanController {
    * Este es el metodo que permite al admin ver todos los planes disponibles
    */
   @Get()
-  // @UseGuards(AuthGuard, RolesGuard)
-  // @Roles(Role.Admin)
   findAll(@Query('page') page: number, @Query('limit') limit: number) {
     if (page && limit) {
       return this.planService.findAll(page, limit);
@@ -47,8 +43,6 @@ export class PlanController {
    * Este es el metodo que permite al admin ver un plan
    */
   @Get(':id')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.User, Role.Admin)
   findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.planService.findOne(id);
   }
@@ -57,15 +51,15 @@ export class PlanController {
    *Este metodo permite al admin modificar los planes
    */
   @Put(':id')
-  // @UseGuards(AuthGuard, RolesGuard)
-  // @Roles(Role.Admin)
   update(
     @Param('id', new ParseIntPipe()) id: number,
     @Body() updatePlanDto: UpdatePlanDto,
   ) {
     return this.planService.update(id, updatePlanDto);
   }
-
+  /***
+   * Este metodo permite borrar los planes creados
+   */
   @Delete(':id')
   async removePlan(@Param('id', new ParseIntPipe()) id: number) {
     return this.planService.removePlan(id);
