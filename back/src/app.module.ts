@@ -10,10 +10,15 @@ import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
+import { ScheduleModule } from '@nestjs/schedule';
 import { PlanModule } from './plan/plan.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { EmailModule } from './email/email.module';
-// import * as cors from 'cors';
+import { AvisosModule } from './avisos/avisos.module';
+import { NotificationModule } from './notificaciones/notification.module';
+import { ChatbotModule } from './chatbot/chatbot.module';
+import { MailerModule } from './mailer/mailer.module';
+import { MailerService } from './mailer/mailer.service';
+
+
 
 @Module({
   imports: [
@@ -35,7 +40,7 @@ import { EmailModule } from './email/email.module';
     NotificationModule,
     ChatbotModule,
     SeederModule,
-    EmailModule,
+    
     // NotificationsModule,
 
     JwtModule.register({
@@ -43,6 +48,11 @@ import { EmailModule } from './email/email.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
+    
+    MailerModule,
+    ScheduleModule.forRoot(),
+    //TypeOrmModule.forFeature([Pago]),
+    
   ],
   controllers: [],
   providers: [],

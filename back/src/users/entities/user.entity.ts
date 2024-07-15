@@ -86,4 +86,6 @@ export class User {
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
   pagos: string;
+  avisos: any;
+    notifications: any;
 }
