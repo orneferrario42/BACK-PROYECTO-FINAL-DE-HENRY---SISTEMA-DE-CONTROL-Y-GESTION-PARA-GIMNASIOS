@@ -29,17 +29,19 @@ export class PagosController {
     if (crearPagoDto.metodoPago !== 'MercadoPago') {
       throw new HttpException(
         'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
     return await this.mercadoPagoService.createPreference(crearPagoDto);
   }
-
+  /***
+   * Este metodo permite hacer un pago en efectivo
+   */
   @Post('efectivo')
   async createEfectivo(@Body() crearPagoDto: CrearPagoDto) {
     return await this.mercadoPagoService.createEfectivo(crearPagoDto);
   }
-  
+
   /**
    * este metodo permite ver al admin todos los pagos
    */
