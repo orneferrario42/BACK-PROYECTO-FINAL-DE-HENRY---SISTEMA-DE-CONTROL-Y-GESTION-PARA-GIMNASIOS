@@ -10,7 +10,6 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { MercadoPagoService } from './pagos.service';
@@ -19,24 +18,28 @@ import { UpdatePagoDto } from './dto/update-pago.dto';
 @Controller('payments')
 @ApiTags('PAGOS')
 export class PagosController {
-  // constructor(private readonly pagosService: PagosService) {}
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
   /**
    * Este es el metodo para crear el metodo de pago
    */
-  // @Post()
-  @Post('')
+
+  @Post()
   async createSuscripcion(@Body() crearPagoDto: CrearPagoDto) {
-    // if (crearPagoDto.metodoPago !== 'MercadoPago') {
-    //   throw new HttpException(
-    //     'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
-    //     HttpStatus.BAD_REQUEST
-    //   );
-    // }
-    // return this.pagosService.createSubscription(crearPagoDto);
-    return this.mercadoPagoService.createPreference(crearPagoDto);
+    if (crearPagoDto.metodoPago !== 'MercadoPago') {
+      throw new HttpException(
+        'Una vez realice el pago en efectivo en el gimnasio, se habilitará su acceso.',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return await this.mercadoPagoService.createPreference(crearPagoDto);
   }
+
+  @Post('efectivo')
+  async createEfectivo(@Body() crearPagoDto: CrearPagoDto) {
+    return await this.mercadoPagoService.createEfectivo(crearPagoDto);
+  }
+  
   /**
    * este metodo permite ver al admin todos los pagos
    */
@@ -47,19 +50,20 @@ export class PagosController {
     }
     return await this.mercadoPagoService.getAll(1, 5);
   }
+
   /**
    * este metodo permite ver al admin un pago
    */
   @Get(':id')
   async getOne(@Param('id') id: string) {
-    return this.mercadoPagoService.getOne(id);
+    return await this.mercadoPagoService.getOne(id);
   }
 
   /**
-   * este metodo permite actualizar ls pagos
+   * este metodo permite actualizar los pagos
    */
   @Put(':id')
   async updateOne(@Body() id: string, @Body() dto: UpdatePagoDto) {
-    return this.mercadoPagoService.updateOne(id, dto);
+    return await this.mercadoPagoService.updateOne(id, dto);
   }
 }

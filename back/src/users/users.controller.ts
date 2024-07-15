@@ -9,7 +9,10 @@ import {
   Put,
   Req,
   UseGuards,
+
   Query,
+
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,6 +23,7 @@ import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Response } from  'express' 
 @ApiTags('USERS')
 // @ApiBearerAuth()
 @Controller('users')
@@ -33,8 +37,8 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-
-  /**
+  
+    /**
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
@@ -74,6 +78,7 @@ export class UsersController {
     return this.usersService.updateState(id);
   }
 
+
   /***
    * Este metodo le permite al usuario ver su informacion personal
    */
@@ -92,5 +97,10 @@ export class UsersController {
   // @UseGuards(AuthGuard,RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Get('generaqr/:id')
+  generaqr(@Param('id')id:string){
+    return this.usersService.generaqr(id)
   }
 }
