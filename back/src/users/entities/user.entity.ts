@@ -85,13 +85,11 @@ export class User {
   // rutina: Profesor;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago[];
-
-  @OneToMany(() => Avisos, (aviso) => aviso.user)
-  avisos: Avisos[];
+  pagos: Pago;
 
   @OneToMany(() => Notification, (notification) => notification.user)
-  notifications: Notification[];
+notifications: Notification[];
 
-  
+@OneToMany(() => Avisos, (avisos) => avisos.user)
+avisos: Avisos[];
 }
