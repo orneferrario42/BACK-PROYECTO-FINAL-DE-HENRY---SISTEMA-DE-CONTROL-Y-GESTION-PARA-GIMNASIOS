@@ -110,6 +110,9 @@ export class UsersService {
         'rutina',
       ],
     });
+    if (!users) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
     const start = (page - 1) * limit;
     const end = start + limit;
     users = users.slice(start, end);
