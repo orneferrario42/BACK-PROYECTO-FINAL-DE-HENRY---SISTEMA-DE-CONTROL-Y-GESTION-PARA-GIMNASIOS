@@ -15,6 +15,8 @@ import axios from 'axios';
 import { User } from 'src/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePagoDto } from './dto/update-pago.dto';
+import { NotificationService } from 'src/notificaciones/notification.service';
+import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
 export class MercadoPagoService {
@@ -27,7 +29,9 @@ export class MercadoPagoService {
   @InjectRepository(User)
   private userRepository: Repository<User>;
   
-  constructor() {
+  constructor(
+    private notificationService:NotificationService
+  ) {
     this.mercadopagoClient = new mercadopago.MercadoPagoConfig({
       accessToken:
       'APP_USR-6388226938088227-070410-84089c51e198a5281fed512e8c8f653e-1884641309',
@@ -89,10 +93,14 @@ export class MercadoPagoService {
       console.log(pago);
       
       await this.pagosRepository.save(pago);
+
+      // Enviar notificación al administrador
+      await this.notificationService.sendNotificationAdmin(
+        `Hey! ${user.email} acaba de realizar un pago de ${price} por el ${plan.name}.`);
       
       return response;
     } catch (error) {
-      throw new Error(`Error creating preference: ${error.message}`);
+      throw new Error(`Error de preferencia  ${error.message}`);
     }
   }
 
@@ -170,5 +178,6 @@ export class MercadoPagoService {
     const pagoGuardado = await this.pagosRepository.save(pago);
     return pagoGuardado;
   }
-}
+
+  }
 
