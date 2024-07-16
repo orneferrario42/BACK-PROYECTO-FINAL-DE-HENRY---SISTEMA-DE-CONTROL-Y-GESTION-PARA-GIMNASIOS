@@ -13,6 +13,7 @@ import { User } from 'src/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePagoDto } from './dto/update-pago.dto';
 import { NotificationService } from 'src/notificaciones/notification.service';
+import { Profesor } from 'src/profesor/entities/profesor.entity';
 
 @Injectable()
 export class MercadoPagoService {
@@ -24,6 +25,8 @@ export class MercadoPagoService {
   private pagosRepository: Repository<Pago>;
   @InjectRepository(User)
   private userRepository: Repository<User>;
+  @InjectRepository(Profesor)
+  private profesorRepository: Repository<Profesor>;
   
   constructor(
     private notificationService:NotificationService
@@ -48,18 +51,27 @@ export class MercadoPagoService {
       if (!plan) {
         throw new HttpException('Plan no encontrado', HttpStatus.NOT_FOUND);
       }
+
+      const profesor = await this.profesorRepository.findOne({
+        where: { id: crearPagoDto.id_profesor },
+      })
       
       const user = await this.userRepository.findOne({
         where: { email: crearPagoDto.userEmail },
       });
-
-      user.metodoPago = 'MercadoPago'
-      user.estado = true
-      this.userRepository.save(user)
       
       if (!user) {
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
       }
+
+      // Actualizar el plan y profesor del usuario
+      user.plan = plan;
+      user.profesor = profesor;
+      user.metodoPago = 'MercadoPago';
+      user.estado = true;
+      user.diasSeleccionados = crearPagoDto.diasSeleccionados;
+
+      await this.userRepository.save(user);
       
       const response = await preference.create({
         body: {
@@ -79,18 +91,12 @@ export class MercadoPagoService {
         },
       });
       
-      //  Actualizar el plan del usuario
-      user.plan = plan;
-      await this.userRepository.save(user);
-      
       //Guardar información del pago en la base de datos
       const pago = new Pago();
       pago.fecha_pago = new Date();
       pago.metodopago = 'MercadoPago';
       pago.id_plan = plan;
       pago.clientes = user;
-      
-      console.log(pago);
       
       await this.pagosRepository.save(pago);
 

@@ -34,4 +34,12 @@ export class CrearPagoDto {
   @IsNotEmpty()
   @IsUUID()
   userEmail: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  id_profesor: string;
+
+  @IsNotEmpty()
+  @IsString({ each: true })
+  diasSeleccionados: string[];
 }
