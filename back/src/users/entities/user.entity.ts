@@ -81,7 +81,7 @@ export class User {
   nivelActividad: string;
 
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago;
+  pagos: Pago[];
 
   @OneToMany(() => Notification, (notification) => notification.user)
 notifications: Notification[];

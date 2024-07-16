@@ -88,7 +88,7 @@ export class UsersService {
 
 
   async findAll(page: number, limit: number): Promise<User[]> {
-    let users = await this.userRepository.find({
+    const users = await this.userRepository.find({
       relations: ['profesor', 'plan', 'pagos'],
       select: [
         'id',
@@ -108,11 +108,10 @@ export class UsersService {
         'objetivo',
         'metodoPago',
         'rutina',
+        'pagos',
+        'diasSeleccionados'
       ],
     });
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    users = users.slice(start, end);
     return users;
   }
 
@@ -143,6 +142,8 @@ export class UsersService {
         'objetivo',
         'metodoPago',
         'rutina',
+        'pagos',
+        'diasSeleccionados'
       ],
     });
 
@@ -183,9 +184,6 @@ export class UsersService {
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
-
-    console.log('PASA POR AQUI', updateUserDto);
-
     if (updateUserDto.plan) {
       const plan = await this.planRepository.findOne({
         where: { id: updateUserDto.plan as unknown as number },
@@ -259,7 +257,7 @@ export class UsersService {
     const dias = filteredString.split(',')
 
 
-    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
+    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
     const today = new Date();
     const dayNumber = today.getDay();
     const pago = dataqr.estado;
@@ -284,7 +282,7 @@ export class UsersService {
       toString(
         messageQR,
         { type: 'svn' },
-        (error, data) => {
+        (error: any, data: any) => {
           console.log(data)
           return data
         })
