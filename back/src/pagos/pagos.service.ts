@@ -52,6 +52,10 @@ export class MercadoPagoService {
       const user = await this.userRepository.findOne({
         where: { email: crearPagoDto.userEmail },
       });
+
+      user.metodoPago = 'MercadoPago'
+      user.estado = true
+      this.userRepository.save(user)
       
       if (!user) {
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
@@ -160,6 +164,7 @@ export class MercadoPagoService {
       relations: ['pagos'],
     })
     user.metodoPago = 'Efectivo'
+    user.estado = true
     await this.userRepository.save(user)
 
     const pago = new Pago();

@@ -47,7 +47,7 @@ export class UsersService {
           fecha_nacimiento: '12-12-1994',
           numero_dni: '12345678',
           altura: '1.75',
-          peso: '70',
+          peso: ['70'],
           role: Role.Admin,
           estado: true,
         });
