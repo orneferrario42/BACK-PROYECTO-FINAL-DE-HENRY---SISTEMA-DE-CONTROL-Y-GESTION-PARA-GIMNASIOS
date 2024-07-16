@@ -46,7 +46,10 @@ export class User {
   altura: string;
 
   @Column({ type: 'varchar', nullable: true })
-  peso: string;
+  peso: string[];
+
+  @Column({ type: 'varchar', nullable: true })
+  fechaProgreso: string[];
 
   @Column({ default: Role.User })
   role: Role;
@@ -84,8 +87,8 @@ export class User {
   pagos: Pago[];
 
   @OneToMany(() => Notification, (notification) => notification.user)
-notifications: Notification[];
+  notifications: Notification[];
 
-@OneToMany(() => Avisos, (avisos) => avisos.user)
-avisos: Avisos[];
+  @OneToMany(() => Avisos, (avisos) => avisos.user)
+  avisos: Avisos[];
 }

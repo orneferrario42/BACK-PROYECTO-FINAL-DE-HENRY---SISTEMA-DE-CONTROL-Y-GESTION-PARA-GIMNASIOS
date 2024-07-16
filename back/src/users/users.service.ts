@@ -45,7 +45,7 @@ export class UsersService {
           fecha_nacimiento: '12-12-1994',
           numero_dni: '12345678',
           altura: '1.75',
-          peso: '70',
+          peso: ['70'],
           role: Role.Admin,
           estado: true,
         });
@@ -73,6 +73,7 @@ export class UsersService {
     const newUser = this.userRepository.create({
       ...user,
       password: hashedPassword,
+      estado: false
     });
 
     const savedUser = await this.userRepository.save(newUser);
@@ -175,22 +176,6 @@ export class UsersService {
 
     return userWithOutPassword;
   }
-
-  // async update(
-  //   id: string,
-  //   updateUserDto: UpdateUserDto,
-  // ): Promise<Partial<User>> {
-  //   const updateUser = await this.userRepository.findOneBy({ id });
-  //   if (!updateUser) {
-  //     throw new NotFoundException('Usuario no encontrado');
-  //   }
-
-  //   await this.userRepository.update(id, updateUserDto);
-
-  //   const { password, ...userWithOutPassword } = updateUser;
-
-  //   return userWithOutPassword;
-  // }
 
   async update(
     id: string,
@@ -297,23 +282,15 @@ export class UsersService {
       }
     });
     console.log(valido);
-
-    if (valido && dataqr.estado == true) {
-      const messageQR = `Id:${dataqr.id}
-                   Nombre : ${dataqr.name} 
-                   DNI : ${dataqr.numero_dni} 
-                   Estado : ${dataqr.estado} 
-                   Plan:${dias}
-                   Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
-                   `;
-      toString(messageQR, { type: 'svn' }, (error: any, data: any) => {
-        console.log(data);
-        return data;
-      });
-    } else {
-      const message2 =
-        'Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo';
-      return message2;
+    const Json = {
+      id: dataqr.id,
+      name: dataqr.name,
+      email: dataqr.email,
+      dni: dataqr.numero_dni,
+      estado: dataqr.estado,
+      plan: dias,
+      fecha_nacimiento: dataqr.fecha_nacimiento
     }
+    return Json
   }
 }
