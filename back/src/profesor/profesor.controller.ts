@@ -47,8 +47,9 @@ export class ProfesorController {
   @Get('cupos')
   async getCupoProfesores(@Query('id') id: string) {
     const datoRecibidos = await this.profesorService.getCupoProfesores(id);
-    const data = this.profesorService.cupoKeyValue(datoRecibidos);
+    const data = await this.profesorService.cupoKeyValue(datoRecibidos);
     const json = JSON.stringify(data);
+    console.log('JSON: ', json);
     return json;
   }
 

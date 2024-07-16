@@ -18,10 +18,8 @@ import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { toString } from 'qrcode';
 
-
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -29,7 +27,7 @@ export class UsersService {
     private planRepository: Repository<Plan>,
     @InjectRepository(Profesor)
     private profesorRepository: Repository<Profesor>,
-  ) { }
+  ) {}
 
   async seederUser() {
     try {
@@ -86,7 +84,6 @@ export class UsersService {
     }
   }
 
-
   async findAll(page: number, limit: number): Promise<User[]> {
     const users = await this.userRepository.find({
       relations: ['profesor', 'plan', 'pagos'],
@@ -109,12 +106,35 @@ export class UsersService {
         'metodoPago',
         'rutina',
         'pagos',
-        'diasSeleccionados'
+        'diasSeleccionados',
       ],
+      take: limit,
+      skip: (page - 1) * limit,
     });
+
     return users;
   }
 
+  async getMetadata(limit: number) {
+    const totalUsers = await this.userRepository.count();
+    const totalUserActives = await this.userRepository.count({
+      where: { estado: true },
+    });
+    const totalUserInactives = await this.userRepository.count({
+      where: { estado: false },
+    });
+
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    const metadata = {
+      totalUsers,
+      totalPages,
+      totalUserActives,
+      totalUserInactives,
+    };
+
+    return metadata;
+  }
 
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
@@ -143,7 +163,7 @@ export class UsersService {
         'metodoPago',
         'rutina',
         'pagos',
-        'diasSeleccionados'
+        'diasSeleccionados',
       ],
     });
 
@@ -247,29 +267,36 @@ export class UsersService {
   }
 
   async generaqr(id: string) {
-    const dataqr = await this.userRepository.findOne({ where: { id: id } })
+    const dataqr = await this.userRepository.findOne({ where: { id: id } });
     if (!dataqr) {
-      return 'No existen Usuario Con Este Id'
+      return 'No existen Usuario Con Este Id';
     }
-    const str = JSON.stringify(dataqr.diasSeleccionados)
+    const str = JSON.stringify(dataqr.diasSeleccionados);
     const regex = /[^A-Za-z,]/g;
     const filteredString = str.replace(regex, '').slice(0);
-    const dias = filteredString.split(',')
+    const dias = filteredString.split(',');
 
-
-    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+    const daysOfWeek = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miercoles',
+      'Jueves',
+      'Viernes',
+      'Sabado',
+    ];
     const today = new Date();
     const dayNumber = today.getDay();
     const pago = dataqr.estado;
-    const diaHoy = daysOfWeek[dayNumber]
+    const diaHoy = daysOfWeek[dayNumber];
     let valido = false;
     dias.forEach((d) => {
-      console.log(d + ' === ' + diaHoy)
+      console.log(d + ' === ' + diaHoy);
       if (d.trim() === diaHoy) {
-        valido = true
+        valido = true;
       }
-    })
-    console.log(valido)
+    });
+    console.log(valido);
 
     if (valido && dataqr.estado == true) {
       const messageQR = `Id:${dataqr.id}
@@ -279,18 +306,14 @@ export class UsersService {
                    Plan:${dias}
                    Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
                    `;
-      toString(
-        messageQR,
-        { type: 'svn' },
-        (error: any, data: any) => {
-          console.log(data)
-          return data
-        })
+      toString(messageQR, { type: 'svn' }, (error: any, data: any) => {
+        console.log(data);
+        return data;
+      });
     } else {
-      const message2 = "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
+      const message2 =
+        'Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo';
       return message2;
     }
-
   }
-
 }

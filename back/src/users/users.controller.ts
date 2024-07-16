@@ -11,6 +11,7 @@ import {
   UseGuards,
   Query,
   Res,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -39,11 +40,17 @@ export class UsersController {
    * Este metodo permite al Administrador ver la lista de los usuarios del gimnasio, en el ver quienres estan activos e inactivos
    */
   @Get()
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+  async findAll(
+    @Query('page', new ParseIntPipe()) page: number,
+    @Query('limit', new ParseIntPipe()) limit: number,
+  ) {
     if (page && limit) {
-      return this.usersService.findAll(page, limit);
+      const users = await this.usersService.findAll(page, limit);
+      const metadata = await this.usersService.getMetadata(limit);
+      const toReturn = { users, metadata };
+      return toReturn;
     }
-    return this.usersService.findAll(1, 8);
+    return this.usersService.findAll(1, 5);
   }
 
   /**
