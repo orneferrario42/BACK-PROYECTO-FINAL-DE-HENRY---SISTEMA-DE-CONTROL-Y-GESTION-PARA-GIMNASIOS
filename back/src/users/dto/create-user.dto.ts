@@ -76,7 +76,7 @@ export class CreateUserDto {
 
   /** Esta es la propiedad de peso */
   @IsString()
-  peso: string;
+  peso: string[];
 
   /** Esta es la propiedad de dias seleccionados */
   @IsArray()
