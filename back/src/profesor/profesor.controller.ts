@@ -39,7 +39,7 @@ export class ProfesorController {
     if (page && limit) {
       return await this.profesorService.getProfesores(page, limit);
     }
-    return await this.profesorService.getProfesores(page, limit);
+    return await this.profesorService.getProfesores(1, 5);
   }
   /**
    * Este metodo permite contar cuantos cupos disponibles hay por clase de cada profesor

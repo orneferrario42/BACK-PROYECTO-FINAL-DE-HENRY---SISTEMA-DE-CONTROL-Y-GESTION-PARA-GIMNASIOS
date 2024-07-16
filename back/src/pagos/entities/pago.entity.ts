@@ -21,10 +21,11 @@ export class Pago {
   @Column({ type: 'varchar' })
   metodopago: string;
 
-  @OneToOne(() => User, (user) => user.pagos, {
-    cascade: true,
-  })
-  @JoinColumn()
+  // @OneToOne(() => User, (user) => user.pagos, {
+  //   cascade: true,
+  // })
+  
+  @ManyToOne(() => User, (user) => user.pagos)
   clientes: User;
 
   @ManyToOne(() => Plan, (plan) => plan.pagos)

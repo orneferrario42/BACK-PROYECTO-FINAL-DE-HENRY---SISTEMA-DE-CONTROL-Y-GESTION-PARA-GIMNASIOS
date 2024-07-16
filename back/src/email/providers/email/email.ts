@@ -26,7 +26,7 @@ export class Email {
         },
       });
 
-    async sendEmail(from, subjectEmail, sendTo, html){
+    async sendEmail(from: any, subjectEmail: any, sendTo: any, html: any){
         try {
             const info = await this.transporter.sendMail({
                 from, // sender address

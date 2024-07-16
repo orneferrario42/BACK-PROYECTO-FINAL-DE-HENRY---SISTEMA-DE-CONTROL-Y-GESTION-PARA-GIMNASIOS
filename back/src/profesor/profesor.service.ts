@@ -67,10 +67,10 @@ export class ProfesorService {
   }
 
   async getProfesores(page: number, limit: number) {
-    let profesores = await this.profesorRepository.find();
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    profesores = profesores.slice(start, end);
+    const profesores = await this.profesorRepository.find();
+    // const start = (page - 1) * limit;
+    // const end = start + limit;
+    // profesores = profesores.slice(start, end);
     return profesores;
   }
 

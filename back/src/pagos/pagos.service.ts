@@ -2,19 +2,17 @@ import {
   Injectable,
   HttpException,
   HttpStatus,
-  InternalServerErrorException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as mercadopago from 'mercadopago';
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Plan } from '../plan/entities/plan.entity';
 import { Pago } from '../pagos/entities/pago.entity';
-import axios from 'axios';
 import { User } from 'src/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePagoDto } from './dto/update-pago.dto';
+import { NotificationService } from 'src/notificaciones/notification.service';
 
 @Injectable()
 export class MercadoPagoService {
@@ -27,7 +25,9 @@ export class MercadoPagoService {
   @InjectRepository(User)
   private userRepository: Repository<User>;
   
-  constructor() {
+  constructor(
+    private notificationService:NotificationService
+  ) {
     this.mercadopagoClient = new mercadopago.MercadoPagoConfig({
       accessToken:
       'APP_USR-6388226938088227-070410-84089c51e198a5281fed512e8c8f653e-1884641309',
@@ -89,19 +89,23 @@ export class MercadoPagoService {
       console.log(pago);
       
       await this.pagosRepository.save(pago);
+
+      // Enviar notificación al administrador
+      await this.notificationService.sendNotificationAdmin(
+        `Hey! ${user.email} acaba de realizar un pago de ${price} por el ${plan.name}.`);
       
       return response;
     } catch (error) {
-      throw new Error(`Error creating preference: ${error.message}`);
+      throw new Error(`Error de preferencia  ${error.message}`);
     }
   }
 
   
   async getAll(page: number, limit: number): Promise<Pago[]> {
-    let pagos = await this.pagosRepository.find();
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    pagos = pagos.slice(start, end);
+    const pagos = await this.pagosRepository.find({
+      relations: ['clientes', 'id_plan'],
+    });
+
     return pagos;
   }
   
@@ -110,19 +114,41 @@ export class MercadoPagoService {
     return pago;
   }
   
-  async updateOne(id: string, dto: UpdatePagoDto) {
-    const updatePago = await this.pagosRepository.findOneBy({ id });
-    
-    if (!updatePago){
-
-    if (!updatePago) {
-      throw new HttpException('El pago no existe', HttpStatus.NOT_FOUND);
+  async updateOne(userId: string, dto: UpdatePagoDto) {
+    // Buscar el usuario
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
-    
-    const update = await this.pagosRepository.save({ ...updatePago, ...dto });
-    
-    return updatePago;
-  }}
+  
+    // Buscar el pago asociado al usuario
+    let pago = await this.pagosRepository.findOne({ 
+      where: { clientes: { id: userId } },
+      relations: ['clientes', 'id_plan']
+    });
+  
+    if (!pago) {
+      // Si no existe un pago, crear uno nuevo
+      pago = new Pago();
+      pago.clientes = user;
+      pago.fecha_pago = new Date(); // Fecha actual
+      // Asigna otros campos necesarios para un nuevo pago
+    }
+  
+    // Actualizar los campos del pago
+    if (dto.metodo_pago) {
+      pago.metodopago = dto.metodo_pago;
+      // Actualizar también el metodoPago del usuario
+      user.metodoPago = dto.metodo_pago;
+    }
+    // Actualiza otros campos según sea necesario
+  
+    // Guardar los cambios del pago
+    await this.pagosRepository.save(pago);
+  
+    // Guardar los cambios del usuario
+    return await this.userRepository.save(user);
+  }
     
   async createEfectivo(crearPagoDto: CrearPagoDto) {
     const plan = await this.planRepository.findOne({
@@ -131,14 +157,21 @@ export class MercadoPagoService {
 
     const user = await this.userRepository.findOne({
       where: { email: crearPagoDto.userEmail },
+      relations: ['pagos'],
     })
-  
+    user.metodoPago = 'Efectivo'
+    await this.userRepository.save(user)
+
     const pago = new Pago();
     pago.fecha_pago = new Date();
     pago.metodopago = 'Efectivo';
     pago.id_plan = plan;
     pago.clientes = user;
-    return await this.pagosRepository.save(pago);
+    console.log(pago)
+
+    const pagoGuardado = await this.pagosRepository.save(pago);
+    return pagoGuardado;
   }
-}
+
+  }
 

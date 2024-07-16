@@ -78,12 +78,11 @@ Horas disponibles: ${profesor.horario.join(' | ')}`,
 ¿Algo más en lo que te pueda ayudar?`;
   }
 
-
   async formatPlanesInf(planes: Plan[]) {
     return `Estos son los planes con los que contamos:
 ${planes.map(
   (plan) => `Plan: ${plan.name}
-Precio: ${plan.price}`
+Precio: ${plan.price}`,
 )}
 ¿Algo más en lo que te pueda ayudar?`;
   }

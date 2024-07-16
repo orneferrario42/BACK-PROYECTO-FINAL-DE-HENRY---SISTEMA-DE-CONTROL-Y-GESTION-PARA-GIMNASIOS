@@ -80,12 +80,8 @@ export class User {
   @Column({ nullable: true })
   nivelActividad: string;
 
-  // @OneToOne(() => Profesor, (profesor) => profesor.rutina)
-  // @JoinColumn({ name: 'rutina' })
-  // rutina: Profesor;
-
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago;
+  pagos: Pago[];
 
   @OneToMany(() => Notification, (notification) => notification.user)
 notifications: Notification[];

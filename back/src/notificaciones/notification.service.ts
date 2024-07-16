@@ -11,9 +11,11 @@
 // }
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Admin, Repository } from 'typeorm';
 import { Notification } from './entitites/notification.entity';
 import { NotificationGateway } from './notification.gateway';
+import { Role } from 'src/enum/roles.enum';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class NotificationService {
@@ -21,6 +23,8 @@ export class NotificationService {
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
     private readonly notificationGateway: NotificationGateway,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
   ) {}
 
   async sendNotification(userId: string, message: string) {
@@ -33,6 +37,24 @@ export class NotificationService {
     this.notificationGateway.sendNotification(userId, message);
   }
 
+  async sendNotificationAdmin(message: string) {
+    const admin = await this.userRepository.findOne({
+      where: { role: Role.Admin },
+    });
+
+    if (!admin) {
+      throw new Error('No se encontró al administrador');
+    }
+
+    const notification = new Notification();
+    notification.message = message;
+    notification.createdAt = new Date();
+    notification.user = admin;
+
+    await this.notificationRepository.save(notification);
+    this.notificationGateway.sendNotification(admin.id, message);
+  }
+
   async getNotificationsForUser(userId: string, page: number, limit: number) {
     let notification = await this.notificationRepository.find({
       where: { user: { id: userId } },
@@ -43,6 +65,7 @@ export class NotificationService {
     notification = notification.slice(start, end);
     return notification;
   }
+
 
   async markAsRead(notificationId: string) {
     await this.notificationRepository.update(notificationId, { read: true });

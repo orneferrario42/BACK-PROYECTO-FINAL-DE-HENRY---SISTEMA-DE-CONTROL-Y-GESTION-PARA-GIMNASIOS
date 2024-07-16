@@ -31,11 +31,7 @@ export class PlanRepository {
     return updatePlan;
   }
   async getAllPlans(page: number, limit: number): Promise<Plan[]> {
-    let planes = await this.planRepository.find();
-
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    planes = planes.slice(start, end);
+    const planes = await this.planRepository.find();
     return planes;
   }
 
