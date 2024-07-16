@@ -92,9 +92,28 @@ export class ProfesorService {
   }
 
   async getCupoProfesores(id: string) {
-    const cupos = this.processTurnos(id);
+    const cupos = await this.processTurnos(id);
     return cupos;
   }
+
+  async cupoKeyValue(arrayCupos: any[]) {
+    const datosJSON: {
+      horario: string;
+      cupos: number;
+    }[] = [];
+ 
+    for (let i = 0; i < arrayCupos.length; i += 2) {
+      const franjaHoraria = arrayCupos[i];
+      const cupo = arrayCupos[i + 1];
+      const objetoJSON = {
+        horario: franjaHoraria,
+        cupos: cupo,
+      };
+      datosJSON.push(objetoJSON);
+    }
+    return datosJSON;
+  }
+
 
   findByEmail(email: string): Promise<Profesor> {
     return this.profesorRepository.findOneBy({ email: email });

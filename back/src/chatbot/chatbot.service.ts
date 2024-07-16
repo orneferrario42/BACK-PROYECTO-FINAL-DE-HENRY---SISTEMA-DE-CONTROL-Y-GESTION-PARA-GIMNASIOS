@@ -34,13 +34,11 @@ export class ChatbotService {
       case 'location':
         return '¡Claro que sí! Estamos ubicados en Leandro N.Alem 537 en Resistencia Chaco. ¿Algo mas en lo que te pueda ayudar hoy? ';
       case 'route':
-        return {
-          message: [
-            'Sí mira, ve a Google Maps y sigue la ruta',
-            ' https://maps.app.goo.gl/6hkxZKtj5E8XQAQaA ',
-            '¿Algo mas en lo que te pueda ayudar?',
-          ],
-        };
+        return [
+          'Sí mira, ve a Google Maps y sigue la ruta',
+          ' https://maps.app.goo.gl/6hkxZKtj5E8XQAQaA ',
+          '¿Algo mas en lo que te pueda ayudar?',
+        ];
       case 'open':
         return `El horario de atención de Power Training es el siguiente:\n\n
 

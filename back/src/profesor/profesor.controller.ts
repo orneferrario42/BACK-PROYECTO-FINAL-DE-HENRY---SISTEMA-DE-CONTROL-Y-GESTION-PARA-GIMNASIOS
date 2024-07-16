@@ -46,19 +46,10 @@ export class ProfesorController {
    */
   @Get('cupos')
   async getCupoProfesores(@Query('id') id: string) {
-    const datosJSON = [];
     const datoRecibidos = await this.profesorService.getCupoProfesores(id);
-    console.log(datoRecibidos);
-    for (let i = 0; i < datoRecibidos.length; i += 2) {
-      const franjaHoraria = datoRecibidos[i];
-      const cupo = datoRecibidos[i + 1];
-      const objetoJSON = {
-        horario: franjaHoraria,
-        cupos: cupo,
-      };
-      datosJSON.push(objetoJSON);
-    }
-    const json = JSON.stringify(datosJSON);
+    const data = await this.profesorService.cupoKeyValue(datoRecibidos);
+    const json = JSON.stringify(data);
+    console.log('JSON: ', json);
     return json;
   }
 

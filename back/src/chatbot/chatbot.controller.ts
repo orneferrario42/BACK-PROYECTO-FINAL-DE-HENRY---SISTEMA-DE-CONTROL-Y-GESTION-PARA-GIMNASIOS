@@ -5,6 +5,8 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('chatbot')
 export class ChatbotController {
   constructor(private readonly chatbotService: ChatbotService) {}
+
+  @Post()
   /***
    * Este metodo permite conectar con la IA de WIT de meta
    */
