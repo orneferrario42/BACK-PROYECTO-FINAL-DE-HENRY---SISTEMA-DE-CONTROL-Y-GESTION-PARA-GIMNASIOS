@@ -10,10 +10,10 @@ import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
-import { EmailModule } from './email/email.module';
 import { AvisosModule } from './avisos/avisos.module';
 import { NotificationModule } from './notificaciones/notification.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
+import { MailerModule } from './mailer/mailer.module';
 // import * as cors from 'cors';
 
 @Module({
@@ -36,7 +36,7 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     NotificationModule,
     ChatbotModule,
     SeederModule,
-    EmailModule,
+    MailerModule,
 
     JwtModule.register({
       global: true,
