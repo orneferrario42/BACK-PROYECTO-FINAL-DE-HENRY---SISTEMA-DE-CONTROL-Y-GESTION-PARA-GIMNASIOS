@@ -75,6 +75,7 @@ export class UsersService {
     const newUser = this.userRepository.create({
       ...user,
       password: hashedPassword,
+      estado: false
     });
 
     const savedUser = await this.userRepository.save(newUser);
@@ -271,25 +272,37 @@ export class UsersService {
     })
     console.log(valido)
 
-    if (valido && dataqr.estado == true) {
-      const messageQR = `Id:${dataqr.id}
-                   Nombre : ${dataqr.name} 
-                   DNI : ${dataqr.numero_dni} 
-                   Estado : ${dataqr.estado} 
-                   Plan:${dias}
-                   Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
-                   `;
-      toString(
-        messageQR,
-        { type: 'svn' },
-        (error: any, data: any) => {
-          console.log(data)
-          return data
-        })
-    } else {
-      const message2 = "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
-      return message2;
+    const Json = {
+      id: dataqr.id,
+      name: dataqr.name,
+      email: dataqr.email,
+      dni: dataqr.numero_dni,
+      estado: dataqr.estado,
+      plan: dias,
+      fecha_nacimiento: dataqr.fecha_nacimiento
     }
+
+    return Json
+
+    // if (valido && dataqr.estado == true) {
+    //   const messageQR = `Id:${dataqr.id}
+    //                Nombre : ${dataqr.name} 
+    //                DNI : ${dataqr.numero_dni} 
+    //                Estado : ${dataqr.estado} 
+    //                Plan:${dias}
+    //                Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
+    //                `;
+    //   toString(
+    //     messageQR,
+    //     { type: 'svn' },
+    //     (error: any, data: any) => {
+    //       console.log(data)
+    //       return data
+    //     })
+    // } else {
+    //   const message2 = "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
+    //   return message2;
+    // }
 
   }
 
