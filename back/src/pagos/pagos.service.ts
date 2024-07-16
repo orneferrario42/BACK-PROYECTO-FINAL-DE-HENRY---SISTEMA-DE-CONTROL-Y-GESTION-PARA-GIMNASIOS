@@ -2,21 +2,17 @@ import {
   Injectable,
   HttpException,
   HttpStatus,
-  InternalServerErrorException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as mercadopago from 'mercadopago';
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Plan } from '../plan/entities/plan.entity';
 import { Pago } from '../pagos/entities/pago.entity';
-import axios from 'axios';
 import { User } from 'src/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePagoDto } from './dto/update-pago.dto';
 import { NotificationService } from 'src/notificaciones/notification.service';
-import { Role } from 'src/enum/roles.enum';
 
 @Injectable()
 export class MercadoPagoService {
@@ -109,9 +105,7 @@ export class MercadoPagoService {
     const pagos = await this.pagosRepository.find({
       relations: ['clientes', 'id_plan'],
     });
-    // const start = (page - 1) * limit;
-    // const end = start + limit;
-    // pagos = pagos.slice(start, end);
+
     return pagos;
   }
   
