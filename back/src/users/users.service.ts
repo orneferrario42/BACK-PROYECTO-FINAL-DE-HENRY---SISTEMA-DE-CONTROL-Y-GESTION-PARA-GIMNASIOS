@@ -17,6 +17,7 @@ import { Status } from 'src/enum/estados.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { toString } from 'qrcode';
+import { NotificationService } from 'src/notificaciones/notification.service';
 
 
 @Injectable()
@@ -29,6 +30,7 @@ export class UsersService {
     private planRepository: Repository<Plan>,
     @InjectRepository(Profesor)
     private profesorRepository: Repository<Profesor>,
+    private notificationService: NotificationService
   ) { }
 
   async seederUser() {
@@ -156,26 +158,7 @@ export class UsersService {
     return userWithOutPassword;
   }
 
-  // async update(
-  //   id: string,
-  //   updateUserDto: UpdateUserDto,
-  // ): Promise<Partial<User>> {
-  //   const updateUser = await this.userRepository.findOneBy({ id });
-  //   if (!updateUser) {
-  //     throw new NotFoundException('Usuario no encontrado');
-  //   }
-
-  //   await this.userRepository.update(id, updateUserDto);
-
-  //   const { password, ...userWithOutPassword } = updateUser;
-
-  //   return userWithOutPassword;
-  // }
-
-  async update(
-    id: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<Partial<User>> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<Partial<User>> {
     const updateUser = await this.userRepository.findOne({
       where: { id },
       relations: ['plan', 'profesor'],
@@ -184,6 +167,7 @@ export class UsersService {
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
+
     if (updateUserDto.plan) {
       const plan = await this.planRepository.findOne({
         where: { id: updateUserDto.plan as unknown as number },
@@ -194,6 +178,7 @@ export class UsersService {
       updateUserDto.plan = plan;
     }
 
+    let profesorAsignado = null;
     if (updateUserDto.profesor) {
       const profesor = await this.profesorRepository.findOne({
         where: { id: updateUserDto.profesor.id },
@@ -202,6 +187,7 @@ export class UsersService {
         throw new BadRequestException('Profesor no encontrado');
       }
       updateUserDto.profesor = profesor;
+      profesorAsignado = profesor;
     }
 
     await this.userRepository.update(id, updateUserDto);
@@ -210,6 +196,12 @@ export class UsersService {
       where: { id },
       relations: ['plan', 'profesor'],
     });
+
+    // Enviar notificación al profesor si se ha asignado uno nuevo o actualizado
+    if (profesorAsignado) {
+      const message = ` ${updatedUser.name} te ha sido asignado a ti como profesor.`;
+      await this.notificationService.sendNotificationProfesor(profesorAsignado, message);
+    }
 
     const { password, ...userWithOutPassword } = updatedUser;
 
@@ -273,12 +265,12 @@ export class UsersService {
 
     if (valido && dataqr.estado == true) {
       const messageQR = `Id:${dataqr.id}
-                   Nombre : ${dataqr.name} 
-                   DNI : ${dataqr.numero_dni} 
-                   Estado : ${dataqr.estado} 
-                   Plan:${dias}
-                   Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
-                   `;
+                  Nombre : ${dataqr.name} 
+                  DNI : ${dataqr.numero_dni} 
+                  Estado : ${dataqr.estado} 
+                  Plan:${dias}
+                  Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
+                  `;
       toString(
         messageQR,
         { type: 'svn' },

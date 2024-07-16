@@ -9,13 +9,16 @@ import { Plan } from 'src/plan/entities/plan.entity';
 import { PlanModule } from 'src/plan/plan.module';
 import { UsersService } from 'src/users/users.service';
 import { Pago } from 'src/pagos/entities/pago.entity';
+import { NotificationModule } from 'src/notificaciones/notification.module';
+import { Notification } from 'src/notificaciones/entitites/notification.entity';
+import { PlanService } from 'src/plan/plan.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Profesor, User, Plan, Pago]),
-    forwardRef(() => PlanModule), // Uso de forwardRef para evitar dependencias circulares
+    TypeOrmModule.forFeature([Profesor, User, Plan, Pago, Notification]),
+    forwardRef(() => NotificationModule),  // Uso de forwardRef para evitar dependencias circulares
   ],
   controllers: [ProfesorController],
-  providers: [ProfesorService, UsersService, PlanRepository],
+  providers: [ProfesorService, UsersService, PlanRepository, PlanService],
 })
 export class ProfesorModule {}

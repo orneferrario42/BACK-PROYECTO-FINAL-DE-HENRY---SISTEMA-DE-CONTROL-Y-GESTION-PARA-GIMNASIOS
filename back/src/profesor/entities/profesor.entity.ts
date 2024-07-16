@@ -5,10 +5,10 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import { Notification } from 'src/notificaciones/entitites/notification.entity';
 
 @Entity({ name: 'profesor' })
 export class Profesor {
@@ -45,4 +45,7 @@ export class Profesor {
   @OneToMany(() => User, (user) => user.profesor)
   @JoinColumn({ name: 'id_users' })
   users: User[];
+
+  @OneToMany(() => Notification, (notification) => notification.profesor)
+notifications: Notification[];
 }

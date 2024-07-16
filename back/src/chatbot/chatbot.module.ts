@@ -5,19 +5,18 @@ import { ProfesorService } from 'src/profesor/profesor.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { User } from 'src/users/entities/user.entity';
-import { ProfesorModule } from 'src/profesor/profesor.module';
 import { UsersService } from 'src/users/users.service';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { PlanService } from 'src/plan/plan.service';
 import { Pago } from 'src/pagos/entities/pago.entity';
 import { PlanRepository } from 'src/plan/plan.repository';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Profesor, User, Plan, Pago])],
+  imports: [TypeOrmModule.forFeature([Profesor, User, Plan, Pago]), UsersModule],
   providers: [
     ChatbotService,
     ProfesorService,
-    UsersService,
     PlanService,
     PlanRepository,
   ],
