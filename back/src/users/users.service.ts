@@ -112,9 +112,6 @@ export class UsersService {
         'diasSeleccionados'
       ],
     });
-    // const start = (page - 1) * limit;
-    // const end = start + limit;
-    // users = users.slice(start, end);
     return users;
   }
 
