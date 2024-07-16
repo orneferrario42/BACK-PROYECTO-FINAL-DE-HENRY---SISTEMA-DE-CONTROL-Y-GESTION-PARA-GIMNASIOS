@@ -106,10 +106,12 @@ export class MercadoPagoService {
 
   
   async getAll(page: number, limit: number): Promise<Pago[]> {
-    let pagos = await this.pagosRepository.find();
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    pagos = pagos.slice(start, end);
+    const pagos = await this.pagosRepository.find({
+      relations: ['clientes', 'id_plan'],
+    });
+    // const start = (page - 1) * limit;
+    // const end = start + limit;
+    // pagos = pagos.slice(start, end);
     return pagos;
   }
   
@@ -118,19 +120,41 @@ export class MercadoPagoService {
     return pago;
   }
   
-  async updateOne(id: string, dto: UpdatePagoDto) {
-    const updatePago = await this.pagosRepository.findOneBy({ id });
-    
-    if (!updatePago){
-
-    if (!updatePago) {
-      throw new HttpException('El pago no existe', HttpStatus.NOT_FOUND);
+  async updateOne(userId: string, dto: UpdatePagoDto) {
+    // Buscar el usuario
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
-    
-    const update = await this.pagosRepository.save({ ...updatePago, ...dto });
-    
-    return updatePago;
-  }}
+  
+    // Buscar el pago asociado al usuario
+    let pago = await this.pagosRepository.findOne({ 
+      where: { clientes: { id: userId } },
+      relations: ['clientes', 'id_plan']
+    });
+  
+    if (!pago) {
+      // Si no existe un pago, crear uno nuevo
+      pago = new Pago();
+      pago.clientes = user;
+      pago.fecha_pago = new Date(); // Fecha actual
+      // Asigna otros campos necesarios para un nuevo pago
+    }
+  
+    // Actualizar los campos del pago
+    if (dto.metodo_pago) {
+      pago.metodopago = dto.metodo_pago;
+      // Actualizar también el metodoPago del usuario
+      user.metodoPago = dto.metodo_pago;
+    }
+    // Actualiza otros campos según sea necesario
+  
+    // Guardar los cambios del pago
+    await this.pagosRepository.save(pago);
+  
+    // Guardar los cambios del usuario
+    return await this.userRepository.save(user);
+  }
     
   async createEfectivo(crearPagoDto: CrearPagoDto) {
     const plan = await this.planRepository.findOne({
@@ -139,14 +163,20 @@ export class MercadoPagoService {
 
     const user = await this.userRepository.findOne({
       where: { email: crearPagoDto.userEmail },
+      relations: ['pagos'],
     })
-  
+    user.metodoPago = 'Efectivo'
+    await this.userRepository.save(user)
+
     const pago = new Pago();
     pago.fecha_pago = new Date();
     pago.metodopago = 'Efectivo';
     pago.id_plan = plan;
     pago.clientes = user;
-    return await this.pagosRepository.save(pago);
+    console.log(pago)
+
+    const pagoGuardado = await this.pagosRepository.save(pago);
+    return pagoGuardado;
   }
 
   }
