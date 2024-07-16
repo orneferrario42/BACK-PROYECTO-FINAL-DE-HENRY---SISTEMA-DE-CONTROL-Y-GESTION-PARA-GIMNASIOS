@@ -289,7 +289,8 @@ export class UsersService {
       dni: dataqr.numero_dni,
       estado: dataqr.estado,
       plan: dias,
-      fecha_nacimiento: dataqr.fecha_nacimiento
+      fecha_nacimiento: dataqr.fecha_nacimiento,
+      horario: dataqr.horario,
     }
     return Json
   }

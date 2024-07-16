@@ -119,7 +119,10 @@ export class ProfesorService {
     return this.profesorRepository.findOneBy({ email: email });
   }
   getUsers(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: ['plan'],
+    }
+    );
   }
 
   async getUsersById(id: string): Promise<User> {
