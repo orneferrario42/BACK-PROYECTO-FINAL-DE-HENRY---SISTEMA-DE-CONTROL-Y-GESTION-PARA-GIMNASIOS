@@ -42,4 +42,7 @@ export class CrearPagoDto {
   @IsNotEmpty()
   @IsString({ each: true })
   diasSeleccionados: string[];
+
+  @IsNotEmpty()
+  horarios: string[];
 }

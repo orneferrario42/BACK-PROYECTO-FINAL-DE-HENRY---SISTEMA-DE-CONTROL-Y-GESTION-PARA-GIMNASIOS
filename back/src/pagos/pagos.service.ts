@@ -46,7 +46,7 @@ export class MercadoPagoService {
       });
       
       const price = parseFloat(plan.price.toString());
-      console.log(plan.price);
+      
       
       if (!plan) {
         throw new HttpException('Plan no encontrado', HttpStatus.NOT_FOUND);
@@ -70,6 +70,7 @@ export class MercadoPagoService {
       user.metodoPago = 'MercadoPago';
       user.estado = true;
       user.diasSeleccionados = crearPagoDto.diasSeleccionados;
+      user.horario = crearPagoDto.horarios;
 
       await this.userRepository.save(user);
       

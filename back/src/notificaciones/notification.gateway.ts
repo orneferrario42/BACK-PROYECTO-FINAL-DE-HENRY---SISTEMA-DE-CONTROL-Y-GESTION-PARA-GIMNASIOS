@@ -37,12 +37,10 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     }
 
     sendNotification(userId: string, message: string) {
-        console.log('Si vemos esto es porque se envio la rutina con exito ♥')
         this.server.to(userId).emit('Tu profe ha subido tu rutina', message);
     }
 
     sendNotificationAdmin(admin= Role.Admin) {
-        console.log('♥♥♥♥ Si vemos esto es porque se envio el pagoo ♥♥♥♥')
         this.server.to(admin).emit('Se ha registrado un pago');
     }
 }
