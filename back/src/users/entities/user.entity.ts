@@ -65,7 +65,7 @@ export class User {
   @Column('varchar', { default: [] })
   diasSeleccionados: string[];
 
-  @Column('varchar', { default: [] })
+  @Column({ type: 'simple-array', default: [] })
   horario: string[];
 
   @Column({ type: 'varchar', nullable: true, default: [] })
