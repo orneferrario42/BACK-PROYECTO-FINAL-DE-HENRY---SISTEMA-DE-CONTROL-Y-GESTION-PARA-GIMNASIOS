@@ -63,7 +63,7 @@ export class ChatbotService {
         const infoPlan = this.formatPlanesInf(planesDb);
         return infoPlan;
       default:
-        return 'Lo siento, no entendí eso.';
+        return 'Upps!! No tengo respuesta para esto. Intenta con estas preguntas: ¿Información de la página? ¿Planes? ¿Profesores? ¿Horarios? ¿Ubicacción? ¿Dirección?.';
     }
   }
   async formatProfessorInf(profesores: Profesor[]) {
