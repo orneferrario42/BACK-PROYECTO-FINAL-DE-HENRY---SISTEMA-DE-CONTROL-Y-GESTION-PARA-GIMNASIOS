@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as mercadopago from 'mercadopago';
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,7 +13,6 @@ import { Profesor } from 'src/profesor/entities/profesor.entity';
 
 @Injectable()
 export class MercadoPagoService {
-  
   private mercadopagoClient: mercadopago.MercadoPagoConfig;
   @InjectRepository(Plan)
   private planRepository: Repository<Plan>;
@@ -27,39 +22,36 @@ export class MercadoPagoService {
   private userRepository: Repository<User>;
   @InjectRepository(Profesor)
   private profesorRepository: Repository<Profesor>;
-  
-  constructor(
-    private notificationService:NotificationService
-  ) {
+
+  constructor(private notificationService: NotificationService) {
     this.mercadopagoClient = new mercadopago.MercadoPagoConfig({
       accessToken:
-      'APP_USR-6388226938088227-070410-84089c51e198a5281fed512e8c8f653e-1884641309',
+        'APP_USR-6388226938088227-070410-84089c51e198a5281fed512e8c8f653e-1884641309',
     });
   }
-  
+
   async createPreference(crearPagoDto: CrearPagoDto) {
     const preference = new mercadopago.Preference(this.mercadopagoClient);
-    
+
     try {
       const plan = await this.planRepository.findOne({
         where: { id: crearPagoDto.id_plan },
       });
-      
+
       const price = parseFloat(plan.price.toString());
-      
-      
+
       if (!plan) {
         throw new HttpException('Plan no encontrado', HttpStatus.NOT_FOUND);
       }
 
       const profesor = await this.profesorRepository.findOne({
         where: { id: crearPagoDto.id_profesor },
-      })
-      
+      });
+
       const user = await this.userRepository.findOne({
         where: { email: crearPagoDto.userEmail },
       });
-      
+
       if (!user) {
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
       }
@@ -73,7 +65,7 @@ export class MercadoPagoService {
       user.horario = crearPagoDto.horarios;
 
       await this.userRepository.save(user);
-      
+
       const response = await preference.create({
         body: {
           items: [
@@ -91,53 +83,55 @@ export class MercadoPagoService {
           },
         },
       });
-      
+
       //Guardar información del pago en la base de datos
       const pago = new Pago();
       pago.fecha_pago = new Date();
       pago.metodopago = 'MercadoPago';
       pago.id_plan = plan;
       pago.clientes = user;
-      
+
       await this.pagosRepository.save(pago);
 
       // Enviar notificación al administrador
       await this.notificationService.sendNotificationAdmin(
-        `Hey! ${user.email} acaba de realizar un pago de ${price} por el ${plan.name}.`);
-      
+        `Hey! ${user.email} acaba de realizar un pago de ${price} por el ${plan.name}.`,
+      );
+
       return response;
     } catch (error) {
       throw new Error(`Error de preferencia  ${error.message}`);
     }
   }
 
-  
   async getAll(page: number, limit: number): Promise<Pago[]> {
     const pagos = await this.pagosRepository.find({
       relations: ['clientes', 'id_plan'],
+      take: limit,
+      skip: (page - 1) * limit,
     });
 
     return pagos;
   }
-  
+
   async getOne(id: string) {
     const pago = this.pagosRepository.findOne({ where: { id } });
     return pago;
   }
-  
+
   async updateOne(userId: string, dto: UpdatePagoDto) {
     // Buscar el usuario
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
-  
+
     // Buscar el pago asociado al usuario
-    let pago = await this.pagosRepository.findOne({ 
+    let pago = await this.pagosRepository.findOne({
       where: { clientes: { id: userId } },
-      relations: ['clientes', 'id_plan']
+      relations: ['clientes', 'id_plan'],
     });
-  
+
     if (!pago) {
       // Si no existe un pago, crear uno nuevo
       pago = new Pago();
@@ -145,7 +139,7 @@ export class MercadoPagoService {
       pago.fecha_pago = new Date(); // Fecha actual
       // Asigna otros campos necesarios para un nuevo pago
     }
-  
+
     // Actualizar los campos del pago
     if (dto.metodo_pago) {
       pago.metodopago = dto.metodo_pago;
@@ -153,37 +147,48 @@ export class MercadoPagoService {
       user.metodoPago = dto.metodo_pago;
     }
     // Actualiza otros campos según sea necesario
-  
+
     // Guardar los cambios del pago
     await this.pagosRepository.save(pago);
-  
+
     // Guardar los cambios del usuario
     return await this.userRepository.save(user);
   }
-    
+
   async createEfectivo(crearPagoDto: CrearPagoDto) {
     const plan = await this.planRepository.findOne({
       where: { id: crearPagoDto.id_plan },
-    })
+    });
 
     const user = await this.userRepository.findOne({
       where: { email: crearPagoDto.userEmail },
       relations: ['pagos'],
-    })
-    user.metodoPago = 'Efectivo'
-    user.estado = true
-    await this.userRepository.save(user)
+    });
+    user.metodoPago = 'Efectivo';
+    user.estado = true;
+    await this.userRepository.save(user);
 
     const pago = new Pago();
     pago.fecha_pago = new Date();
     pago.metodopago = 'Efectivo';
     pago.id_plan = plan;
     pago.clientes = user;
-    console.log(pago)
+    console.log(pago);
 
     const pagoGuardado = await this.pagosRepository.save(pago);
     return pagoGuardado;
   }
 
-  }
+  async getMetadata(limit: number) {
+    const totalPays = await this.pagosRepository.count();
 
+    const totalPages = Math.ceil(totalPays / limit);
+
+    const metadata = {
+      totalPays,
+      totalPages,
+    };
+
+    return metadata;
+  }
+}
