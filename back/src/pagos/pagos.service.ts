@@ -296,8 +296,6 @@ export class MercadoPagoService {
 
   }
 
-}
-
   async getMetadata(limit: number) {
     const totalPays = await this.pagosRepository.count();
 
