@@ -8,7 +8,7 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app',
     methods: ['GET', 'POST'],
     credentials: true,
   },

@@ -80,9 +80,9 @@ export class MercadoPagoService {
             },
           ],
           back_urls: {
-            failure: 'http://localhost:3000/finalstep',
-            pending: 'http://localhost:3000/finalstep',
-            success: 'http://localhost:3000/login',
+            failure: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app/finalstep',
+            pending: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app/finalstep',
+            success: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app/userdashboard',
           },
         },
       });
