@@ -74,6 +74,19 @@ export class ProfesorService {
     return profesores;
   }
 
+  async getMetadata(limit: number) {
+    const totalProfessors = await this.profesorRepository.count();
+
+    const totalPages = Math.ceil(totalProfessors / limit);
+
+    const metadata = {
+      totalProfessors,
+      totalPages,
+    };
+
+    return metadata;
+  }
+
   public async processTurnos(id) {
     const veriTurnos = await this.profesorRepository.find({
       where: { id: id },
@@ -101,7 +114,7 @@ export class ProfesorService {
       horario: string;
       cupos: number;
     }[] = [];
- 
+
     for (let i = 0; i < arrayCupos.length; i += 2) {
       const franjaHoraria = arrayCupos[i];
       const cupo = arrayCupos[i + 1];
@@ -114,15 +127,13 @@ export class ProfesorService {
     return datosJSON;
   }
 
-
   findByEmail(email: string): Promise<Profesor> {
     return this.profesorRepository.findOneBy({ email: email });
   }
   getUsers(): Promise<User[]> {
     return this.userRepository.find({
       relations: ['plan'],
-    }
-    );
+    });
   }
 
   async getUsersById(id: string): Promise<User> {
