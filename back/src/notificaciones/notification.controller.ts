@@ -3,7 +3,6 @@ import { NotificationService } from './notification.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Admin } from 'typeorm';
 
-@ApiTags('NOTIFICATION')
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
@@ -25,6 +24,11 @@ export class NotificationController {
       );
     }
     return await this.notificationService.getNotificationsForUser(userId, 1, 8);
+  }
+
+  @Patch(':id/read')
+  async markAsRead(@Param('id') id: string) {
+    return await this.notificationService.markAsRead(id);
   }
 
 }
