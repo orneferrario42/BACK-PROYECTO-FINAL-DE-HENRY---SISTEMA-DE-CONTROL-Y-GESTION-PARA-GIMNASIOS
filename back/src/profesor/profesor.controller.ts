@@ -9,6 +9,7 @@ import {
   Put,
   UseGuards,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
@@ -33,11 +34,16 @@ export class ProfesorController {
 
   @Get('profesores')
   async getAllProfesores(
-    @Query('page') page: number,
-    @Query('limit') limit: number,
-  ): Promise<Profesor[]> {
+    @Query('page', new ParseIntPipe()) page: number,
+    @Query('limit', new ParseIntPipe()) limit: number,
+  ) {
     if (page && limit) {
-      return await this.profesorService.getProfesores(page, limit);
+      const professors = await this.profesorService.getProfesores(page, limit);
+      const metadata = await this.profesorService.getMetadata(limit);
+      return {
+        professors,
+        metadata,
+      };
     }
     return await this.profesorService.getProfesores(1, 5);
   }
