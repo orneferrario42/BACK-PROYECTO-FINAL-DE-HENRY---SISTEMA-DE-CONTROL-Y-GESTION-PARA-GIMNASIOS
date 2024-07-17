@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus, } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as mercadopago from 'mercadopago';
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,6 @@ import { transporter } from 'src/config/configMailer';
 
 @Injectable()
 export class MercadoPagoService {
-
   private mercadopagoClient: mercadopago.MercadoPagoConfig;
   @InjectRepository(Plan)
   private planRepository: Repository<Plan>;
@@ -27,9 +26,7 @@ export class MercadoPagoService {
   @InjectRepository(Profesor)
   private profesorRepository: Repository<Profesor>;
 
-  constructor(
-    private notificationService: NotificationService
-  ) {
+  constructor(private notificationService: NotificationService) {
     this.mercadopagoClient = new mercadopago.MercadoPagoConfig({
       accessToken:
         'APP_USR-6388226938088227-070410-84089c51e198a5281fed512e8c8f653e-1884641309',
@@ -46,14 +43,13 @@ export class MercadoPagoService {
 
       const price = parseFloat(plan.price.toString());
 
-
       if (!plan) {
         throw new HttpException('Plan no encontrado', HttpStatus.NOT_FOUND);
       }
 
       const profesor = await this.profesorRepository.findOne({
         where: { id: crearPagoDto.id_profesor },
-      })
+      });
 
       const user = await this.userRepository.findOne({
         where: { email: crearPagoDto.userEmail },
@@ -102,7 +98,8 @@ export class MercadoPagoService {
 
       // Enviar notificación al administrador
       await this.notificationService.sendNotificationAdmin(
-        `Hey! ${user.email} acaba de realizar un pago de ${price} por el ${plan.name}.`);
+        `Hey! ${user.email} acaba de realizar un pago de ${price} por el ${plan.name}.`,
+      );
 
       return response;
     } catch (error) {
@@ -110,10 +107,11 @@ export class MercadoPagoService {
     }
   }
 
-
   async getAll(page: number, limit: number): Promise<Pago[]> {
     const pagos = await this.pagosRepository.find({
       relations: ['clientes', 'id_plan'],
+      take: limit,
+      skip: (page - 1) * limit,
     });
 
     return pagos;
@@ -134,7 +132,7 @@ export class MercadoPagoService {
     // Buscar el pago asociado al usuario
     let pago = await this.pagosRepository.findOne({
       where: { clientes: { id: userId } },
-      relations: ['clientes', 'id_plan']
+      relations: ['clientes', 'id_plan'],
     });
 
     if (!pago) {
@@ -163,27 +161,26 @@ export class MercadoPagoService {
   async createEfectivo(crearPagoDto: CrearPagoDto) {
     const plan = await this.planRepository.findOne({
       where: { id: crearPagoDto.id_plan },
-    })
+    });
 
     const user = await this.userRepository.findOne({
       where: { email: crearPagoDto.userEmail },
       relations: ['pagos'],
-    })
-    user.metodoPago = 'Efectivo'
-    user.estado = true
-    await this.userRepository.save(user)
+    });
+    user.metodoPago = 'Efectivo';
+    user.estado = true;
+    await this.userRepository.save(user);
 
     const pago = new Pago();
     pago.fecha_pago = new Date();
     pago.metodopago = 'Efectivo';
     pago.id_plan = plan;
     pago.clientes = user;
-    console.log(pago)
+    console.log(pago);
 
     const pagoGuardado = await this.pagosRepository.save(pago);
     return pagoGuardado;
   }
-
   public calcularFechaPagoSiguiente(fechaPago) {
     const hoy = new Date();
     const fechaPagoActual = moment(fechaPago);
@@ -197,11 +194,6 @@ export class MercadoPagoService {
     return datoFecha
   }
 
-
-
-
-
-
   @Cron('00 00 * * *')
   async getAllPagos() {
 
@@ -212,8 +204,6 @@ export class MercadoPagoService {
     pagos.map(async (p) => {
 
       const dr = this.calcularFechaPagoSiguiente(p.fecha_pago);
-
-
 
       if (Number(dr.diasRestantes) === 5) {
         // const htmlContent = getHtmlTemplate(p.clientes.name, dr.siguienteFechaPago.toString());
@@ -308,3 +298,16 @@ export class MercadoPagoService {
 
 }
 
+  async getMetadata(limit: number) {
+    const totalPays = await this.pagosRepository.count();
+
+    const totalPages = Math.ceil(totalPays / limit);
+
+    const metadata = {
+      totalPays,
+      totalPages,
+    };
+
+    return metadata;
+  }
+}

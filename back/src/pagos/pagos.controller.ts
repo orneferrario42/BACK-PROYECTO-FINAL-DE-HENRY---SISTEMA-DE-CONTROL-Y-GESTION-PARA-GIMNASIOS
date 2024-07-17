@@ -9,6 +9,7 @@ import {
   Put,
   Param,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CrearPagoDto } from './dto/create-pago.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -46,9 +47,17 @@ export class PagosController {
    * este metodo permite ver al admin todos los pagos
    */
   @Get()
-  async getAll(@Query('page') page: number, @Query('limit') limit: number) {
+  async getAll(
+    @Query('page', new ParseIntPipe()) page: number,
+    @Query('limit', new ParseIntPipe()) limit: number,
+  ) {
     if (page && limit) {
-      return await this.mercadoPagoService.getAll(page, limit);
+      const payments = await this.mercadoPagoService.getAll(page, limit);
+      const metadata = await this.mercadoPagoService.getMetadata(limit);
+      return {
+        payments,
+        metadata,
+      };
     }
     return await this.mercadoPagoService.getAll(page, limit);
   }
