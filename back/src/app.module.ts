@@ -10,10 +10,11 @@ import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
+import { AvisosModule } from './avisos/avisos.module';
+import { NotificationModule } from './notificaciones/notification.module';
+import { ChatbotModule } from './chatbot/chatbot.module';
 import { PlanModule } from './plan/plan.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { EmailModule } from './email/email.module';
-// import * as cors from 'cors';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
@@ -33,20 +34,18 @@ import { EmailModule } from './email/email.module';
     PlanModule,
     PagosModule,
     FileModule,
+    AvisosModule,
+    NotificationModule,
+    ChatbotModule,
     SeederModule,
-    EmailModule,
-    // NotificationsModule,
+    ScheduleModule.forRoot(),
 
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-
-    // JwtModule.register({global:true, secret: process.env.JWT_SECRET, signOptions:{expiresIn:'24h'}},),
-    PlanModule,
   ],
-
   controllers: [],
   providers: [],
 })
@@ -71,3 +70,4 @@ export class AppModule implements NestModule {
       .forRoutes('*');
   }
 }
+

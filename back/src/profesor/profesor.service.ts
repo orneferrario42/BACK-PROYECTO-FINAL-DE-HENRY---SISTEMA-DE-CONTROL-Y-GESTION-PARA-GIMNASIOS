@@ -66,8 +66,25 @@ export class ProfesorService {
     return userWithOutPassword;
   }
 
-  getProfesores() {
-    return this.profesorRepository.find();
+  async getProfesores(page: number, limit: number) {
+    const profesores = await this.profesorRepository.find();
+    // const start = (page - 1) * limit;
+    // const end = start + limit;
+    // profesores = profesores.slice(start, end);
+    return profesores;
+  }
+
+  async getMetadata(limit: number) {
+    const totalProfessors = await this.profesorRepository.count();
+
+    const totalPages = Math.ceil(totalProfessors / limit);
+
+    const metadata = {
+      totalProfessors,
+      totalPages,
+    };
+
+    return metadata;
   }
 
   public async processTurnos(id) {
@@ -88,15 +105,35 @@ export class ProfesorService {
   }
 
   async getCupoProfesores(id: string) {
-    const cupos = this.processTurnos(id);
+    const cupos = await this.processTurnos(id);
     return cupos;
+  }
+
+  async cupoKeyValue(arrayCupos: any[]) {
+    const datosJSON: {
+      horario: string;
+      cupos: number;
+    }[] = [];
+
+    for (let i = 0; i < arrayCupos.length; i += 2) {
+      const franjaHoraria = arrayCupos[i];
+      const cupo = arrayCupos[i + 1];
+      const objetoJSON = {
+        horario: franjaHoraria,
+        cupos: cupo,
+      };
+      datosJSON.push(objetoJSON);
+    }
+    return datosJSON;
   }
 
   findByEmail(email: string): Promise<Profesor> {
     return this.profesorRepository.findOneBy({ email: email });
   }
   getUsers(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: ['plan'],
+    });
   }
 
   async getUsersById(id: string): Promise<User> {

@@ -11,7 +11,6 @@ import { v4 as uuid } from 'uuid';
 import { Plan } from '../../plan/entities/plan.entity';
 import { User } from 'src/users/entities/user.entity';
 @Entity({ name: 'pagos' })
-
 export class Pago {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
@@ -22,11 +21,13 @@ export class Pago {
   @Column({ type: 'varchar' })
   metodopago: string;
 
-  @OneToOne(() => User, (user) => user.pagos)
-  @JoinColumn()
+  // @OneToOne(() => User, (user) => user.pagos, {
+  //   cascade: true,
+  // })
+  
+  @ManyToOne(() => User, (user) => user.pagos)
   clientes: User;
 
   @ManyToOne(() => Plan, (plan) => plan.pagos)
   id_plan: Plan;
-  
 }

@@ -9,6 +9,7 @@ import {
   Put,
   UseGuards,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
@@ -32,44 +33,44 @@ export class ProfesorController {
    */
 
   @Get('profesores')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.Admin)
-  async getAllProfesores(): Promise<Profesor[]> {
-    return await this.profesorService.getProfesores();
+  async getAllProfesores(
+    @Query('page', new ParseIntPipe()) page: number,
+    @Query('limit', new ParseIntPipe()) limit: number,
+  ) {
+    if (page && limit) {
+      const professors = await this.profesorService.getProfesores(page, limit);
+      const metadata = await this.profesorService.getMetadata(limit);
+      return {
+        professors,
+        metadata,
+      };
+    }
+    return await this.profesorService.getProfesores(1, 5);
   }
-
+  /**
+   * Este metodo permite contar cuantos cupos disponibles hay por clase de cada profesor
+   */
   @Get('cupos')
   async getCupoProfesores(@Query('id') id: string) {
-    const datosJSON = [];
     const datoRecibidos = await this.profesorService.getCupoProfesores(id);
-    console.log(datoRecibidos);
-    for (let i = 0; i < datoRecibidos.length; i += 2) {
-      const franjaHoraria = datoRecibidos[i];
-      const cupo = datoRecibidos[i + 1];
-      const objetoJSON = {
-        horario: franjaHoraria,
-        cupos: cupo,
-      };
-      datosJSON.push(objetoJSON);
-    }
-    const json = JSON.stringify(datosJSON);
+    const data = await this.profesorService.cupoKeyValue(datoRecibidos);
+    const json = JSON.stringify(data);
+    console.log('JSON: ', json);
     return json;
   }
 
   /**
    * Este metodo le permite al profesor ver los usuarios del gimnasio que estan inscriptos en su clase.
    */
-@Get('users')
-// @UseGuards(AuthGuard,RolesGuard)
-// @Roles(Role.Profesor,Role.Admin)
+  @Get('users')
   async getUsers(): Promise<User[]> {
     return await this.profesorService.getUsers();
   }
-
+  /**
+   * Este metodo permite al admin activar o desactivar profesores
+   */
   @Get(':id')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.Profesor,Role.Admin)
-  updateStatus(@Param('id') id: string){
+  updateStatus(@Param('id') id: string) {
     return this.profesorService.updateState(id);
   }
 
@@ -77,8 +78,6 @@ export class ProfesorController {
    *  Este metodo permite al usuario  profesor ver a un usuario del gimnasio.
    */
   @Get('users/:id')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.Profesor,Role.Admin)
   getUsersById(@Param('id') id: string) {
     return this.profesorService.getUsersById(id);
   }
@@ -87,8 +86,6 @@ export class ProfesorController {
    * Este metodo le permie al administrador crear un usuario profesor.
    */
   @Post('create')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.Admin)
   async createProfesor(@Body() createProfesorDto: CreateProfesorDto) {
     const createdProfesor =
       await this.profesorService.create(createProfesorDto);
@@ -102,8 +99,6 @@ export class ProfesorController {
    *Este metodo le permite al usuario profesor modifica su informacion personal.
    */
   @Put(':id')
-  // @UseGuards(AuthGuard,RolesGuard)
-  // @Roles(Role.Admin)
   async updateProfesor(
     id: string,
     updateProfesorDto: PutProfesorDto,

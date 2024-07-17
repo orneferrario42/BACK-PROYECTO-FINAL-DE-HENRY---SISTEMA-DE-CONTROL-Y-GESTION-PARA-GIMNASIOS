@@ -11,6 +11,8 @@ import { Role } from 'src/enum/roles.enum';
 import { Pago } from 'src/pagos/entities/pago.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { Status } from 'src/enum/estados.enum';
+import { Notification } from 'src/notificaciones/entitites/notification.entity';
+import { Avisos } from 'src/avisos/entity/avisos.entity';
 
 @Entity({
   name: 'users',
@@ -44,12 +46,17 @@ export class User {
   altura: string;
 
   @Column({ type: 'varchar', nullable: true })
-  peso: string;
+  peso: string[];
+
+  @Column({ type: 'varchar', nullable: true })
+  fechaProgreso: string[];
 
   @Column({ default: Role.User })
   role: Role;
 
-  @ManyToOne(() => Plan, (plan) => plan.clientes)
+  @ManyToOne(() => Plan, (plan) => plan.clientes, {
+    nullable: true,
+  })
   plan: Plan; // Relación con el plan seleccionado
 
   @ManyToOne(() => Profesor, (profesor) => profesor.users)
@@ -76,10 +83,12 @@ export class User {
   @Column({ nullable: true })
   nivelActividad: string;
 
-  // @OneToOne(() => Profesor, (profesor) => profesor.rutina)
-  // @JoinColumn({ name: 'rutina' })
-  // rutina: Profesor;
-
   @OneToMany(() => Pago, (pago) => pago.clientes)
-  pagos: Pago;
+  pagos: Pago[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
+
+  @OneToMany(() => Avisos, (avisos) => avisos.user)
+  avisos: Avisos[];
 }

@@ -47,7 +47,8 @@ export class AuthService {
     return {
       success: 'Inicio de sesión exitoso',
       token,
-      user: validEntity.role,
+      user: validEntity.role, 
+      id: validEntity.id
     };
   }
 }

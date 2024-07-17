@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
+import { And, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/roles.enum';
@@ -16,14 +16,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
-import {v4} from 'uuid';
-import {toString} from 'qrcode';
+
 
 @Injectable()
 export class UsersService {
-  findBy(email: string) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -49,7 +45,7 @@ export class UsersService {
           fecha_nacimiento: '12-12-1994',
           numero_dni: '12345678',
           altura: '1.75',
-          peso: '70',
+          peso: ['70'],
           role: Role.Admin,
           estado: true,
         });
@@ -77,6 +73,7 @@ export class UsersService {
     const newUser = this.userRepository.create({
       ...user,
       password: hashedPassword,
+      estado: false
     });
 
     const savedUser = await this.userRepository.save(newUser);
@@ -88,9 +85,9 @@ export class UsersService {
     }
   }
 
-  async findAll() {
-    return await this.userRepository.find({
-      relations: ['profesor'],
+  async findAll(page: number, limit: number): Promise<User[]> {
+    const users = await this.userRepository.find({
+      relations: ['profesor', 'plan', 'pagos'],
       select: [
         'id',
         'name',
@@ -101,8 +98,43 @@ export class UsersService {
         'role',
         'estado',
         'profesor',
+        'altura',
+        'peso',
+        'nivelActividad',
+        'plan',
+        'horario',
+        'objetivo',
+        'metodoPago',
+        'rutina',
+        'pagos',
+        'diasSeleccionados',
       ],
+      take: limit,
+      skip: (page - 1) * limit,
     });
+
+    return users;
+  }
+
+  async getMetadata(limit: number) {
+    const totalUsers = await this.userRepository.count();
+    const totalUserActives = await this.userRepository.count({
+      where: { estado: true },
+    });
+    const totalUserInactives = await this.userRepository.count({
+      where: { estado: false },
+    });
+
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    const metadata = {
+      totalUsers,
+      totalPages,
+      totalUserActives,
+      totalUserInactives,
+    };
+
+    return metadata;
   }
 
   async findOne(id: string) {
@@ -111,6 +143,7 @@ export class UsersService {
       relations: {
         profesor: true,
         plan: true,
+        pagos: true,
       },
       select: [
         'id',
@@ -122,8 +155,16 @@ export class UsersService {
         'role',
         'estado',
         'profesor',
+        'altura',
+        'peso',
+        'nivelActividad',
         'plan',
+        'horario',
+        'objetivo',
+        'metodoPago',
+        'rutina',
         'pagos',
+        'diasSeleccionados',
       ],
     });
 
@@ -135,22 +176,6 @@ export class UsersService {
 
     return userWithOutPassword;
   }
-
-  // async update(
-  //   id: string,
-  //   updateUserDto: UpdateUserDto,
-  // ): Promise<Partial<User>> {
-  //   const updateUser = await this.userRepository.findOneBy({ id });
-  //   if (!updateUser) {
-  //     throw new NotFoundException('Usuario no encontrado');
-  //   }
-
-  //   await this.userRepository.update(id, updateUserDto);
-
-  //   const { password, ...userWithOutPassword } = updateUser;
-
-  //   return userWithOutPassword;
-  // }
 
   async update(
     id: string,
@@ -164,9 +189,6 @@ export class UsersService {
     if (!updateUser) {
       throw new NotFoundException('Usuario no encontrado');
     }
-
-    console.log('PASA POR AQUI', updateUserDto);
-
     if (updateUserDto.plan) {
       const plan = await this.planRepository.findOne({
         where: { id: updateUserDto.plan as unknown as number },
@@ -229,51 +251,47 @@ export class UsersService {
     return true;
   }
 
-  async generaqr(id:string){
-    const dataqr = await this.userRepository.findOne({where:{id:id}})
-    if(!dataqr){
-      return 'No existen Usuario Con Este Id'
+  async generaqr(id: string) {
+    const dataqr = await this.userRepository.findOne({ where: { id: id } });
+    if (!dataqr) {
+      return 'No existen Usuario Con Este Id';
     }
-    const str = JSON.stringify( dataqr.diasSeleccionados)  
+    const str = JSON.stringify(dataqr.diasSeleccionados);
     const regex = /[^A-Za-z,]/g;
-    const filteredString = str.replace(regex, '').slice(0); 
-    const dias =filteredString.split(',')
-  
- 
-    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miercole', 'Jueves', 'Viernes', 'Sabado'];
+    const filteredString = str.replace(regex, '').slice(0);
+    const dias = filteredString.split(',');
+
+    const daysOfWeek = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miercoles',
+      'Jueves',
+      'Viernes',
+      'Sabado',
+    ];
     const today = new Date();
-    const dayNumber = today.getDay();   
+    const dayNumber = today.getDay();
     const pago = dataqr.estado;
-    const diaHoy = daysOfWeek[dayNumber]
-    let valido=false;
-         dias.forEach((d)=>{
-              console.log(d +  ' === ' + diaHoy)
-              if(d.trim() === diaHoy){
-                 valido=true
-              }
-          })
-             console.log(valido)
-
-        if(valido && dataqr.estado==true){
-              const messageQR = `Id:${dataqr.id}
-                   Nombre : ${dataqr.name} 
-                   DNI : ${dataqr.numero_dni} 
-                   Estado : ${dataqr.estado} 
-                   Plan:${dias}
-                   Fecha Nacimiento : ${dataqr.fecha_nacimiento}                    
-                   `;
-      toString(
-         messageQR,    
-        {type:'svn'},
-        (error,data)=>{
-        console.log(data)
-        return data
-      })
-  }else{
-     const message2 =  "Acceso Denegado Verifique que dias tiene su plan o si su pago esta Activo"
-     return message2;
-  } 
-
+    const diaHoy = daysOfWeek[dayNumber];
+    let valido = false;
+    dias.forEach((d) => {
+      console.log(d + ' === ' + diaHoy);
+      if (d.trim() === diaHoy) {
+        valido = true;
+      }
+    });
+    console.log(valido);
+    const Json = {
+      id: dataqr.id,
+      name: dataqr.name,
+      email: dataqr.email,
+      dni: dataqr.numero_dni,
+      estado: dataqr.estado,
+      plan: dias,
+      fecha_nacimiento: dataqr.fecha_nacimiento,
+      horario: dataqr.horario,
+    }
+    return Json
   }
-
 }
