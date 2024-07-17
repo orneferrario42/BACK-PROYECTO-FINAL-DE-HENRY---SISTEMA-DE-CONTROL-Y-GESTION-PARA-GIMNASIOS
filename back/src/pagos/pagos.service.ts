@@ -189,31 +189,31 @@ export class MercadoPagoService {
     const datoFecha = {
       fechaPagoActual: fechaPagoActual,
       siguienteFechaPago: siguienteFechaPago,
-      diasRestantes: diasRestantes
-    }
-    return datoFecha
+      diasRestantes: diasRestantes,
+    };
+    return datoFecha;
   }
 
   @Cron('00 00 * * *')
   async getAllPagos() {
-
     const pagos = await this.pagosRepository.find({
       relations: ['clientes'],
     });
 
     pagos.map(async (p) => {
-
       const dr = this.calcularFechaPagoSiguiente(p.fecha_pago);
 
       if (Number(dr.diasRestantes) === 5) {
         // const htmlContent = getHtmlTemplate(p.clientes.name, dr.siguienteFechaPago.toString());
-        const fechaFormateada = moment(dr.siguienteFechaPago).format('DD/MM/YYYY');
+        const fechaFormateada = moment(dr.siguienteFechaPago).format(
+          'DD/MM/YYYY',
+        );
 
         try {
           await transporter.sendMail({
             from: '"PowerTraining" <PowerTraining@gmail.com>',
             to: p.clientes.email,
-            subject: "Renovacion de Suscripción  ",
+            subject: 'Renovacion de Suscripción  ',
 
             html: `<!-- emailTemplate.html -->
   <!DOCTYPE html>
@@ -277,23 +277,19 @@ export class MercadoPagoService {
         <p>Hola ${p.clientes.name},</p>
         <p>Tu suscripción se vence el ${fechaFormateada}. te invitamos en los proximos 5 días a renovar tu suscripción.</p>
       </div>
-      <div class="button">
-        <a href="#">Renovar ahora</a>
-      </div>
+      
       <div class="footer">
         <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
       </div>
     </div>
   </body>
-  </html>`
+  </html>`,
           });
-          
         } catch (error) {
-          console.log('error al enviar correo' + error)
+          console.log('error al enviar correo' + error);
         }
       }
-    })
-
+    });
   }
 
   async getMetadata(limit: number) {
