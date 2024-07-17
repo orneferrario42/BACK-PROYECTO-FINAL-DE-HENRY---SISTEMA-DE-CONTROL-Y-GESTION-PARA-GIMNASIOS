@@ -10,11 +10,12 @@ import { PagosModule } from './pagos/pagos.module';
 import { SeederModule } from './seeder/seeder.module';
 import { JwtModule } from '@nestjs/jwt';
 import cors from 'cors';
-import { EmailModule } from './email/email.module';
 import { AvisosModule } from './avisos/avisos.module';
 import { NotificationModule } from './notificaciones/notification.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
-// import * as cors from 'cors';
+import { PlanModule } from './plan/plan.module';
+import { ScheduleModule } from '@nestjs/schedule';
+
 
 @Module({
   imports: [
@@ -30,13 +31,14 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     UsersModule,
     AuthModule,
     ProfesorModule,
+    PlanModule,
     PagosModule,
     FileModule,
     AvisosModule,
     NotificationModule,
     ChatbotModule,
     SeederModule,
-    EmailModule,
+    ScheduleModule.forRoot(),
 
     JwtModule.register({
       global: true,
@@ -68,3 +70,4 @@ export class AppModule implements NestModule {
       .forRoutes('*');
   }
 }
+

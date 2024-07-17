@@ -7,7 +7,6 @@ import { Plan } from '../plan/entities/plan.entity';
 import { PlanRepository } from 'src/plan/plan.repository';
 import { UsersRepository } from 'src/users/users.repository';
 import { User } from 'src/users/entities/user.entity';
-import { NotificationService } from 'src/notificaciones/notification.service';
 import { NotificationModule } from 'src/notificaciones/notification.module';
 import { UsersService } from 'src/users/users.service';
 import { ProfesorService } from 'src/profesor/profesor.service';
