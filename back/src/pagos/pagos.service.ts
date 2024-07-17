@@ -10,6 +10,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdatePagoDto } from './dto/update-pago.dto';
 import { NotificationService } from 'src/notificaciones/notification.service';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { Cron } from '@nestjs/schedule';
+import moment from 'moment';
+import { transporter } from 'src/config/configMailer';
 
 @Injectable()
 export class MercadoPagoService {
@@ -178,6 +181,122 @@ export class MercadoPagoService {
     const pagoGuardado = await this.pagosRepository.save(pago);
     return pagoGuardado;
   }
+  public calcularFechaPagoSiguiente(fechaPago) {
+    const hoy = new Date();
+    const fechaPagoActual = moment(fechaPago);
+    const siguienteFechaPago = fechaPagoActual.add(1, 'months');
+    const diasRestantes = moment(siguienteFechaPago).diff(hoy, 'days');
+    const datoFecha = {
+      fechaPagoActual: fechaPagoActual,
+      siguienteFechaPago: siguienteFechaPago,
+      diasRestantes: diasRestantes
+    }
+    return datoFecha
+  }
+
+  @Cron('00 00 * * *')
+  async getAllPagos() {
+
+    const pagos = await this.pagosRepository.find({
+      relations: ['clientes'],
+    });
+
+    pagos.map(async (p) => {
+
+      const dr = this.calcularFechaPagoSiguiente(p.fecha_pago);
+
+      if (Number(dr.diasRestantes) === 5) {
+        // const htmlContent = getHtmlTemplate(p.clientes.name, dr.siguienteFechaPago.toString());
+        const fechaFormateada = moment(dr.siguienteFechaPago).format('DD/MM/YYYY');
+
+        try {
+          await transporter.sendMail({
+            from: '"PowerTraining" <PowerTraining@gmail.com>',
+            to: p.clientes.email,
+            subject: "Renovacion de Suscripción  ",
+
+            html: `<!-- emailTemplate.html -->
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        padding-bottom: 20px;
+      }
+      .header img {
+        width: 150px;
+      }
+      .content h2 {
+        color: #333333;
+      }
+      .content p {
+        color: #555555;
+      }
+      .button {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .button a {
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .footer {
+        color: #999999;
+        font-size: 12px;
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="https://github.com/Ezequiel-Sale/PF-HENRY-FRONT/blob/main/public/full-logo.png?raw=true" alt="PowerTraining">
+      </div>
+      <div class="content">
+        <h2>Renovación de Suscripción</h2>
+        <p>Hola ${p.clientes.name},</p>
+        <p>Tu suscripción se vence el ${fechaFormateada}. te invitamos en los proximos 5 días a renovar tu suscripción.</p>
+      </div>
+      <div class="button">
+        <a href="#">Renovar ahora</a>
+      </div>
+      <div class="footer">
+        <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+      </div>
+    </div>
+  </body>
+  </html>`
+          });
+          
+        } catch (error) {
+          console.log('error al enviar correo' + error)
+        }
+      }
+    })
+
+  }
+
+}
 
   async getMetadata(limit: number) {
     const totalPays = await this.pagosRepository.count();

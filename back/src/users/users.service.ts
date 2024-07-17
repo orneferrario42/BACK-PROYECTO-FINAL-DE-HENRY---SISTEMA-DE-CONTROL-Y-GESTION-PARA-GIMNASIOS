@@ -16,7 +16,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Status } from 'src/enum/estados.enum';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
-import { toString } from 'qrcode';
+
 
 @Injectable()
 export class UsersService {
