@@ -56,7 +56,7 @@ export class UpdateUserDto {
 
   plan?: Plan;
 
-  profesor?: Profesor;
+  id_profesor?: string;
 
   @IsString()
   metodoPago?: string;
