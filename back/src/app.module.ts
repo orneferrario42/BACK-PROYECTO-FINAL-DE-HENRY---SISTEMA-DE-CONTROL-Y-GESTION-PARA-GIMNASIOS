@@ -52,23 +52,23 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
-        cors({
-          origin: [
-            'https://pf-henry-front-rouge.vercel.app',
-            /https:\/\/pf-henry-front-.*\.vercel\.app$/,
-            'http://localhost:3000',
-          ],
-          methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-          credentials: true,
-          allowedHeaders: [
-            'Access-Control-Allow-Origin',
-            'Access-Control-Allow-Methods',
-            'x-requested-with',
-            'Access-Control-Allow-Headers',
-            'authorization',
-            'content-type',
-          ],
-        }),
+        // cors({
+        //   origin: [
+        //     'https://pf-henry-front-rouge.vercel.app',
+        //     /https:\/\/pf-henry-front-.*\.vercel\.app$/,
+        //     'http://localhost:3000',
+        //   ],
+        //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        //   credentials: true,
+        //   allowedHeaders: [
+        //     'Access-Control-Allow-Origin',
+        //     'Access-Control-Allow-Methods',
+        //     'x-requested-with',
+        //     'Access-Control-Allow-Headers',
+        //     'authorization',
+        //     'content-type',
+        //   ],
+        // }),
       )
       .forRoutes('*');
   }
