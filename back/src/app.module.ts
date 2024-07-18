@@ -55,7 +55,8 @@ export class AppModule implements NestModule {
         cors({
           origin: [
             'https://pf-henry-front-rouge.vercel.app',
-            /https:\/\/pf-henry-front-.*\.vercel\.app$/
+            /https:\/\/pf-henry-front-.*\.vercel\.app$/,
+            'http://localhost:3000',
           ],
           methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
           credentials: true,

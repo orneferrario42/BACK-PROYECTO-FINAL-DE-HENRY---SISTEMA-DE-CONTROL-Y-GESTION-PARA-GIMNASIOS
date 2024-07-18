@@ -10,7 +10,8 @@ import { Server, Socket } from 'socket.io';
   cors: {
     origin: [
       'https://pf-henry-front-rouge.vercel.app',
-      /https:\/\/pf-henry-front-.*\.vercel\.app$/
+      /https:\/\/pf-henry-front-.*\.vercel\.app$/,
+      'http://localhost:3000',
     ],
     methods: ['GET', 'POST'],
     credentials: true,
