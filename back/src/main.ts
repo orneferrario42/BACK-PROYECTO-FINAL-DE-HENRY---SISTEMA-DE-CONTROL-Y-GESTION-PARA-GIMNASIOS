@@ -1,4 +1,3 @@
-
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { auth } from 'express-openid-connect';
@@ -9,10 +8,12 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(loggerGlobal);
-  app.use(auth(auth0Config));
   app.enableCors({
-    origin: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app', // Reemplaza con el origen de tu frontend
+    origin: [
+      'https://pf-henry-front-rouge.vercel.app',
+      /https:\/\/pf-henry-front-.*\.vercel\.app$/,
+      'http://localhost:3000',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: [
@@ -24,6 +25,8 @@ async function bootstrap() {
       'content-type',
     ],
   });
+  app.use(loggerGlobal);
+  app.use(auth(auth0Config));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('PowerTraining')
@@ -36,7 +39,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3001);
+  const port = process.env.PORT || 3001;
+
+await app.listen(port);
 }
+
+
 
 bootstrap();

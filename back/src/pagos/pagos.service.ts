@@ -80,9 +80,9 @@ export class MercadoPagoService {
             },
           ],
           back_urls: {
-            failure: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app/finalstep',
-            pending: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app/finalstep',
-            success: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app/userdashboard',
+            failure: 'https://pf-henry-front-rouge.vercel.app/finalstep',
+            pending: 'https://pf-henry-front-rouge.vercel.app/finalstep',
+            success: 'https://pf-henry-front-rouge.vercel.app/login',
           },
         },
       });
