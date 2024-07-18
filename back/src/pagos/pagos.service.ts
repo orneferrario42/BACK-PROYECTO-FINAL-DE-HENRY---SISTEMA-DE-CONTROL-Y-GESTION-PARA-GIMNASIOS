@@ -82,7 +82,7 @@ export class MercadoPagoService {
           back_urls: {
             failure: 'https://pf-henry-front-rouge.vercel.app/finalstep',
             pending: 'https://pf-henry-front-rouge.vercel.app/finalstep',
-            success: 'https://pf-henry-front-rouge.vercel.app/userdashboard',
+            success: 'https://pf-henry-front-rouge.vercel.app/login',
           },
         },
       });

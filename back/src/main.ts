@@ -8,10 +8,11 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(loggerGlobal);
-  app.use(auth(auth0Config));
   app.enableCors({
-    origin: 'https://pf-henry-front-rouge.vercel.app', // Reemplaza con el origen de tu frontend
+    origin: [
+      'https://pf-henry-front-rouge.vercel.app',
+      /https:\/\/pf-henry-front-.*\.vercel\.app$/
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: [
@@ -23,6 +24,8 @@ async function bootstrap() {
       'content-type',
     ],
   });
+  app.use(loggerGlobal);
+  app.use(auth(auth0Config));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('PowerTraining')
