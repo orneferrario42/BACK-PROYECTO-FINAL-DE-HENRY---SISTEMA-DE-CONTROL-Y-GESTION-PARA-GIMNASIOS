@@ -11,7 +11,8 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://pf-henry-front-rouge.vercel.app',
-      /https:\/\/pf-henry-front-.*\.vercel\.app$/
+      /https:\/\/pf-henry-front-.*\.vercel\.app$/,
+      'http://localhost:3000',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
@@ -37,6 +38,12 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
+
+  const port = process.env.PORT || 3001;
+
+await app.listen(port);
 }
+
+
 
 bootstrap();
