@@ -183,7 +183,6 @@ export class UsersService {
   ): Promise<Partial<User>> {
     const updateUser = await this.userRepository.findOne({
       where: { id },
-      relations: ['plan', 'profesor'],
     });
 
     if (!updateUser) {
@@ -199,14 +198,14 @@ export class UsersService {
       updateUserDto.plan = plan;
     }
 
-    if (updateUserDto.profesor) {
+    if (updateUserDto.id_profesor) {
       const profesor = await this.profesorRepository.findOne({
-        where: { id: updateUserDto.profesor.id },
+        where: { id: updateUserDto.id_profesor},
       });
       if (!profesor) {
         throw new BadRequestException('Profesor no encontrado');
       }
-      updateUserDto.profesor = profesor;
+      updateUser.profesor = profesor;
     }
 
     await this.userRepository.update(id, updateUserDto);
