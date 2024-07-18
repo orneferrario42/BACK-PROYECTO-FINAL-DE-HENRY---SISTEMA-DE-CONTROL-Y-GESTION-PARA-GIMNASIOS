@@ -16,7 +16,6 @@ import { ChatbotModule } from './chatbot/chatbot.module';
 import { PlanModule } from './plan/plan.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -54,7 +53,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(
         cors({
-          origin: 'https://pf-henry-front-ettfy7o6d-ezequiels-projects-a036481b.vercel.app', // Reemplaza con el origen de tu frontend
+          origin: 'https://pf-henry-front-rouge.vercel.app', // Reemplaza con el origen de tu frontend
           methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
           credentials: true,
           allowedHeaders: [
@@ -70,4 +69,3 @@ export class AppModule implements NestModule {
       .forRoutes('*');
   }
 }
-
